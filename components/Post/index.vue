@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card class="mx-auto dark:bg-slate-900 dark:text-white" max-width="344" v-for="(item, i) in feeds" :key="item.id">
+    <v-card class="mx-auto" max-width="344" v-for="(item, i) in feeds" :key="item.id">
       <p>feed ke {{ i + 1 }}</p>
       <v-img height="200px" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" cover></v-img>
 
