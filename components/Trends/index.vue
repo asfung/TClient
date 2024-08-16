@@ -1,6 +1,7 @@
 <template>
-  <div class="trend-section">
-    <v-list lines="two">
+  <!-- <div class="trend-section"> -->
+  <div class="">
+    <v-list lines="two" class="dark:bg-black dark:text-white dark:border rounded-lg dark:border-white">
       <v-list-item 
         v-for="trend in trends" 
         :key="trend.id" 

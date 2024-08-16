@@ -1,7 +1,9 @@
 <template>
     <!-- <div class="bg-purple-darken-2"> -->
     <!-- <div class="header"> -->
-    <div class="header dark:bg-gray-900 dark:text-gray-100 bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-80">
+    <!-- <div class="header dark:bg-gray-900 dark:text-gray-100 bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-80"> -->
+    <!-- <div class="header dark:bg-gray-900 dark:text-white bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-80"> -->
+    <div class="header dark:bg-black dark:text-white bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-70">
 
         <!-- <h1>Talker</h1> -->
         <h1>Header</h1>

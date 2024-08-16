@@ -5,7 +5,7 @@
     <Footer />
   </div> -->
 
-  <div class="wrapper">
+  <div class="wrapper dark:bg-black">
     <Header class="header-top" />
       <NuxtPage />
     <Footer class="footer-bottom" />

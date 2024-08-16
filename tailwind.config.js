@@ -15,5 +15,12 @@
 // }
 
 module.exports = {
-  darkMode: 'class'
+  darkMode: 'class',
+  // theme: {
+  //   colors: {
+  //     'black': "#121212",
+  //     'white': "#F5F5F5",
+  //     'slate': "#212121"
+  //   }
+  // }
 }

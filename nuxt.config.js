@@ -17,6 +17,9 @@ export default defineNuxtConfig({
       ]
     }
   },
+  // plugins: [
+  //   '~/plugins/screen.js',
+  // ],
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
   // title: 'Hello Nuxt',
