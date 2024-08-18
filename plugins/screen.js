@@ -1,50 +1,98 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 
-const breakpoints = {
-  xs: 0,
-  sm: 576,
-  md: 768,
-  lg: 992,
-  xl: 1200,
-}
+// const breakpoints = {
+//   xs: 0,
+//   sm: 576,
+//   md: 768,
+//   lg: 992,
+//   xl: 1200,
+// }
 
-const getScreenSize = () => {
-  const width = window.innerWidth
+// const getScreenSize = () => {
+//   const width = window.innerWidth
 
-  if (width >= breakpoints.xl) return 'xl'
-  if (width >= breakpoints.lg) return 'lg'
-  if (width >= breakpoints.md) return 'md'
-  if (width >= breakpoints.sm) return 'sm'
-  return 'xs'
-}
+//   if (width >= breakpoints.xl) return 'xl'
+//   if (width >= breakpoints.lg) return 'lg'
+//   if (width >= breakpoints.md) return 'md'
+//   if (width >= breakpoints.sm) return 'sm'
+//   return 'xs'
+// }
 
-const screenPlugin = {
-  install(Vue) {
-    const screen = Vue.observable({
-      size: getScreenSize(),
-    })
+// const screenPlugin = {
+//   install(Vue) {
+//     const screen = Vue.observable({
+//       size: getScreenSize(),
+//     })
 
-    const updateScreenSize = () => {
-      screen.size = getScreenSize()
-    }
+//     const updateScreenSize = () => {
+//       screen.size = getScreenSize()
+//     }
 
-    window.addEventListener('resize', updateScreenSize)
+//     window.addEventListener('resize', updateScreenSize)
 
-    Vue.mixin({
-      computed: {
-        $screen() {
-          return screen
-        },
-        $isBreakpoint() {
-          return (breakpoint) => {
-            const currentWidth = breakpoints[screen.size]
-            const breakpointWidth = breakpoints[breakpoint]
-            return currentWidth >= breakpointWidth
-          }
-        }
-      }
-    })
+//     Vue.mixin({
+//       computed: {
+//         $screen() {
+//           return screen
+//         },
+//         $isBreakpoint() {
+//           return (breakpoint) => {
+//             const currentWidth = breakpoints[screen.size]
+//             const breakpointWidth = breakpoints[breakpoint]
+//             return currentWidth >= breakpointWidth
+//           }
+//         }
+//       }
+//     })
+//   }
+// }
+
+// Vue.use(screenPlugin)
+
+
+import { defineNuxtPlugin } from '#app'
+import { ref } from 'vue'
+
+export default defineNuxtPlugin((nuxtApp) => {
+  const breakpoints = {
+    xs: 0,
+    sm: 576,
+    md: 768,
+    lg: 992,
+    xl: 1200,
   }
-}
 
-Vue.use(screenPlugin)
+  const getScreenSize = () => {
+    const width = window.innerWidth
+
+    if (width >= breakpoints.xl) return 'xl'
+    if (width >= breakpoints.lg) return 'lg'
+    if (width >= breakpoints.md) return 'md'
+    if (width >= breakpoints.sm) return 'sm'
+    return 'xs'
+  }
+
+  const screen = ref({
+    size: getScreenSize(),
+  })
+
+  const updateScreenSize = () => {
+    screen.value.size = getScreenSize()
+  }
+
+  window.addEventListener('resize', updateScreenSize)
+
+  nuxtApp.provide('screen', screen)
+  nuxtApp.provide('isBreakpoint', (breakpoint) => {
+    // const currentWidth = breakpoints[screen.value.size]
+    // const breakpointWidth = breakpoints[breakpoint]
+    // return currentWidth >= breakpointWidth
+    if (Array.isArray(breakpoint)) {
+      return breakpoint.includes(screen.value.size)
+    } else {
+      const currentWidth = breakpoints[screen.value.size]
+      const breakpointWidth = breakpoints[breakpoint]
+      return currentWidth >= breakpointWidth
+    }
+  })
+})

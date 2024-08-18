@@ -2,7 +2,7 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // defineNuxtConfig
-export default defineNuxtConfig({
+export default {
   // title: 'Talker',
   app: {
     head: {
@@ -81,4 +81,4 @@ export default defineNuxtConfig({
   // ]
 
 
-})
+}
