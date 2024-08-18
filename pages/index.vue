@@ -42,6 +42,7 @@ export default {
     </div>
   </div> -->
 
+  <!-- TODO: make it best practice, cause bug found that on mobile the right side width chopped so is like not fit in mobile screen md:w-2/4 is good width size-->
   <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-48">
     <!-- <div class="w-full md:w-1/4 sticky top-14 p-0 border border-gray-300 dark:bg-slate-900 dark:text-white rounded mr-4 md:mr-8"> -->
     <div v-if="$isBreakpoint(['md', 'lg', 'xl'])" class="w-full md:w-1/4 sticky top-14 p-0 border border-gray-300 dark:text-white rounded mr-4 md:mr-8">
