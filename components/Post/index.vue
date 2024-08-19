@@ -184,6 +184,8 @@
       </div>
 
     </div>
+
+    <div v-for="(item, i) in feeds" :key="item.id">
     <hr class="border-gray-600">
     <div class="flex flex-shrink-0 p-4 pb-0">
       <a href="#" class="flex-shrink-0 group block">
@@ -206,7 +208,7 @@
     </div>
 
 
-    <div class="pl-16" v-for="(item, i) in feeds" :key="item.id">
+    <div class="pl-16">
       <p class="text-base width-auto font-medium flex-shrink">
         Day 07 of the challenge <span class="text-blue-400">#100DaysOfCode</span>
         I was wondering what I can do with <span class="text-blue-400">#tailwindcss</span>, so just started building
@@ -291,6 +293,7 @@
             </div>
           </div>
         </div>
+    </div>
 
 
       </div>
