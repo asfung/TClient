@@ -4,9 +4,9 @@
     <v-list lines="two" class="dark:bg-black dark:text-white dark:border rounded-lg dark:border-white">
       <v-list-item 
         v-for="trend in trends" 
-        :key="trend.id" 
-        :title="trend.title"
-        :subtitle="trend.subtitle">
+        :key="trend.id">
+        <v-list-item-title>{{ trend.title }}</v-list-item-title>
+        <v-list-item-subtitle>{{ trend.subtitle }}</v-list-item-subtitle>
         <!-- <v-divider></v-divider> -->
       </v-list-item>
     </v-list>

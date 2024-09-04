@@ -47,5 +47,6 @@ export default{
   min-height: 100vh;
   padding-top: 60px;
   padding-bottom: 60px;
+  font-family: 'IA Writer Quattro S';
 }
 </style>

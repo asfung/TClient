@@ -66,6 +66,8 @@ export default {
 
   ssr: false,
 
+  // css: ['~/assets/css/fonts.css'],
+
   // tailwind
   // postcss: {
   //   plugins: {
