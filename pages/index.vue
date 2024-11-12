@@ -46,7 +46,7 @@ export default {
   <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-48">
     <!-- <div class="w-full md:w-1/4 sticky top-14 p-0 border border-gray-300 dark:bg-slate-900 dark:text-white rounded mr-4 md:mr-8"> -->
     <div v-if="$isBreakpoint(['md', 'lg', 'xl'])" class="w-full md:w-1/4 sticky top-14 p-0 border border-gray-300 dark:text-white rounded mr-4 md:mr-8">
-      <!-- <SideBar /> -->
+      <SideBar />
     </div>
     <!-- <div class="w-full md:w-3/4 p-4 border border-gray-300 dark:bg-slate-900 dark:text-white rounded"> -->
     <div class="w-full md:w-2/4 p-0 dark:text-white rounded dark:border-white dark:border" style="border: 1px solid #d1d5db">
