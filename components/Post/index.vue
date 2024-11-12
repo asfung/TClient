@@ -135,7 +135,8 @@
             </div> -->
 
             <div class="flex-1 text-center py-2 m-2" @click="like = true" v-if="like === false">
-              <a class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-500 hover:text-pink-300">
+              <a
+                class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-500 hover:text-pink-300">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
                   stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                   <path
@@ -158,8 +159,10 @@
             </div> -->
 
             <div class="flex-1 text-center py-2 m-2" @click="like = false" v-if="like === true">
-              <a class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-100 hover:text-pink-300">
-                <svg class="text-center h-7 w-6 fill-pink-500" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <a
+                class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-100 hover:text-pink-300">
+                <svg class="text-center h-7 w-6 fill-pink-500" fill="none" stroke-linecap="round"
+                  stroke-linejoin="round" viewBox="0 0 24 24">
                   <path
                     d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                   </path>
@@ -206,7 +209,7 @@
 
     </div>
 
-    <div v-for="(item, i) in feeds" :key="item.id">
+    <div v-for="(item, index) in feeds" :key="index">
       <hr class="border-gray-600">
       <div class="flex flex-shrink-0 p-4 pb-0">
         <a href="#" class="flex-shrink-0 group block">
@@ -239,10 +242,39 @@
         </p>
 
         <div class="md:flex-shrink pr-6 pt-3">
-          <img class="rounded-lg w-full h-64"
+          <!-- <img class="rounded-lg w-full h-64"
             src="https://plus.unsplash.com/premium_photo-1669867124806-f84dd1a9e87c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Woman paying for a purchase">
+            <img class="rounded-lg w-full h-64"
+            src="https://plus.unsplash.com/premium_photo-1669867124806-f84dd1a9e87c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Woman paying for a purchase">
+            <img class="rounded-lg w-full h-64"
+            src="https://plus.unsplash.com/premium_photo-1669867124806-f84dd1a9e87c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Woman paying for a purchase"> -->
+
+
+
+          <div class="grid grid-cols-2 gap-1">
+            <!-- <div>
+              <img class="h-auto max-w-full rounded-lg"
+                src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg" alt="">
+            </div> -->
+            <div>
+              <img class="h-auto max-w-full rounded-lg"
+                src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
+            </div>
+            <div>
+              <img class="h-auto max-w-full rounded-lg"
+                src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
+            </div>
+            <div>
+              <img class="h-auto max-w-full rounded-lg"
+                src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
+            </div>
+          </div>
+
         </div>
+
         <div class="flex">
           <div class="w-full">
 
@@ -270,7 +302,8 @@
             </div> -->
 
               <div class="flex-1 text-center py-2 m-2" @click="item.liked = true" v-if="item.liked === false">
-                <a class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-500 hover:text-pink-300">
+                <a
+                  class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-500 hover:text-pink-300">
                   <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
                     stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
                     <path
@@ -281,8 +314,10 @@
               </div>
 
               <div class="flex-1 text-center py-2 m-2" @click="item.liked = true" v-if="item.liked === true">
-                <a class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-100 hover:text-pink-300">
-                  <svg class="text-center h-7 w-6 fill-pink-500" fill="none" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                <a
+                  class="w-12 cursor-pointer mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-100 hover:text-pink-300">
+                  <svg class="text-center h-7 w-6 fill-pink-500" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round" viewBox="0 0 24 24">
                     <path
                       d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
                     </path>
