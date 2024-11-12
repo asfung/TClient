@@ -3,16 +3,6 @@
     font-style: normal;
     font-weight: 400;
     /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
-
-    src: url("https://db.onlinewebfonts.com/t/881d5f9aaf4240dcbff6178ef403cc90.eot");
-    src: url("https://db.onlinewebfonts.com/t/881d5f9aaf4240dcbff6178ef403cc90.eot?#iefix")format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/881d5f9aaf4240dcbff6178ef403cc90.woff2")format("woff2"),
-    url("https://db.onlinewebfonts.com/t/881d5f9aaf4240dcbff6178ef403cc90.woff")format("woff"),
-    url("https://db.onlinewebfonts.com/t/881d5f9aaf4240dcbff6178ef403cc90.ttf")format("truetype"),
-    url("https://db.onlinewebfonts.com/t/881d5f9aaf4240dcbff6178ef403cc90.svg#iA Writer Quattro S Regular")format("svg");
-
-    /* 
-        make the font from local
-     */
+    src: url('iAWriterQuattroS-Regular.woff2') format('truetype');
 
 }
