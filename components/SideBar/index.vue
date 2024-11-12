@@ -2,7 +2,6 @@
   <!-- <div class="profile-section"> -->
   <div class="h-96 dark:bg-black dark:text-white p-7 dark:border rounded-lg">
     <h1>Side Bar</h1>
-    sidebar selesai
     <!-- Profile -->
   </div>
 </template>
