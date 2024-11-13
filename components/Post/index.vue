@@ -12,7 +12,7 @@
         <div class="flex">
           <div class="w-10"></div>
 
-          <div class="w-64 px-2">
+          <div class="px-2">
 
             <div class="flex items-center">
               <div class="flex-1 text-center px-1 py-1 m-2">
@@ -27,7 +27,7 @@
                 </a>
               </div>
 
-              <div class="flex-1 text-center py-2 m-2">
+              <!-- <div class="flex-1 text-center py-2 m-2">
                 <a href="#"
                   class="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                   <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -60,14 +60,14 @@
                     </path>
                   </svg>
                 </a>
-              </div>
+              </div> -->
             </div>
           </div>
 
           <div class="flex-1">
             <button
               class="bg-blue-400 mt-5 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
-              Tweet
+              Post
             </button>
           </div>
         </div>
@@ -78,7 +78,7 @@
 
     <hr class="border-gray-600">
 
-    <!-- tweet text -->
+    <!-- after tweet -->
     <div class="flex flex-shrink-0 p-4 pb-0">
       <a href="#" class="flex-shrink-0 group block">
         <div class="flex items-center">
@@ -99,12 +99,7 @@
       </a>
     </div>
     <div class="pl-16">
-      <p class="text-base width-auto font-medium flex-shrink">
-        Day 07 of the challenge <span class="text-blue-400">#100DaysOfCode</span>
-        I was wondering what I can do with <span class="text-blue-400">#tailwindcss</span>, so just started building
-        Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion.
-        [07/100]
-        <span class="text-blue-400"> #WomenWhoCode #CodeNewbie</span>
+      <p class="text-base width-auto font-medium flex-shrink" v-html="parseContent(content)">
       </p>
 
 
@@ -124,7 +119,7 @@
               </a>
             </div>
 
-            <!-- <div class="flex-1 text-center py-2 m-2">
+            <div class="flex-1 text-center py-2 m-2">
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -132,7 +127,7 @@
                   <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                 </svg>
               </a>
-            </div> -->
+            </div>
 
             <div class="flex-1 text-center py-2 m-2" @click="like = true" v-if="like === false">
               <a
@@ -146,17 +141,6 @@
               </a>
             </div>
 
-
-            <!-- <div class="flex-1 text-center py-2 m-2">
-              <a href="#"
-                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-pink-500 hover:text-pink-300">
-                <svg class="text-center h-7 w-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                  </path>
-                </svg>
-              </a>
-            </div> -->
 
             <div class="flex-1 text-center py-2 m-2" @click="like = false" v-if="like === true">
               <a
@@ -179,7 +163,7 @@
                 </svg>
               </a>
             </div>
-            <!-- <div class="flex-1 text-center py-2 m-2">
+            <div class="flex-1 text-center py-2 m-2">
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -189,7 +173,7 @@
                   </path>
                 </svg>
               </a>
-            </div> -->
+            </div>
             <div class="flex-1 text-center py-2 m-2">
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
@@ -209,6 +193,8 @@
 
     </div>
 
+
+    <!-- data tweet -->
     <div v-for="(item, index) in feeds" :key="index">
       <hr class="border-gray-600">
       <div class="flex flex-shrink-0 p-4 pb-0">
@@ -233,27 +219,10 @@
 
 
       <div class="pl-16">
-        <p class="text-base width-auto font-medium flex-shrink">
-          Day 07 of the challenge <span class="text-blue-400">#100DaysOfCode</span>
-          I was wondering what I can do with <span class="text-blue-400">#tailwindcss</span>, so just started building
-          Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion.
-          [07/100]
-          <span class="text-blue-400"> #WomenWhoCode #CodeNewbie</span>
+        <p class="text-base width-auto font-medium flex-shrink" v-html="parseContent(contentData)">
         </p>
 
         <div class="md:flex-shrink pr-6 pt-3">
-          <!-- <img class="rounded-lg w-full h-64"
-            src="https://plus.unsplash.com/premium_photo-1669867124806-f84dd1a9e87c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Woman paying for a purchase">
-            <img class="rounded-lg w-full h-64"
-            src="https://plus.unsplash.com/premium_photo-1669867124806-f84dd1a9e87c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Woman paying for a purchase">
-            <img class="rounded-lg w-full h-64"
-            src="https://plus.unsplash.com/premium_photo-1669867124806-f84dd1a9e87c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-            alt="Woman paying for a purchase"> -->
-
-
-
           <div class="rounded-xl overflow-hidden">
             <div class="grid grid-cols-2 gap-1 bg-gray-700 rounded-xl">
               <div>
@@ -271,22 +240,6 @@
             </div>
           </div>
 
-          <!-- <div class="rounded-xl overflow-hidden">
-            <div class="grid grid-cols-2 gap-1 bg-white rounded-xl p-2 scale-125">
-              <div>
-                <img class="h-auto max-w-full"
-                  src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-2.jpg" alt="">
-              </div>
-              <div>
-                <img class="h-auto max-w-full"
-                  src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-3.jpg" alt="">
-              </div>
-              <div>
-                <img class="h-auto max-w-full"
-                  src="https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg" alt="">
-              </div>
-            </div>
-          </div> -->
 
         </div>
 
@@ -306,7 +259,7 @@
                 </a>
               </div>
 
-              <!-- <div class="flex-1 text-center py-2 m-2">
+              <div class="flex-1 text-center py-2 m-2">
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -314,7 +267,7 @@
                   <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
                 </svg>
               </a>
-            </div> -->
+            </div>
 
               <div class="flex-1 text-center py-2 m-2" @click="item.liked = true" v-if="item.liked === false">
                 <a
@@ -349,7 +302,7 @@
                   </svg>
                 </a>
               </div>
-              <!-- <div class="flex-1 text-center py-2 m-2">
+              <div class="flex-1 text-center py-2 m-2">
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -359,7 +312,7 @@
                   </path>
                 </svg>
               </a>
-            </div> -->
+            </div>
               <div class="flex-1 text-center py-2 m-2">
                 <a href="#"
                   class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
@@ -380,40 +333,12 @@
 
     </div>
 
-    <!-- <v-card class="mx-auto" max-width="344" v-for="(item, i) in feeds" :key="item.id">
-      <p>feed ke {{ i + 1 }}</p>
-      <v-img height="200px" src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" cover></v-img>
-
-      <v-card-title>
-        {{ item.title }}
-      </v-card-title>
-
-      <v-card-subtitle>
-        {{ item.subtitle }}
-      </v-card-subtitle>
-
-      <v-card-actions>
-        <v-btn color="orange-lighten-2" text="Explore"></v-btn>
-
-        <v-spacer></v-spacer>
-
-        <v-btn :icon="item.show ? 'mdi-chevron-up' : 'mdi-chevron-down'" @click="item.show = !item.show"></v-btn>
-      </v-card-actions>
-
-      <v-expand-transition>
-        <div v-show="item.show">
-          <v-divider></v-divider>
-          <v-card-text>
-            {{ item.description }}
-          </v-card-text>
-        </div>
-      </v-expand-transition>
-    </v-card> -->
     <div id="checkpoint-section"></div>
   </div>
 </template>
 
 <script>
+// import DOMPurify from 'dompurify';
 export default {
   mounted() {
       this.observeSentinel()
@@ -465,12 +390,34 @@ export default {
         console.log(this.hasNextPage)
       }, 2000)
     },
+    parseContent(content) {
+      const hashtagRegex = /#\w+/g;
+      const linkRegex = /https?:\/\/[^\s]+/g;
+      const mentionRegex = /@\w+/g;
+
+      const parsedContent = content
+        .replace(/\n/g, '<br>') 
+        .replace(linkRegex, (url) => `<a href="${url}" target="_blank" class="text-blue-500 hover:underline">${url}</a>`)
+        .replace(hashtagRegex, (hashtag) => `<a href="/search?term=${hashtag.slice(1)}" class="text-blue-500 hover:underline">${hashtag}</a>`)
+        .replace(mentionRegex, (mention) => `<a href="/@${mention.slice(1)}" class="text-blue-500 hover:underline">${mention}</a>`);
+
+      return parsedContent;
+      // return DOMPurify.sanitize(parsedContent);
+
+    }
+
   },
   data() {
     return {
       like: false,
       isLoading: false,
       hasNextPage: true,
+      contentData: "Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie",
+      // content: "Just completed my first project using #VueJS! 🎉 Check it out here: https://github.com/username/vue-project Big thanks to @developer123 for the guidance!  Also, don't forget to follow #WebDevelopment and #JavaScript for more updates!  Visit our site: https://www.example.com",
+      content: 
+        `our project on https://github.com/asfung/TClient appreciate to @rama and @perdi for the contributing!, 
+
+        #Nuxt3 #Sigma`,
       feeds: Array.from({ length: 10 }, (_, i) => ({
         id: `${i + 1}`,
         username: `user ${i + 1}`,

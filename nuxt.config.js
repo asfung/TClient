@@ -13,7 +13,7 @@ export default {
         { hid: 'description', name: 'description', content: 'Bro is Yapping' }
       ],
       link: [
-        { rel: 'icon', type: 'image/png', href: '/images/icon.png' }
+        { rel: 'icon', type: 'image/png', href: '/images/TALKER_PART2_BLACK.png' }
       ]
     }
   },
@@ -78,9 +78,10 @@ export default {
   // treesa
 
 
-  // plugins: [
-  //   '~/plugins/vuetify.js'
-  // ]
+  plugins: [
+    // '~/plugins/vuetify.js',
+    // '~/plugins/AppIcon.js',
+  ]
 
 
 }
