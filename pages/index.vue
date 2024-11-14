@@ -1,20 +1,5 @@
-<!-- <template>
-  <h1>{{ nama }}</h1>
-</template>
-
-
-<script>
-
-export default {
-  data(){
-    return{
-      nama: "rama kontol",
-    }
-  },
-}
-
+<script setup> 
 </script>
- -->
 
 <template>
   <!-- <v-row justify="space-between" class="spacing-4">
@@ -54,7 +39,9 @@ export default {
       <p>{{ $screen }}</p>
       <!-- <p>{{ $isBreakpoint("xl") }}</p> -->
       <!-- sdalkmdlksa -->
-      <Post />
+       <keep-alive>
+        <Post />
+       </keep-alive>
     </div>
     <!-- <div class="w-full md:w-1/4 sticky top-14 border border-gray-300 dark:bg-slate-900 dark:text-white rounded ml-4 md:ml-8"> -->
     <div v-if="$isBreakpoint(['md', 'lg', 'xl'])" class="w-full md:w-1/4 sticky top-14 border border-gray-300 dark:text-white rounded ml-4 md:ml-8">
