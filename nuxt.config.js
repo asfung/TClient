@@ -48,11 +48,13 @@ export default {
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
+    '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
   ],
   colorMode: {
     classSuffix: '',
+    preference: 'light'
   },
 
   tailwindcss: {

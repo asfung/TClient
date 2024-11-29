@@ -7,8 +7,8 @@
           src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
       </div>
       <div class="flex-1 px-2 pt-2 mt-2">
-        <textarea class="bg-transparent text-gray-400 font-medium text-lg w-full" rows="2" cols="50"
-          placeholder="What's happening?"></textarea>
+        <textarea v-model="content" @input="handleInput" class="bg-transparent text-gray-400 font-medium text-lg w-full"
+          rows="2" cols="50" placeholder="What's happening?"></textarea>
         <div class="flex">
           <div class="w-10"></div>
 
@@ -202,52 +202,48 @@
         </a>
       </div>
 
-      <div class="pl-16">
-        <p class="text-base width-auto font-medium flex-shrink" v-html="parseContent(contentData)">
+      <!-- <div class="pl-16"> -->
+      <div class="">
+        <p class="pl-16 text-base width-auto font-medium flex-shrink" v-html="parseContent(contentData)">
         </p>
 
-        <div class="md:flex-shrink pr-6 pt-3">
+
+        <div class="pl-0" >
+          <UCarousel v-slot="{ item }" :items="items" :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
+            <img :src="item" width="200" height="300" draggable="true" class="rounded-lg cursor-pointer duration-200 active:scale-95" />
+          </UCarousel>
+        </div>
+
+
+        <!-- <div class="md:flex-shrink pr-6 pt-3">
           <div class="rounded-xl overflow-hidden">
 
-            <div class="grid grid-cols-3 gap-1 bg-gray-700 rounded-xl">
-              <div>
-                <img class="h-auto max-w-full" src="https://flowbite.s2.amazonaws.com/docs/gallery/square/image-1.jpg"
-                  alt="" />
+            <div class="grid grid-cols-2 gap-2">
+              <div class="col-span-1">
+                <img class="w-full h-auto"
+                  src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
               </div>
-              <div class="h-11">
-                <img class="h-auto max-w-full" src="https://flowbite.s2.amazonaws.com/docs/gallery/square/image-2.jpg"
-                  alt="" />
+
+              <div class="col-span-1">
+                <img class="w-full h-auto"
+                  src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
               </div>
-              <div class="">
-                <img class="h-auto max-w-full" src="https://flowbite.s2.amazonaws.com/docs/gallery/square/image-3.jpg"
-                  alt="" />
+
+              <div class="col-span-1">
+                <img class="w-full h-auto"
+                  src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
               </div>
-              <div>
-                <img class="h-auto max-w-full " src="https://flowbite.s2.amazonaws.com/docs/gallery/square/image-4.jpg"
-                  alt="">
+
+              <div class="col-span-1">
+                <img class="w-full h-auto"
+                  src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
               </div>
             </div>
 
-            <!-- <div className="grid grid-rows-2 grid-cols-4 gap-5">
-
-              <div className="col-span-1 row-span-1">
-                <img className="" src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
-              </div>
-
-              <div className="col-span-1 row-span-1">
-                <img className="" src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
-              </div>
-
-              <div className="col-span-2 row-span-2">
-                <img src="https://img.freepik.com/free-photo/beautiful-strawberry-garden-sunrise-doi-ang-khang-chiang-mai-thailand_335224-762.jpg?t=st=1731473988~exp=1731477588~hmac=2348a33c7460dc326a903011013c38b3d3736896ab2f7fc11ce2422e2f9f4f6e&w=1380" />
-              </div>
-            </div> -->
-
           </div>
+        </div> -->
 
-        </div>
-
-        <div class="flex">
+        <div class="flex pl-16">
           <div class="w-full">
             <div class="flex items-center">
               <div class="flex-1 text-center">
@@ -411,7 +407,20 @@ export default {
       return parsedContent;
       // return DOMPurify.sanitize(parsedContent);
 
-    }
+    },
+    handleInput(event) {
+      const input = event.target.value;
+      const lines = input.split('\n');
+      const newLines = lines.map(line => {
+        const chunks = [];
+        for (let i = 0; i < line.length; i += this.maxCharsPerLine) {
+          chunks.push(line.substring(i, i + this.maxCharsPerLine));
+        }
+        return chunks.join('\n');
+      });
+      this.content = newLines.join('\n');
+    },
+
 
   },
   data() {
@@ -419,6 +428,8 @@ export default {
       like: false,
       isLoading: false,
       hasNextPage: true,
+      maxCharsPerLine: 50, 
+      content: null,
       contentData: "@Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie",
       // content: "Just completed my first project using #VueJS! 🎉 Check it out here: https://github.com/username/vue-project Big thanks to @developer123 for the guidance!  Also, don't forget to follow #WebDevelopment and #JavaScript for more updates!  Visit our site: https://www.example.com",
       content: 
@@ -436,5 +447,33 @@ export default {
       })),
     };
   },
+  watch: {
+    content: (oldVal, newValue) => {
+      console.log(newValue)
+    }
+  },
 };
+</script>
+
+
+<script setup>
+import { computed } from 'vue';
+
+const items = [
+  'https://picsum.photos/600/800?random=1',
+  'https://picsum.photos/600/800?random=2',
+  'https://picsum.photos/600/800?random=3',
+  'https://picsum.photos/600/800?random=4',
+  'https://picsum.photos/600/800?random=5',
+  'https://picsum.photos/600/800?random=6'
+]
+
+const imageClass = computed(() => {
+  const itemCount = this.items.length;
+  const widthClass = itemCount <= 4 ? 'w-1/4' : itemCount <= 6 ? 'w-1/6' : 'w-1/8'; 
+  return `${widthClass} flex-shrink-0`;
+
+})
+
+
 </script>
