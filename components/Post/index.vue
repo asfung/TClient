@@ -210,6 +210,8 @@
             </div>
           </div>
 
+          <!-- rama anjing -->
+
           <!-- <div class="rounded-xl overflow-hidden">
             <div class="grid grid-cols-2 gap-1 bg-white rounded-xl p-2 scale-125">
               <div>
