@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@font-face {
+    font-family: 'IA Writer Quattro S';
+    font-style: normal;
+    font-weight: 400;
+    src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2');
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+    /* src: url('iAWriterQuattroS-Regular.woff2') format('truetype'); */
+
+}
