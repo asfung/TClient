@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="dark:border-white dark:border dark:rounded"> -->
-  <div class="border border-black">
-    <div class="flex">
+  <div class="dark:border dark:border-white rounded-lg">
+    <div class="flex ">
       <div class="m-2 w-10 py-1">
         <img class="inline-block h-10 w-10 rounded-full"
           src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
@@ -60,7 +60,7 @@
 
           <div class="flex-1">
             <button
-              class="bg-bujang mt-5 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
+              class="bg-blue-500 mt-5 hover:bg-blue-600 text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
               Post
             </button>
           </div>
@@ -68,7 +68,7 @@
       </div>
     </div>
 
-    <hr class="border-gray-600" />
+    <hr class="border-gray-600 dark:border-white" />
 
     <!-- after tweet -->
     <div class="flex flex-shrink-0 p-4 pb-0">
@@ -182,7 +182,7 @@
 
     <!-- data tweet -->
     <div v-for="(item, index) in feeds" :key="index">
-      <hr class="border-gray-600" />
+      <hr class="border-gray-600 dark:border-white" />
       <div class="flex flex-shrink-0 p-4 pb-0">
         <a href="#" class="flex-shrink-0 group block">
           <div class="flex items-center">
@@ -331,6 +331,7 @@
 
     <div id="checkpoint-section"></div>
   </div>
+
 </template>
 
 <script>

@@ -1,8 +1,7 @@
 <template>
-  <div class="trend-section">
-    <v-list lines="two" class="dark:bg-black dark:text-white bg-gray-100 text-gray-900 rounded-lg shadow-md overflow-hidden">
-      <!-- Wrapper Scroll -->
-      <div class="scrollable-content">
+  <div class="trend-section dark:border dark:border-white rounded-lg">
+    <v-list lines="two" class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white rounded-lg shadow-md overflow-hidden">
+      <div class="scrollable max-h-96 overflow-y-scroll">
         <v-list-item v-for="trend in trends" :key="trend.id" class="flex items-center justify-between px-4 py-3 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors rounded-md">
           <div class="flex items-center space-x-4">
             <!-- Ikon Tren -->
@@ -22,7 +21,7 @@
         </v-list-item>
 
         <!-- Divider -->
-        <v-divider v-if="!$last" />
+        <!-- <v-divider v-if="!$last" /> -->
       </div>
     </v-list>
   </div>
@@ -49,30 +48,4 @@ export default {
 </script>
 
 <style>
-.trend-section {
-  margin: 20px;
-  border-radius: 8px; /* Border radius untuk sudut yang lebih lembut */
-  border: 2px solid #777575; /* Garis tepi berwarna hijau */
-}
-
-.scrollable-content {
-  max-height: 400px; /* Batasi tinggi maksimal */
-  overflow-y: scroll; /* Aktifkan scroll */
-}
-
-.scrollable-content::-webkit-scrollbar {
-  width: 0; /* Sembunyikan scrollbar di WebKit */
-}
-
-.scrollable-content {
-  scrollbar-width: none; /* Hilangkan scrollbar di Firefox */
-}
-
-.scrollable-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.scrollable-content::-webkit-scrollbar-thumb {
-  background: transparent;
-}
 </style>

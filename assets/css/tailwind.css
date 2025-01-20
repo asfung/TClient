@@ -12,3 +12,48 @@
     /* src: url('iAWriterQuattroS-Regular.woff2') format('truetype'); */
 
 }
+
+
+/* Custom Scrollbar Styles */
+.scrollable {
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* Light Mode Scrollbar */
+.scrollable {
+  scrollbar-color: #4b5563 #f3f4f6; /* Thumb color and track color */
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #f3f4f6; /* Track color */
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #4b5563; /* Thumb color */
+  border-radius: 10px; /* Rounded corners for the thumb */
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280; /* Thumb color on hover */
+}
+
+/* Dark Mode Scrollbar */
+.dark .scrollable {
+  scrollbar-color: #a1a1a1 #1f2937; /* Thumb color and track color */
+}
+
+.dark .scrollable::-webkit-scrollbar-track {
+  background: #1f2937; /* Track color */
+}
+
+.dark .scrollable::-webkit-scrollbar-thumb {
+  background-color: #a1a1a1; /* Thumb color */
+}
+
+.dark .scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: #c1c1c1; /* Thumb color on hover */
+}
