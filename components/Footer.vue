@@ -1,10 +1,70 @@
 <template>
   <!-- <div class="footer"> -->
-  <!-- <div class="footer dark:bg-gray-900 dark:text-gray-100 bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-80"> -->
+  <!-- < div class="footer dark:bg-gray-900 dark:text-gray-100 bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-80"> -->
   <div class="footer dark:bg-black dark:text-white bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-50">
-    <h1>Footer</h1>
+    <!-- <h1>Footer</h1> -->
+  </div>
+  <div v-if="$isBreakpoint(['xs', 'sm'])" class="">
+    <v-layout class="overflow-visible" style="height: 56px">
+      <v-bottom-navigation v-model="value" :bg-color="color" mode="shift">
+        <v-btn>
+          <v-icon>mdi mdi-home-variant</v-icon>
+
+          <span>Home</span>
+        </v-btn>
+
+        <v-btn>
+          <v-icon>mdi mdi-magnify</v-icon>
+
+          <span>Search</span>
+        </v-btn>
+
+        <v-btn>
+          <v-icon>mdi mdi-bookmark</v-icon>
+
+          <span>Bookmark</span>
+        </v-btn>
+
+        <v-btn>
+          <v-icon v-if="isBtnicon" @click="Notif()">mdi-bell</v-icon>
+          <v-icon v-else @click="Notif()">mdi-bell-outline</v-icon>
+          <span>Notification</span>
+        </v-btn>
+      </v-bottom-navigation>
+    </v-layout>
   </div>
 </template>
+
+<script>
+export default {
+  data: () => ({
+    value: 1,
+    isBtnicon: false,
+  }),
+
+  methods: {
+    Notif() {
+      this.isBtnicon = !this.isBtnicon;
+    },
+  },
+  computed: {
+    color() {
+      switch (this.value) {
+        case 0:
+          return "blue-grey";
+        case 1:
+          return "teal";
+        case 2:
+          return "brown";
+        case 3:
+          return "indigo";
+        default:
+          return "blue-grey";
+      }
+    },
+  },
+};
+</script>
 
 <!-- <style>
 .footer {
