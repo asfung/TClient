@@ -7,12 +7,35 @@
     font-family: 'IA Writer Quattro S';
     font-style: normal;
     font-weight: 400;
-    src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2');
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
     /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
-    /* src: url('iAWriterQuattroS-Regular.woff2') format('truetype'); */
-
+    src: url('~/assets/fonts/iAWriterQuattroS-Regular.woff2') format('woff2');
 }
 
+@font-face {
+    font-family: 'IA Writer Quattro S Bold';
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+    src: url('~/assets/fonts/iAWriterQuattroS-Bold.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IA Writer Quattro S Italic';
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+    src: url('~/assets/fonts/iAWriterQuattroS-Italic.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'IA Writer Quattro S Bold Italic';
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+    /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+    src: url('~/assets/fonts/iAWriterQuattroS-BoldItalic.woff2') format('woff2');
+}
+
+.dark .border-default {
+    border: 1px solid gray;
+}
 
 /* Custom Scrollbar Styles */
 .scrollable {
@@ -57,3 +80,4 @@
 .dark .scrollable::-webkit-scrollbar-thumb:hover {
   background-color: #c1c1c1; /* Thumb color on hover */
 }
+

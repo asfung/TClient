@@ -5,7 +5,7 @@
     <Footer />
   </div> -->
 
-  <div class="wrapper dark:bg-black selection:bg-purple-400">
+  <div class="wrapper dark:bg-black selection:bg-purple-400 font-base">
     <Header class="header-top" />
       <NuxtPage />
     <Footer class="footer-bottom" />
@@ -47,6 +47,6 @@ export default{
   min-height: 100vh;
   padding-top: 60px;
   /* padding-bottom: 60px; */
-  font-family: 'IA Writer Quattro S';
+  /* font-family: 'IA Writer Quattro S'; */
 }
 </style>

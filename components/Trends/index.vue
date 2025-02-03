@@ -1,5 +1,5 @@
 <template>
-  <div class="trend-section dark:border dark:border-white rounded-lg">
+  <div class="trend-section border-default rounded-lg">
     <v-list lines="two" class="bg-gray-100 dark:bg-black text-gray-900 dark:text-white rounded-lg shadow-md overflow-hidden">
       <div class="scrollable max-h-96 overflow-y-scroll">
         <v-list-item v-for="trend in trends" :key="trend.id" class="flex items-center justify-between px-4 py-3 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors rounded-md">

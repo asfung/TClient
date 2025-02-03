@@ -18,7 +18,17 @@ const defaultColors = require('tailwindcss/colors');
 module.exports = {
   darkMode: 'class',
   theme: {
-    extends: {
+    extend: {
+      fontFamily: {
+        // 'ia-writer': ['IA Writer Quattro S', 'sans-serif'],
+        // 'ia-writer-bold': ['IA Writer Quattro S Bold', 'sans-serif'],
+        // 'ia-writer-italic': ['IA Writer Quattro S Italic', 'sans-serif'],
+        // 'ia-writer-bold-italic': ['IA Writer Quattro S Bold Italic', 'sans-serif'],
+        'base': ['IA Writer Quattro S', 'sans-serif'],
+        'base-bold': ['IA Writer Quattro S Bold', 'sans-serif'],
+        'base-italic': ['IA Writer Quattro S Italic', 'sans-serif'],
+        'base-bold-italic': ['IA Writer Quattro S Bold Italic', 'sans-serif'],
+      },
       colors: {
         ...defaultColors,
         // 'black': "#121212",
@@ -44,7 +54,7 @@ module.exports = {
         'success': "#10B981",
         'error': "#EF4444",
 
-        'bujang': '#10B981',
+        'bujang': '#eb34a8',
 
         
 
