@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { build } from 'vite';
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // defineNuxtConfig
@@ -42,12 +43,13 @@ export default {
     transpile: ['vuetify'],
   },
   modules: [
-    (_options, nuxt) => {
+    [(_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
         config.plugins.push(vuetify({ autoImport: true }))
       })
-    },
+    }],
+    '@pinia/nuxt',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/color-mode',
