@@ -43,4 +43,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       return currentWidth >= breakpointWidth
     }
   })
+  nuxtApp.hook('app:mounted', () => {
+    console.log('Nuxt app is mounted and screen is ready')
+  })
 })

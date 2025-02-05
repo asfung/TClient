@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { useAuthStore } from '~/stores/Auth'
 export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig()
   const axiosInstance = axios.create({
@@ -7,7 +8,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   axiosInstance.interceptors.request.use(
     (config) => {
       // Modify request config before sending the request
-      const token = useAuthStore().token
+      const userStore = useAuthStore()
+      const token = userStore.token
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
       }
@@ -31,6 +33,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       return Promise.reject(error)
     },
   )
+
+  nuxtApp.hook('app:mounted', () => {
+    console.log('Nuxt app is mounted and axios is ready')
+  })
+
   return {
     provide: { axios: axiosInstance },
   }

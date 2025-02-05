@@ -292,12 +292,12 @@ import { ref, reactive, computed, watch, onMounted } from 'vue';
 import { useAuthStore } from '~/stores/Auth'
 import { usePostStore } from '~/stores/Post';
 import PostContentText from '../PostContentText.vue';
-// import { createPinia } from 'pinia'
 
 // const pinia = createPinia()
 
 // const posts = defineProps(['posts']);
 const postStore = usePostStore()
+
 const clicked = ref(false);
 
 // state

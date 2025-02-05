@@ -3,7 +3,7 @@ import { build } from 'vite';
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 // defineNuxtConfig
-export default {
+export default defineNuxtConfig({
   // title: 'Talker',
   app: {
     head: {
@@ -43,16 +43,16 @@ export default {
     transpile: ['vuetify'],
   },
   modules: [
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode',
+    '@pinia/nuxt',
     [(_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
         config.plugins.push(vuetify({ autoImport: true }))
       })
     }],
-    '@pinia/nuxt',
-    '@nuxt/ui',
-    '@nuxtjs/tailwindcss',
-    '@nuxtjs/color-mode',
   ],
   colorMode: {
     classSuffix: '',
@@ -94,7 +94,8 @@ export default {
   plugins: [
     // '~/plugins/vuetify.js',
     // '~/plugins/AppIcon.js',
+    // '~/plugins/pinia.js',
   ]
 
 
-}
+})
