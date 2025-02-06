@@ -63,9 +63,9 @@
       </a>
     </div>
     <div class="pl-16">
-      <p class="text-base width-auto font-medium flex-shrink" v-html="parseContent(content)">
-      </p>
-      <!-- <PostContentText :content="content" /> -->
+      <!-- <p class="text-base width-auto font-medium flex-shrink" v-html="parseContent(content)">
+      </p> -->
+      <PostContentText :content="content" />
 
       <div class="flex">
         <div class="w-full">
@@ -186,7 +186,7 @@
         </p> -->
         <!-- <div class="pl-16 text-base width-auto font-medium flex-shrink" v-html="parseContent(contentData)"></div> -->
         <!-- <PostContentText :content="contentData" /> -->
-        <PostContentText :content="item.contentData" />
+        <PostContentText class="pl-16 " :content="item.contentData" />
 
 
         <div class="pl-0" >
