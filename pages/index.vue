@@ -1,21 +1,8 @@
 <template>
 
-  <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-48">
-    <div v-if="$isBreakpoint(['md', 'lg', 'xl'])" class="w-full md:w-2/4 sticky top-14 p-0 border border-gray-300 dark:text-white rounded mr-4 md:mr-8 ">
-      <SideBar />
-    </div>
-    <div class="w-full md:w-4/4 p-0 dark:text-white rounded border border-gray-300">
-      <!-- <p>{{ $screen }}</p> -->
-       <!-- <v-infinite-scroll @load="postStore.loadMoreData"> -->
-      <p class="text-white">{{ token }} </p>
-       <!-- <keep-alive> -->
-          <Post />
-       <!-- </keep-alive> -->
-      <!-- </v-infinite-scroll> -->
-    </div>
-    <div v-if="$isBreakpoint(['md', 'lg', 'xl'])" class="w-full md:w-2/4 sticky top-14 border border-gray-300 dark:text-white rounded ml-4 md:ml-8">
-      <Trends />
-    </div>
+  <div>
+    <p class="text-white">{{ token }} </p>
+    <Post />
   </div>
 
 
@@ -25,8 +12,18 @@
 import { createPinia } from 'pinia'
 import { useAuthStore } from '~/stores/Auth'
 import { usePostStore } from '~/stores/Post'
+// import { useScrollStore } from '~/stores/Scroll'
 
+
+const scrollStore = useScrollStore()
+const scrollY = computed((() => scrollStore.scrollY))
 // const pinia = createPinia()
+
+onMounted(() => {
+  console.log("masuk ke page index")
+  window.scrollTo(0, scrollY.value)
+  console.log('scrollY pada halaman index: ', scrollY.value)
+})
 
 // const nuxtApp = useNuxtApp()
 // nuxtApp.vueApp.use(pinia)
@@ -41,7 +38,11 @@ import { usePostStore } from '~/stores/Post'
 //   postStore.loadMoreData()
 // })
 
-
+onBeforeRouteLeave((to, from, next) => {
+  scrollStore.updateScrollY(window.scrollY)
+  console.log('pindah dengan scrollY : ', window.scrollY)
+  next()
+})
 
 
 </script>

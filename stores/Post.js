@@ -33,14 +33,14 @@ export const usePostStore = defineStore('PostStore', {
         liked: false,
       }));
   
-      console.log(`before fetch: ${this.posts.length}`);
+      // console.log(`before fetch: ${this.posts.length}`);
       this.posts.push(...newData);
       // this.post.push(...newData);
-      console.log(`after fetch: ${this.posts.length}`);
+      // console.log(`after fetch: ${this.posts.length}`);
   
       this.isLoading = false
       this.hasNextPage = newData.length === 10;
-      console.log(this.hasNextPage);
+      // console.log(this.hasNextPage);
     }
   },
   getters: {

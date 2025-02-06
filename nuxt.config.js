@@ -31,13 +31,23 @@ export default defineNuxtConfig({
   //   }
   // }
   router: {
-    scrollBehavior(to, from, savedPosition) {
-      if (savedPosition) {
-        return savedPosition;
-      } else {
-        return { top: 0 };
-      }
-    }
+    // scrollBehavior(to, from, savedPosition) {
+    //   if (savedPosition) {
+    //     return savedPosition;
+    //   } else {
+    //     // return savedPosition;
+    //     // return { top: 0 };
+    //     const position = {};
+    //     if (to.hash) {
+    //       position.selector = to.hash;
+    //     }
+    //     if (to.matched.some((m) => m.meta.scrollToTop)) {
+    //       position.x = 0;
+    //       position.y = 0;
+    //     }
+    //     return position;
+    //   }
+    // }
   },
   build: {
     transpile: ['vuetify'],

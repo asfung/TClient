@@ -19,8 +19,8 @@ const token = computed(() => authStore.token);
 // const postsLength = computed(() => posts.value.length);
 
 onMounted(() => {
-    console.log('jumalh pada page name : ', posts.value.length)
-    console.log('jumalh pada page name : ', postsSecond.value.length)
-    console.log('token : ', authStore.getToken())
+    // console.log('jumalh pada page name : ', posts.value.length)
+    // console.log('jumalh pada page name : ', postsSecond.value.length)
+    // console.log('token : ', authStore.getToken())
 });
 </script>

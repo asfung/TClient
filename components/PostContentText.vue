@@ -28,5 +28,5 @@
       .replace(hashtagRegex, (hashtag) => `<a href="/search?term=${hashtag.slice(1)}" class="text-blue-500 hover:underline ">${hashtag}</a>`)
       .replace(mentionRegex, (mention) => `<a href="/@${mention.slice(1)}" class="text-blue-500 hover:underline ">${mention}</a>`);
   });
-   console.log(parsedContent)
+  //  console.log(parsedContent)
   </script>
