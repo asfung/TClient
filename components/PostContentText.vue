@@ -1,7 +1,7 @@
 <template>
     <!-- <div class="pl-16 text-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div> -->
     <!-- <div class="pl-16 text-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div> -->
-    <div class="text-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div>
+    <div class="font-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div>
   </template>
   
   <script setup>
@@ -26,7 +26,7 @@
     return props.content
       .replace(/\n/g, '<br>')
       .replace(linkRegex, (url) => `<a href="${url}" target="_blank" class="text-blue-500 hover:underline">${url}</a>`)
-      .replace(hashtagRegex, (hashtag) => `<a href="/search?term=${hashtag.slice(1)}" class="text-blue-500 hover:underline ">${hashtag}</a>`)
+      .replace(hashtagRegex, (hashtag) => `<a href="/search?q=${hashtag.slice(1)}" class="text-blue-500 hover:underline ">${hashtag}</a>`)
       .replace(mentionRegex, (mention) => `<a href="/@${mention.slice(1)}" class="text-blue-500 hover:underline ">${mention}</a>`);
   });
   //  console.log(parsedContent)
