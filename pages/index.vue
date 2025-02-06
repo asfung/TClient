@@ -12,13 +12,21 @@ import { useAuthStore } from '~/stores/Auth'
 import { usePostStore } from '~/stores/Post'
 // import { useScrollStore } from '~/stores/Scroll'
 
+definePageMeta({
+  scrollToTop: false,
+})
+
 const scrollStore = useScrollStore()
 const scrollY = computed((() => scrollStore.scrollY))
 
 onMounted(() => {
-  console.log("masuk ke page index")
+  // console.log("masuk ke page index")
   window.scrollTo(0, scrollY.value)
-  console.log('scrollY pada halaman index: ', scrollY.value)
+  // console.log('scrollY pada halaman index: ', scrollY.value)
+
+  // if(process.client && window){
+  //   window.history.scrollRestoration = 'auto'
+  // }
 })
 
 onBeforeRouteLeave((to, from, next) => {
