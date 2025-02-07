@@ -1,7 +1,7 @@
 <template>
   <div class="border-default rounded-lg h-screen">
     <div class="search">
-      <UCommandPalette :groups="groups" :autoselect="false"
+      <UCommandPalette :groups="groups" :autoselect="false" @update:model-value="actionCompletionItem"
         :close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'gray', variant: 'link', padded: false }" />
     </div>
 
@@ -25,10 +25,21 @@ const groups = [{
 
     const users = await $fetch('https://jsonplaceholder.typicode.com/users', { params: { q } })
 
-    const userResult = users.map(user => ({ id: user.id, label: user.name, suffix: user.email }))
+    const userResult = users.map(user => ({ 
+      id: user.id, 
+      label: user.name, 
+      suffix: user.email 
+    }))
     console.log(userResult)
     return userResult
-  }
+  },
+  
 }]
+
+const actionCompletionItem = (option) => {
+  // console.log(option)
+  console.log(option.label)
+
+}
 
 </script>
