@@ -39,7 +39,7 @@
 export default {
   computed: {
     logoImage() {
-      return this.$colorMode.preference === "dark" ? "/images/TALKER_PART2_BLACK.png" : "/images/TALKER_PART2_WHITE.png";
+      return "/images/TALKER_TRANSPARENT.png"
     },
   },
 

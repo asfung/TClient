@@ -1,37 +1,52 @@
 <template>
-  <div @click="clickPostItem" class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20">
+  <div class="">
+    <div class="flex sticky top-10 z-10 dark:bg-black p-5 border-default space-between items-center space-x-2">
+      <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
+      <p>Post</p>
+    </div>
     <hr class="border-gray-600 dark:border-white" />
-    <div class="flex flex-shrink-0 p-4 pb-0">
-      <a href="#" class="flex-shrink-0 group block">
-        <div class="flex items-center">
-          <div>
-            <img class="inline-block h-10 w-10 rounded-full"
-              src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
-          </div>
-          <div class="ml-3">
-            <p class="text-base leading-6 font-medium">
-              Sonali Hirave {{ item.id }}
+    <div class="flex flex-shrink-0 p-4 pb-2 justify-between">
+      <a href="#" class="flex-shrink-0 group block w-full">
+        <div class="flex items-center justify-between w-full">
+          <div class="flex items-center">
+            <div>
+              <img class="inline-block h-10 w-10 rounded-full"
+                src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+            </div>
+            <div class="ml-3">
+              <p class="text-base leading-6 font-medium">
+                Sonali Hirave {{ item.id }}
+              </p>
               <span
                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                @{{ item.username }} . 16 April </span>
-            </p>
+                @{{ item.username }} </span>
+            </div>
+          </div>
+          <div>
+            <button
+              class="dark:bg-neutral-dark dark:hover:bg-primaryDark hover:bg-blue-600 bg-neutral text-white dark:text-white font-bold py-2 px-8 rounded-full">
+              Follow
+            </button>
           </div>
         </div>
       </a>
     </div>
 
     <div class="">
-      <PostContentText class="pl-16 " :content="item.contentData" @click.stop @mousedown="startSelection" @mouseup="endSelection" />
+      <PostContentText class="pl-16 " :content="item.contentData" />
 
-      <div class="pl-0" @click.stop>
-        <UCarousel v-slot="{ item }" :items="item.media" @click.stop
+      <div class="pl-0 mb-2">
+        <UCarousel v-slot="{ item }" :items="item.media"
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
-          <img :src="item" width="200" height="300" draggable="true" @click.stop
+          <img :src="item" width="200" height="300" draggable="true"
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
         </UCarousel>
       </div>
 
-      <div class="flex pl-16" @click.stop>
+
+      <!-- <v-divider inset></v-divider> -->
+       <hr />
+      <div class="flex pl-16">
         <div class="w-full">
           <div class="flex items-center">
             <div class="flex-1 text-center">
@@ -57,7 +72,7 @@
             </div>
 
             <div class="flex-1 text-center py-2 m-2" @click="toggleLike">
-              <a 
+              <a
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-accent hover:bg-opacity-10 hover:text-accent">
                 <svg :class="likeClass" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   stroke="currentColor" viewBox="0 0 24 24">
@@ -69,7 +84,7 @@
             </div>
 
             <div class="flex-1 text-center py-2 m-2" @click="toggleBookmark">
-              <a 
+              <a
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-highlight hover:bg-opacity-10 hover:text-highlight">
                 <svg :class="bookmarkClass" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   stroke="currentColor" viewBox="0 0 24 24">
@@ -92,23 +107,45 @@
           </div>
         </div>
       </div>
+      <hr />
     </div>
+
+    <div class="flex items-center justify-between p-4">
+      <div class="hover:bg-gray-600 w-full hover:rounded-full hover:bg-opacity-20 cursor-pointer duration-400">
+        <div class="dark:text-gray-500 ">
+          <img class="inline-block h-10 w-10 rounded-full"
+            src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+          Reply
+        </div>
+      </div>
+    </div>
+    <hr class="border-gray-600 dark:border-white" />
+
+    <div class="">
+      <div v-for="(item, index) in postsReply" :key="index">
+        <PostItemReply :item="item" />
+      </div>
+    </div>
+
   </div>
 </template>
 
 
 <script setup>
-import { toggle } from "~/node_modules/@nuxt/ui/dist/runtime/ui.config/index"
+import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { usePostStore } from '~/stores/Post'
 
 const isBookmarked = ref(false)
 const isLiked = ref(false)
-const isSelecting = ref(false);
+const postStore = usePostStore()
 
 const props = defineProps({
   item: {
     required: true
   },
 })
+
+const postsReply = computed(() => postStore.postsReply);
 
 const bookmarkClass = computed(() => {
   return isBookmarked.value ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
@@ -117,18 +154,6 @@ const bookmarkClass = computed(() => {
 const likeClass = computed(() => {
   return isLiked.value ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
 });
-
-const startSelection = () => {
-  isSelecting.value = true;
-  console.log('start selection');
-};
-
-const endSelection = () => {
-  setTimeout(() => {
-    isSelecting.value = false;
-    console.log('end selection');
-  }, 0);
-};
 
 const toggleBookmark = () => {
   console.log('before ', isBookmarked.value)

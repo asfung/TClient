@@ -1,7 +1,9 @@
 <template>
   <!-- <div class="dark:border-white dark:border dark:rounded"> -->
-  <div class="border-default rounded-lg">
-    <div class="flex ">
+  <!-- <div class="border-default rounded-lg"> -->
+  <div class="" :class="{'border-default rounded-lg': inputPost}">
+    <!-- <p>{{ inputPost }}</p> -->
+    <div v-if="inputPost" class="flex">
       <div class="m-2 w-10 py-1">
         <img class="inline-block h-10 w-10 rounded-full"
           src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
@@ -43,7 +45,7 @@
 
 
     <!-- after tweet -->
-     <div>
+     <div v-if="inputPost">
       <!-- <hr class="border-gray-600 dark:border-white" /> -->
       <PostItem :item="postMe" />
      </div>
@@ -70,8 +72,14 @@ import PostContentText from '../PostContentText.vue';
 
 // const posts = defineProps(['posts']);
 const postStore = usePostStore()
-
 const clicked = ref(false);
+const props = defineProps({
+  inputPost: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+});
 
 // state
 const posts = computed(() => postStore.posts);
@@ -208,6 +216,10 @@ const hellnah = () => {
   }
 
 };
+
+// const clickPostItem = (item) => {
+//   console.log(item);
+// };
 
 onMounted(() => {
   observeSentinel();

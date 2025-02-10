@@ -25,7 +25,20 @@ export const usePostStore = defineStore('PostStore', {
         'https://picsum.photos/600/800?random=6'
         ],
       })),
-      // posts: [], // this state will stiil be empty even i redirect to another page
+      // posts: [], // this state will stiil be empty even i redirect to another page, BOTCH I FORGOT WHAT IS THIS MEAN 
+      postsReply: Array.from({ length: 10 }, (_, i) => ({
+        id: `${i + 1}`,
+        username: `user${i + 1}`,
+        title: `selekences ${i + 1}`,
+        subtitle: `selekencess cessss ${i + 1}`,
+        description: `kddlksamdlksamkdlmaslkdmsakmasdmsaklmsalkmsakldmsalkdmsalkmmaslkmdasl ${i + 1}`,
+        // content: this.contentData,
+        contentData: "how great that was man ",
+        show: false,
+        liked: false,
+        media: [],
+      })),
+
     }
   },
   actions: {
