@@ -7,9 +7,11 @@
       <!-- Header Text -->
       <h1 class="flex-1 flex items-center justify-right space-x-4">
         <span><a href="" class="hover:underline hover:decoration-blue-600">For you</a></span>
+        <!-- <span><NuxtLink to="" class="hover:underline hover:decoration-blue-600">For you</NuxtLink></span> -->
         <!-- Garis Tengah -->
         <div class="w-px h-6 bg-gray-400"></div>
         <span><a href="" class="hover:underline hover:decoration-blue-600">Following</a></span>
+        <!-- <span><NuxtLink top="" class="hover:underline hover:decoration-blue-600">Following</NuxtLink></span> -->
       </h1>
 
       <!-- <div class="flex-1 text-center">

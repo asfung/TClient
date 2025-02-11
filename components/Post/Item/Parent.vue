@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <div class="flex sticky top-10 z-10 dark:bg-black p-5 border-default space-between items-center space-x-2">
+    <div class="flex sticky top-11 z-10 dark:bg-black p-5 border-default space-between items-center space-x-2">
       <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
       <p>Post</p>
     </div>
@@ -107,10 +107,10 @@
           </div>
         </div>
       </div>
-      <hr />
+      <!-- <hr /> -->
     </div>
 
-    <div class="flex items-center justify-between p-4">
+    <div class="flex items-center justify-between p-4 border-y">
       <div class="hover:bg-gray-600 w-full hover:rounded-full hover:bg-opacity-20 cursor-pointer duration-400">
         <div class="dark:text-gray-500 ">
           <img class="inline-block h-10 w-10 rounded-full"
@@ -119,7 +119,6 @@
         </div>
       </div>
     </div>
-    <hr class="border-gray-600 dark:border-white" />
 
     <div class="">
       <div v-for="(item, index) in postsReply" :key="index">

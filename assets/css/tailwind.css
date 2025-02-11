@@ -45,6 +45,12 @@
   font-weight: normal;
 }
 
+.border-timeline {
+  border-inline-start-width: thin;
+  border-inline-start-style: solid;
+  border-inline-start-color: #9CA3AF;
+}
+
 /* Custom Scrollbar Styles */
 .scrollable {
   scrollbar-width: thin; /* For Firefox */
