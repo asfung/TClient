@@ -1,7 +1,7 @@
 <template>
     <!-- <div class="pl-16 text-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div> -->
     <!-- <div class="pl-16 text-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div> -->
-    <div class="font-base width-auto font-medium flex-shrink" v-nuxt-html="parsedContent"></div>
+    <div class="font-base width-auto font-medium flex-shrink break-words" v-nuxt-html="parsedContent"></div>
   </template>
   
   <script setup>

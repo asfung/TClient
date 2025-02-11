@@ -21,7 +21,7 @@
     </div>
 
     <div class="">
-      <PostContentText class="pl-16 " :content="item.contentData" @click.stop @mousedown="startSelection" @mouseup="endSelection" />
+      <PostContentText class="pl-16 max-w-[475px]" :content="item.contentData" @click.stop @mousedown="startSelection" @mouseup="endSelection" />
 
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop

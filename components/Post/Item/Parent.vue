@@ -1,10 +1,11 @@
 <template>
   <div class="">
-    <div class="flex sticky top-11 z-10 dark:bg-black p-5 border-default space-between items-center space-x-2">
+    <!-- edge of header must be top-11 -->
+    <!-- <div class="flex sticky top-0  z-10 bg-[#ffff] dark:bg-black p-5 rounded-t-lg space-between items-center space-x-2"> -->
+    <div :class="headerClass">
       <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
       <p>Post</p>
     </div>
-    <hr class="border-gray-600 dark:border-white" />
     <div class="flex flex-shrink-0 p-4 pb-2 justify-between">
       <a href="#" class="flex-shrink-0 group block w-full">
         <div class="flex items-center justify-between w-full">
@@ -45,7 +46,7 @@
 
 
       <!-- <v-divider inset></v-divider> -->
-       <hr />
+      <hr />
       <div class="flex pl-16">
         <div class="w-full">
           <div class="flex items-center">
@@ -120,9 +121,15 @@
       </div>
     </div>
 
-    <div class="">
+    <div class="replies">
       <div v-for="(item, index) in postsReply" :key="index">
-        <PostItemReply :item="item" />
+        <div class="flex flex-shrink-0 p-8 pb-0">
+          <ol class="relative border-timeline" :class="{ 'border-none': postsReply.length === index + 1 }">
+            <li class="ms-8 -mt-6">
+              <PostItemReply :item="item" />
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
 
@@ -137,6 +144,7 @@ import { usePostStore } from '~/stores/Post'
 const isBookmarked = ref(false)
 const isLiked = ref(false)
 const postStore = usePostStore()
+const scrollY = ref(0)
 
 const props = defineProps({
   item: {
@@ -152,6 +160,13 @@ const bookmarkClass = computed(() => {
 
 const likeClass = computed(() => {
   return isLiked.value ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
+});
+
+const headerClass = computed(() => {
+  console.log(scroll)
+  return scrollY.value > 0
+    ? 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 space-between items-center space-x-2'
+    : 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 rounded-t-lg space-between items-center space-x-2';
 });
 
 const toggleBookmark = () => {
@@ -172,5 +187,10 @@ const clickPostItem = () => {
   useNuxtApp().$router.push(`/post/${props.item.id}`)
 }
 
+onMounted(() => {
+  window.addEventListener('scroll', () => {
+    scrollY.value = window.scrollY
+  })
+})
 
 </script>

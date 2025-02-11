@@ -7,7 +7,7 @@
 
   <div class="wrapper dark:bg-black dark:selection:bg-primaryDark selection:bg-primaryLight font-base">
     <Header class="header-top" />
-    <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-48">
+    <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-96">
       <div v-if="$isBreakpoint(['md', 'lg', 'xl'])"
         class="w-full md:w-2/4 sticky top-14 p-0 border border-gray-300 dark:text-white rounded mr-4 md:mr-8 ">
         <SideBar />
@@ -22,6 +22,25 @@
     </div>
     <Footer class="footer-bottom" />
   </div>
+
+  <!-- 
+  
+  TOO BIG FOR ME 
+  sidebar is md:w-2/4
+  content is md:w-4/4
+  trends is md:w-2/4
+
+  and also, this is the default before changes
+  <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-48">
+
+  this is good too
+  <div class="flex flex-col md:flex-row justify-between items-start md:mx-6 lg:mx-72"> 
+
+
+  thats why it has changes
+
+  
+  -->
 
 
 </template>
