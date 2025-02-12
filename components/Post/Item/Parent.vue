@@ -122,14 +122,8 @@
     </div>
 
     <div class="replies">
-      <div v-for="(item, index) in postsReply" :key="index">
-        <div class="flex flex-shrink-0 p-8 pb-0">
-          <ol class="relative border-timeline" :class="{ 'border-none': postsReply.length === index + 1 }">
-            <li class="ms-8 -mt-6">
-              <PostItemReply :item="item" />
-            </li>
-          </ol>
-        </div>
+      <div v-for="(item, index) in item.replies" :key="index">
+        <PostReplyCard :item="item" :index="index" />
       </div>
     </div>
 
@@ -138,6 +132,7 @@
 
 
 <script setup>
+import { PostReplyCard } from '#components'
 import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
 import { usePostStore } from '~/stores/Post'
 
@@ -163,7 +158,7 @@ const likeClass = computed(() => {
 });
 
 const headerClass = computed(() => {
-  console.log(scroll)
+  // console.log(scroll)
   return scrollY.value > 0
     ? 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 space-between items-center space-x-2'
     : 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 rounded-t-lg space-between items-center space-x-2';

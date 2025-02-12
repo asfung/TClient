@@ -17,11 +17,11 @@
                   @{{ item.username }} . 16 April </span>
               </p>
             </div>
-            <PostContentText class="" :content="item.contentData" />
+            <PostContentText class="max-w-[475px]" :content="item.contentData" />
 
             <div class="pl-0 mb-2">
               <UCarousel v-slot="{ item }" :items="item.media"
-                :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
+                :ui="{ item: 'mx-1', container: 'pr-5 snap-none scroll-smooth' }">
                 <img :src="item" width="200" height="300" draggable="true"
                   class="rounded-lg cursor-pointer duration-200 active:scale-95" />
               </UCarousel>

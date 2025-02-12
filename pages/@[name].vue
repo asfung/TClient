@@ -21,7 +21,7 @@
           </p>
           <p>
             78
-            <span class="text-neutral">Followers</span>
+            <span class="text-neutral">Following</span>
           </p>
           <p>
             3
