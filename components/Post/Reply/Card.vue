@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-shrink-0 p-8 pb-0">
-    <ol class="relative border-timeline" :class="{ 'border-none': (item.length + item.replies.length) === index + 1 }">
+    <!-- <ol class="relative border-timeline" :class="{ 'border-none': (item.length + item.replies.length) === index + 1 }"> -->
+    <ol class="relative border-timeline" :class="{ 'border-none': item.replies.length === 0 }">
       <li class="ms-8 -mt-6">
-        <!-- <p>{{ index }}</p> -->
+        <!-- <p>{{ item.replies.length }}</p> -->
         <PostItemReply :item="item" />
       </li>
       <li class="ms-8 -mt-6" v-for="(reply, replyI) in item.replies" :key="replyI">
-        <p @click="clickedItemReply(item)">{{ replyI }}</p>
+        <!-- <p @click="clickedItemReply(item)">{{ replyI }}</p> -->
         <PostItemReply :item="reply" />
       </li>
       <!-- <p>end</p> -->

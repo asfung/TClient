@@ -63,16 +63,16 @@ export const usePostStore = defineStore('PostStore', {
             title: `Sucker`,
             subtitle: `good`,
             description: `goodddddddddddddddddddddddddddddddddddddd`,
-            contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
+            contentData: "thats nice",
             show: false,
             liked: false,
             media: [
-            'https://picsum.photos/600/800?random=1',
-            'https://picsum.photos/600/800?random=2',
-            'https://picsum.photos/600/800?random=3',
-            'https://picsum.photos/600/800?random=4',
-            'https://picsum.photos/600/800?random=5',
-            'https://picsum.photos/600/800?random=6'
+            // 'https://picsum.photos/600/800?random=1',
+            // 'https://picsum.photos/600/800?random=2',
+            // 'https://picsum.photos/600/800?random=3',
+            // 'https://picsum.photos/600/800?random=4',
+            // 'https://picsum.photos/600/800?random=5',
+            // 'https://picsum.photos/600/800?random=6'
             ],
             replies: [
               {
@@ -81,16 +81,16 @@ export const usePostStore = defineStore('PostStore', {
                 title: `Leannnn`,
                 subtitle: `good`,
                 description: `goodddddddddddddddddddddddddddddddddddddd`,
-                contentData: "iyahhhh",
+                contentData: "you right",
                 show: false,
                 liked: false,
                 media: [
-                'https://picsum.photos/600/800?random=1',
-                'https://picsum.photos/600/800?random=2',
-                'https://picsum.photos/600/800?random=3',
-                'https://picsum.photos/600/800?random=4',
-                'https://picsum.photos/600/800?random=5',
-                'https://picsum.photos/600/800?random=6'
+                // 'https://picsum.photos/600/800?random=1',
+                // 'https://picsum.photos/600/800?random=2',
+                // 'https://picsum.photos/600/800?random=3',
+                // 'https://picsum.photos/600/800?random=4',
+                // 'https://picsum.photos/600/800?random=5',
+                // 'https://picsum.photos/600/800?random=6'
                 ],
                 replies: [
                   {
@@ -282,6 +282,47 @@ export const usePostStore = defineStore('PostStore', {
               },
               {
                 id: `332`,
+                username: `Lean Wuu`,
+                title: `Leannnn`,
+                subtitle: `good`,
+                description: `goodddddddddddddddddddddddddddddddddddddd`,
+                contentData: "iyahhhh",
+                show: false,
+                liked: false,
+                media: [
+                'https://picsum.photos/600/800?random=1',
+                'https://picsum.photos/600/800?random=2',
+                'https://picsum.photos/600/800?random=3',
+                'https://picsum.photos/600/800?random=4',
+                'https://picsum.photos/600/800?random=5',
+                'https://picsum.photos/600/800?random=6'
+                ],
+                replies: [
+        
+                ],
+              }
+            ],
+          },
+          {
+            id: `44`,
+            username: `Mark Sucker`,
+            title: `Sucker`,
+            subtitle: `good`,
+            description: `goodddddddddddddddddddddddddddddddddddddd`,
+            contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
+            show: false,
+            liked: false,
+            media: [
+            'https://picsum.photos/600/800?random=1',
+            'https://picsum.photos/600/800?random=2',
+            'https://picsum.photos/600/800?random=3',
+            'https://picsum.photos/600/800?random=4',
+            'https://picsum.photos/600/800?random=5',
+            'https://picsum.photos/600/800?random=6'
+            ],
+            replies: [
+              {
+                id: `331`,
                 username: `Lean Wuu`,
                 title: `Leannnn`,
                 subtitle: `good`,
