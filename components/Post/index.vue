@@ -98,28 +98,30 @@ const feeds = reactive(Array.from({ length: 10 }, (_, i) => ({
 const isLoading = ref(false);
 const hasNextPage = ref(true);
 const maxCharsPerLine = ref(50);
-const content = ref(`our project on https://github.com/asfung/TClient appreciate to @rama and @perdi for the contributing!, 
+// const content = ref(`our project on https://github.com/asfung/TClient appreciate to @rama and @perdi for the contributing!, 
 
-#Nuxt3 #Sigma`);
+// #Nuxt3 #Sigma`);
+const content = ref('Warga Cileungsi! Lagi pengen pecel lele nih, rekomendasi warung pecel lele terenak dan terdekat di Cileungsi dong! 🙏 #pecellele #cileungsi #kuliner')
+
 const contentData = ref("@Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie");
 
 
 const postMe = ref({
   id: `1`,
-  username: `me1`,
-  title: `title me 1 `,
+  username: `JoeGolberg`,
+  display_name: `Im Joe Golberg`,
   subtitle: `substile me 1`,
   description: `description me 1`,
   contentData: content,
   show: false,
   liked: false,
   media: [
-    'https://picsum.photos/600/800?random=1',
-    'https://picsum.photos/600/800?random=2',
-    'https://picsum.photos/600/800?random=3',
-    'https://picsum.photos/600/800?random=4',
-    'https://picsum.photos/600/800?random=5',
-    'https://picsum.photos/600/800?random=6'
+    // 'https://picsum.photos/600/800?random=1',
+    // 'https://picsum.photos/600/800?random=2',
+    // 'https://picsum.photos/600/800?random=3',
+    // 'https://picsum.photos/600/800?random=4',
+    // 'https://picsum.photos/600/800?random=5',
+    // 'https://picsum.photos/600/800?random=6'
   ],
 });
 

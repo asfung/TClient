@@ -10,7 +10,7 @@
           </div>
           <div class="ml-3">
             <p class="text-base leading-6 font-medium">
-              Sonali Hirave {{ item.id }}
+              {{ item.display_name }} {{ item.id }}
               <span
                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
                 @{{ item.username }} . 16 April </span>
