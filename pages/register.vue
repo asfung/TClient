@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center h-screen text-base">
+  <div class="flex items-center">
     <div class="max-w-[280px] mx-auto">
       <div class="flex flex-col items-center mt-[10vh]">
         <button @click="setColorTheme($colorMode.preference === 'dark' ? 'light' : 'dark')" class="ml-4">
@@ -13,13 +13,17 @@
               clip-rule="evenodd" />
           </svg>
         </button>
-        <h2 class="mb-5 text-gray-900 font-mono font-bold text-xl">Sign Up</h2>
+        <h2 class="mb-5 text-gray-900 dark:text-neutral-light font-mono font-bold text-xl">Sign Up</h2>
         <form>
-          <input type="text" class="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium "
+          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+            placeholder="Display Name" value="" />
+          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+            placeholder="Username" value="" />
+          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Email" value="" />
-          <input type="password" class="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium "
+          <input type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Password" value="" />
-          <input type="password" class="w-full px-6 py-3 mb-2 border border-slate-600 rounded-lg font-medium "
+          <input type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Confirm password" value="" />
           <button
             class="bg-primaryLight hover:bg-primaryDark dark:bg-primaryDark dark:hover:bg-primaryLight text-white text-base rounded-lg py-2.5 px-5 transition-colors w-full text-[19px]">Register</button>
@@ -41,3 +45,9 @@ const setColorTheme = (newTheme) => {
   useColorMode().preference = newTheme;
 }
 </script>
+
+<style scoped>
+.border-input{
+  border: 1px solid rgb(71 85 105 );
+}
+</style>

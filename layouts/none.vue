@@ -1,6 +1,7 @@
 <template>
     <!-- <NuxtLayout> -->
-        <NuxtPage />
+        <!-- <NuxtPage class="dark:bg-black dark:selection:bg-primaryDark selection:bg-primaryLight font-bas" /> -->
+        <NuxtPage class="dark:selection:bg-primaryDark selection:bg-primaryLight font-base" />
     <!-- </NuxtLayout> -->
 </template>
 
