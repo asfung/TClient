@@ -4,7 +4,13 @@ export default defineNuxtPlugin((nuxtApp) => {
   const runtimeConfig = useRuntimeConfig()
   const axiosInstance = axios.create({
     baseURL: runtimeConfig.public.baseUrl,
+    // headers: {
+    //   'Access-Control-Allow-Origin': '*', 
+    //   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS', 
+    //   // 'Access-Control-Allow-Headers': 'Content-Type, Authorization', 
+    // },
   })
+  console.log(runtimeConfig.public.baseUrl)
   axiosInstance.interceptors.request.use(
     (config) => {
       // Modify request config before sending the request

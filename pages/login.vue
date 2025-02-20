@@ -14,12 +14,29 @@
           </svg>
         </button>
         <h2 class="mb-5 text-gray-900 dark:text-neutral-light font-mono font-bold text-xl">Log In</h2>
-        <form>
-          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium " placeholder="Email"
+        <form @submit.prevent>
+          <input v-model="email" type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium " placeholder="Email"
             value="" />
-          <input type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
-            placeholder="Password" value="" />
+          <div class="relative w-full">
+            <input  v-model="password" :type="isPasswordVisible ? 'text' : 'password'"
+              class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium pr-10" placeholder="Password" value="" />
+            <button type="button" @click="isPasswordVisible = !isPasswordVisible"
+              class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
+              <svg v-if="isPasswordVisible" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M13.875 18.825a10.05 10.05 0 01-3.875.675C5.758 19.5 2 14 2 14s1.758-3.89 4.95-5.925a10.05 10.05 0 013.875-.675m7.1 3.4c.472.584.872 1.2 1.2 1.775M3 3l18 18" />
+              </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm-3-9c-7.732 0-14 9-14 9s6.268 9 14 9 14-9 14-9-6.268-9-14-9z" />
+              </svg>
+            </button>
+          </div>
+
           <button
+            @click="loginEvent()"
             class="bg-primaryLight hover:bg-primaryDark dark:bg-primaryDark dark:hover:bg-primaryLight text-white rounded-lg py-2.5 px-5 transition-colors w-full text-[19px]">Log
             In</button>
         </form>
@@ -35,13 +52,68 @@
         dsalkmdas
       </div> -->
     </div>
+
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="error"
+      variant="tonal"
+      class="font-base font-base-bold"
+    >
+      <p>{{ text }}</p>
+    </v-snackbar>
+
+
+
   </div>
 </template>
 
 <script setup>
+import { useAuthStore } from '~/stores/Auth'
 definePageMeta({
   layout: 'none',
 })
+const { $axios } = useNuxtApp()
+
+const isPasswordVisible = ref(false);
+const email = ref('')
+const password = ref('')
+const authStore = useAuthStore();
+
+const snackbar = ref(false)
+const text = ref('')
+const timeout = ref(2000)
+
+onMounted(() => {
+  console.log(authStore.test())
+});
+
+// watch(email, (newVal) => {
+//   console.log(newVal);
+// })
+
+// watch(password, (newVal) => {
+//   console.log(newVal);
+// })
+
+const loginEvent = async () => {
+  try{
+    // if(!email.value || !password.value){
+    //   return;
+    // }
+    const {status, data, message} = await authStore.loginAction({email: email.value, password: password.value});
+    if(status === 401 || status === 404 || status === 422){
+      snackbar.value = true
+      text.value = message
+    }
+    console.log(data)
+
+  }catch(e){
+    console.log(e);
+  }
+}
+
+
 const setColorTheme = (newTheme) => {
   console.log(newTheme);
   useColorMode().preference = newTheme;

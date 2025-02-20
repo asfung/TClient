@@ -18,6 +18,13 @@ export default defineNuxtConfig({
       ]
     }
   },
+  runtimeConfig: {
+    TALKER_API: process.env.TALKER_API,
+    public: {
+      baseUrl: process.env.TALKER_API,
+      apiBase: 'this is api base url',
+    }
+  },
   // plugins: [
   //   '~/plugins/screen.js',
   // ],
