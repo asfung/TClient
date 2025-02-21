@@ -39,6 +39,9 @@ importers:
         specifier: latest
         version: 3.5.13(typescript@5.7.3)
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^9.5.0
+        version: 9.5.0
       '@nuxtjs/color-mode':
         specifier: ^3.4.2
         version: 3.5.2(magicast@0.3.5)(rollup@4.34.2)
@@ -511,6 +514,10 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@faker-js/faker@9.5.0':
+    resolution: {integrity: sha512-3qbjLv+fzuuCg3umxc9/7YjrEXNaKwHgmig949nfyaTx8eL4FAsvFbu+1JcFUj1YAXofhaDn6JdEUBTYuk0Ssw==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@fortawesome/fontawesome-free@6.7.2':
     resolution: {integrity: sha512-JUOtgFW6k9u4Y+xeIaEiLr3+cjoUPiAuLXoyKOJSia6Duzb7pq+A76P9ZdPDoAoxHdHzq6gE9/jKBGXlZT8FbA==}
@@ -4131,6 +4138,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.24.2':
     optional: true
+
+  '@faker-js/faker@9.5.0': {}
 
   '@fortawesome/fontawesome-free@6.7.2': {}
 

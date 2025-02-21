@@ -14,18 +14,18 @@
           </svg>
         </button>
         <h2 class="mb-5 text-gray-900 dark:text-neutral-light font-mono font-bold text-xl">Sign Up</h2>
-        <form>
-          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+        <form @submit.prevent>
+          <input v-model="displayName" type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Display Name" value="" />
-          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+          <input v-model="username" type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Username" value="" />
-          <input type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+          <input v-model="email" type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Email" value="" />
-          <input type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+          <input v-model="password" type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Password" value="" />
-          <input type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
+          <input v-model="passwordConfirm" type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Confirm password" value="" />
-          <button
+          <button @click="registerEvent()"
             class="bg-primaryLight hover:bg-primaryDark dark:bg-primaryDark dark:hover:bg-primaryLight text-white text-base rounded-lg py-2.5 px-5 transition-colors w-full text-[19px]">Register</button>
         </form>
         <p class="text-center mt-3 text-[14px]">Already have an account?
@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '~/stores/Auth';
 definePageMeta({
   layout: 'none',
 })
@@ -44,6 +45,28 @@ const setColorTheme = (newTheme) => {
   console.log(newTheme);
   useColorMode().preference = newTheme;
 }
+
+
+
+
+const displayName = ref('')
+const username = ref('')
+const email = ref('')
+const password = ref('')
+const passwordConfirm = ref('')
+
+
+
+const registerEvent = async () => {
+  try{
+    console.log('register')
+  }catch(e){
+    console.log(e)
+  }
+}
+
+
+
 </script>
 
 <style scoped>

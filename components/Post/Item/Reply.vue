@@ -3,11 +3,11 @@
     <!-- <div class="flex flex-shrink-0 p-8 pb-0">
       <ol class="relative border-timeline">
         <li class="ms-8 -mt-6"> -->
-          <span
+          <!-- <span
             class="absolute flex items-center justify-center w-10 h-10 bg-blue-100 rounded-full -start-5 ring-8 ring-white dark:ring-black dark:bg-blue-900">
             <img class="rounded-full shadow-lg"
               src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="Bonnie image" />
-          </span>
+          </span> -->
           <div class="">
             <div class="">
               <p class="text-base leading-6 font-medium">

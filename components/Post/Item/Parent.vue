@@ -112,7 +112,7 @@
     </div>
 
     <div class="flex items-center justify-between p-4 border-y">
-      <div class="hover:bg-gray-600 w-full hover:rounded-full hover:bg-opacity-20 cursor-pointer duration-400">
+      <div @click="replyDialog = true" class="hover:bg-gray-600 w-full hover:rounded-full hover:bg-opacity-20 cursor-pointer duration-400">
         <div class="dark:text-gray-500 ">
           <img class="inline-block h-10 w-10 rounded-full"
             src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
@@ -127,6 +127,8 @@
       </div>
     </div>
 
+    <DialogTextArea :dialog="replyDialog" @close-dialog="closeReplyDialog" />
+
   </div>
 </template>
 
@@ -140,6 +142,7 @@ const isBookmarked = ref(false)
 const isLiked = ref(false)
 const postStore = usePostStore()
 const scrollY = ref(0)
+const replyDialog = ref(false)
 
 const props = defineProps({
   item: {
@@ -180,6 +183,10 @@ const clickPostItem = () => {
   console.log(props.item);
   // i want to navigate to the post page /post/:id
   useNuxtApp().$router.push(`/post/${props.item.id}`)
+}
+
+const closeReplyDialog = () => {
+  replyDialog.value = false
 }
 
 onMounted(() => {

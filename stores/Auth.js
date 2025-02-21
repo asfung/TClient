@@ -57,6 +57,43 @@ export const useAuthStore = defineStore('AuthStore', {
       }
     },
 
+    async registerAction(payload){
+      try{
+        const { $axios } = useNuxtApp()
+        // console.log($axios)
+        const response = await $axios.post('/Register', payload, {
+          headers: {
+            // 'Content-Type': 'application/json',
+          }
+        })
+        
+        console.log(response.data)
+        // return response.data
+        if(response.status === 500){
+          // console.log('benar')
+          return {
+            status: response.status,
+            data: response.data,
+            message: response.data.error
+          }
+        }else{
+          return {
+            status: response.status,
+            data: response.data,
+            message: 'Berhasil Login'
+          }
+        }
+
+      }catch(e){
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred',
+          // message: e.message || 'An error occurred'
+        }
+      }
+    },
+
     test(){
       return 'hello world '
     },
