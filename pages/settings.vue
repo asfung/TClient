@@ -16,7 +16,7 @@ const authStore = useAuthStore()
 
 const signOutEvent = () => {
   authStore.signOut()
-
+  window.location.href = '/'
 }
 
 </script>

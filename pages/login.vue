@@ -76,7 +76,6 @@ definePageMeta({
   layout: 'none',
   middleware: ['auth-middleware']
 })
-const { $axios } = useNuxtApp()
 
 const isPasswordVisible = ref(false);
 const email = ref('')
@@ -108,9 +107,9 @@ const loginEvent = async () => {
         ...data.user,
         authorization: data.authorization
       };
-      console.log(mergeCredentials)
-      // authStore.setToken(data.authorisation.token)
       authStore.setCredentials(mergeCredentials)
+      // navigateTo('/')
+      window.location.href = '/'
     }
 
   }catch(e){
