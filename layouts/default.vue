@@ -11,11 +11,9 @@
       <div v-if="$isBreakpoint(['md', 'lg', 'xl'])"
         class="w-full md:w-2/4 sticky top-14 p-0 dark:text-white rounded mr-4 md:mr-8 ">
         <SideBar />
-        <!-- <div class="flex border-default justify-center rounded-full"> -->
-          <v-chip class="flex ma-2 bg-primaryLight bg-opacity-50 dark:bg-opacity-50 dark:bg-primaryDark hover:text-white hover:bg-primaryLight dark:hover:bg-primaryDark">
-            <p class="m-20 dark:text-white">New Post</p>
-          </v-chip>
-        <!-- </div> -->
+        <div @click="postDialog = true" class="flex hover:cursor-pointer bg-primaryLight dark:bg-primaryDark dark:bg-opacity-30 dark:hover:bg-opacity-100 justify-center rounded-full">
+          <p class="my-3 text-white ">New Post</p>
+        </div>
       </div>
       <div class="w-full md:w-4/4 p-0 dark:text-white rounded border border-gray-300">
         <NuxtPage />
@@ -26,6 +24,8 @@
       </div>
     </div>
     <Footer class="footer-bottom" />
+
+    <DialogTextArea :dialog="postDialog" @close-dialog="closeReplyDialog" />
   </div>
 
   <!-- 
@@ -50,15 +50,11 @@
 
 </template>
 
-<script>
-// import Header from '~/components/Header.vue'
-// import Footer from '~/components/Footer.vue'
+<script setup>
+const postDialog = ref(false)
 
-export default{
-  components: {
-    // Header,
-    // Footer
-  }, 
+const closeReplyDialog = () => {
+  postDialog.value = false
 }
 </script>
 
