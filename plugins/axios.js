@@ -10,7 +10,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     //   // 'Access-Control-Allow-Headers': 'Content-Type, Authorization', 
     // },
   })
-  console.log(runtimeConfig.public.baseUrl)
+  // console.log(runtimeConfig.public.baseUrl)
   axiosInstance.interceptors.request.use(
     (config) => {
       // Modify request config before sending the request

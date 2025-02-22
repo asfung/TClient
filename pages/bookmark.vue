@@ -9,6 +9,7 @@
 <script setup>
 definePageMeta({
   scrollToTop: false,
+  middleware: ['auth-middleware'],
 })
 
 import { usePostStore } from '~/stores/Post';

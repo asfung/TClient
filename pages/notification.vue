@@ -11,6 +11,7 @@
 
 definePageMeta({
   scrollToTop: false,
+  middleware: ['auth-middleware'],
 })
 
 const scrollY = computed(() => sessionStorage.getItem('notification-scrollY'))

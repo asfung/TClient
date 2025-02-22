@@ -5,6 +5,9 @@
 </template>
 
 <script setup>
+definePageMeta({
+  middleware: ['auth-middleware'],
+})
 import { usePostStore } from '~/stores/Post'
 
 const postStore = usePostStore()

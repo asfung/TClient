@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>{{ dialog }}</p>
+    <!-- <p>{{ dialog }}</p> -->
     <v-dialog 
       v-model="props.dialog" 
       width="auto">

@@ -27,6 +27,9 @@ export const useAuthStore = defineStore('AuthStore', {
       this.credentials = encryptedCredentials
     },
     getCredentials(credentials){
+      if(!this.credentials){
+        return null
+      }
       const decryptCredentials = CryptoJS.AES.decrypt(this.credentials, SECRET_KEY).toString(CryptoJS.enc.Utf8);
       const jsonCredentials = JSON.parse(decryptCredentials)
       // console.log(decryptCredentials)
@@ -52,6 +55,9 @@ export const useAuthStore = defineStore('AuthStore', {
       const bytes = CryptoJS.AES.decrypt(this.token, SECRET_KEY);
       const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
       return decryptedToken;
+    },
+    signOut(){
+      localStorage.removeItem('credentials')
     },
     logout() {
       localStorage.removeItem('token');

@@ -74,6 +74,7 @@ import { Credentials } from '~/enums/Credentials'
 
 definePageMeta({
   layout: 'none',
+  middleware: ['auth-middleware']
 })
 const { $axios } = useNuxtApp()
 
