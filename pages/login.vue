@@ -70,6 +70,8 @@
 
 <script setup>
 import { useAuthStore } from '~/stores/Auth'
+import { Credentials } from '~/enums/Credentials'
+
 definePageMeta({
   layout: 'none',
 })
@@ -84,29 +86,31 @@ const snackbar = ref(false)
 const text = ref('')
 const timeout = ref(2000)
 
+
 onMounted(() => {
-  console.log(authStore.test())
+  console.log(authStore.getCredentials(Credentials.USER))
+  // console.log(authStore.hello)
+  // localStorage.removeItem('token')
 });
 
-// watch(email, (newVal) => {
-//   console.log(newVal);
-// })
-
-// watch(password, (newVal) => {
-//   console.log(newVal);
-// })
 
 const loginEvent = async () => {
   try{
-    // if(!email.value || !password.value){
-    //   return;
-    // }
-    const {status, data, message} = await authStore.loginAction({email: email.value, password: password.value});
+    const { response, status, data, message } = await authStore.loginAction({email: email.value, password: password.value});
     if(status === 401 || status === 404 || status === 422){
       snackbar.value = true
       text.value = message
     }
-    console.log(data)
+    if(response.status === 200){
+      console.log(data)
+      const mergeCredentials = {
+        ...data.user,
+        authorization: data.authorization
+      };
+      console.log(mergeCredentials)
+      // authStore.setToken(data.authorisation.token)
+      authStore.setCredentials(mergeCredentials)
+    }
 
   }catch(e){
     console.log(e);
