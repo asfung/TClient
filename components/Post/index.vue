@@ -1,7 +1,7 @@
 <template>
   <!-- <div class="dark:border-white dark:border dark:rounded"> -->
   <!-- <div class="border-default rounded-lg"> -->
-  <div class="" :class="{'border-default rounded-lg': inputPost}">
+  <div class="" :class="{'border-default rounded': inputPost}">
     <!-- <p>{{ inputPost }}</p> -->
     <div v-if="inputPost" class="flex">
       <div class="m-2 w-10 py-1">
@@ -67,6 +67,7 @@ import { ref, reactive, computed, watch, onMounted } from 'vue';
 import { useAuthStore } from '~/stores/Auth'
 import { usePostStore } from '~/stores/Post';
 import PostContentText from '../PostContentText.vue';
+import { faker } from '@faker-js/faker'
 
 // const pinia = createPinia()
 
@@ -85,12 +86,12 @@ const props = defineProps({
 const posts = computed(() => postStore.posts);
 const postHasNextPage = computed(() => postStore.hasNextPage);
 
-const feeds = reactive(Array.from({ length: 10 }, (_, i) => ({
-  id: `${i + 1}`,
-  username: `user ${i + 1}`,
-  title: `selekences ${i + 1}`,
-  subtitle: `selekencess cessss ${i + 1}`,
-  description: `kddlksamdlksamkdlmaslkdmsakmasdmsaklmsalkmsakldmsalkdmsalkmmaslkmdasl ${i + 1}`,
+const feeds = reactive(Array.from({ length: 10 }, () => ({
+  id: faker.string.uuid(),                    
+  username: faker.internet.userName(),        
+  display_name: faker.person.fullName(),      
+  content: faker.lorem.sentences(2),          
+  created_at: faker.date.recent().toISOString(),
   show: false,
   liked: false,
 })));
@@ -112,7 +113,7 @@ const postMe = ref({
   display_name: `Im Joe Golberg`,
   subtitle: `substile me 1`,
   description: `description me 1`,
-  contentData: content,
+  content: content,
   show: false,
   liked: false,
   media: [

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-96 dark:bg-black dark:text-white p-7 rounded-lg border-default">
+  <div class="h-96 dark:bg-black dark:text-white p-7 rounded-lg">
     <v-list class="dark:text-white dark:bg-black -mx-7">
       <v-list-item v-for="(item, i) in items" :key="i" :value="item" class="sidebar-item" :active="false" :ripple="false">
         <nuxt-link :to="item.name !== 'profile' ? {name: `${item.name}`} : `/@${userCredentials.username}`" class="flex items-center space-x-2 hover:bg-primaryLight dark:hover:bg-primaryDark hover:bg-opacity-70 dark:hover:bg-opacity-30 hover:text-neutral-light p-2 rounded-lg"

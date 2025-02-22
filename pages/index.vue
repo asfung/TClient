@@ -1,6 +1,5 @@
 <template>
   <div>
-    <p class="text-white">{{ token }} </p>
     <Post />
   </div>
 

@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { fakerEN as faker } from '@faker-js/faker'
 
 export const usePostStore = defineStore('PostStore', {
   state: () => {
@@ -7,38 +8,18 @@ export const usePostStore = defineStore('PostStore', {
       hasNextPage: true,
       post: [],
       posts: Array.from({ length: 10 }, (_, i) => ({
-        id: `${i + 1}`,
-        username: `user${i + 1}`,
-        title: `selekences ${i + 1}`,
-        subtitle: `selekencess cessss ${i + 1}`,
-        description: `kddlksamdlksamkdlmaslkdmsakmasdmsaklmsalkmsakldmsalkdmsalkmmaslkmdasl ${i + 1}`,
-        // content: this.contentData,
-        contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie ",
+        id: faker.string.uuid(),                    
+        profile_image: faker.image.url({ width: 100, height: 100 }), 
+        username: faker.internet.userName(),        
+        display_name: faker.person.fullName(),      
+        content: faker.lorem.sentences(2),          
+        created_at: faker.date.recent().toISOString(),
         show: false,
         liked: false,
-        media: [
-        'https://picsum.photos/600/800?random=1',
-        'https://picsum.photos/600/800?random=2',
-        'https://picsum.photos/600/800?random=3',
-        'https://picsum.photos/600/800?random=4',
-        'https://picsum.photos/600/800?random=5',
-        'https://picsum.photos/600/800?random=6'
-        ],
+        media: Array.from({ length: Math.floor(Math.random() * 6) + 1 }, () => 
+          faker.image.url({ width: 600, height: 800 })
+        ),
       })),
-      // posts: [], // this state will stiil be empty even i redirect to another page, BOTCH I FORGOT WHAT IS THIS MEAN 
-      // postsReply: Array.from({ length: 5 }, (_, i) => ({
-      //   id: `${i + 1}`,
-      //   username: `user${i + 1}`,
-      //   title: `selekences ${i + 1}`,
-      //   subtitle: `selekencess cessss ${i + 1}`,
-      //   description: `kddlksamdlksamkdlmaslkdmsakmasdmsaklmsalkmsakldmsalkdmsalkmmaslkmdasl ${i + 1}`,
-      //   // content: this.contentData,
-      //   contentData: "how great that was man  ",
-      //   // contentData: "how great that was man  aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      //   show: false,
-      //   liked: false,
-      //   media: [],
-      // })),
       postReply: {
         id: `1`,
         username: `Dylan Jabbowzz`,
@@ -67,12 +48,6 @@ export const usePostStore = defineStore('PostStore', {
             show: false,
             liked: false,
             media: [
-            // 'https://picsum.photos/600/800?random=1',
-            // 'https://picsum.photos/600/800?random=2',
-            // 'https://picsum.photos/600/800?random=3',
-            // 'https://picsum.photos/600/800?random=4',
-            // 'https://picsum.photos/600/800?random=5',
-            // 'https://picsum.photos/600/800?random=6'
             ],
             replies: [
               {
@@ -85,12 +60,6 @@ export const usePostStore = defineStore('PostStore', {
                 show: false,
                 liked: false,
                 media: [
-                // 'https://picsum.photos/600/800?random=1',
-                // 'https://picsum.photos/600/800?random=2',
-                // 'https://picsum.photos/600/800?random=3',
-                // 'https://picsum.photos/600/800?random=4',
-                // 'https://picsum.photos/600/800?random=5',
-                // 'https://picsum.photos/600/800?random=6'
                 ],
                 replies: [
                   {
@@ -352,14 +321,15 @@ export const usePostStore = defineStore('PostStore', {
   actions: {
     loadMoreData(){
       const newData = Array.from({ length: 10 }, (_, i) => ({
-        id: `${this.posts.length + i + 1}`,
-        username: `user ${i + 1}`,
-        title: `selekences ${this.posts.length + i + 1}`,
-        subtitle: `selekencess cessss ${this.posts.length + i + 1}`,
-        description: `kddlksamdlksamkdlmaslkdmsakmasdmsaklmsalkmsakldmsalkdmsalkmmaslkmdasl ${this.posts.length + i + 1}`,
-        contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie",
+        id: faker.string.uuid(),                    
+        username: faker.internet.userName(),        
+        profile_image: faker.image.url({ width: 100, height: 100 }), 
+        display_name: faker.person.fullName(),      
+        content: faker.lorem.sentences(2),          
+        created_at: faker.date.recent().toISOString(),
         show: false,
         liked: false,
+        // contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie",
         media: [
         'https://picsum.photos/600/800?random=1',
         'https://picsum.photos/600/800?random=2',

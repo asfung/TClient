@@ -6,14 +6,14 @@
         <div class="flex items-center">
           <div>
             <img class="inline-block h-10 w-10 rounded-full"
-              src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+              :src="item.profile_image" alt="" />
           </div>
           <div class="ml-3">
             <p class="text-base leading-6 font-medium">
-              {{ item.display_name }} {{ item.id }}
+              {{ item.display_name }}
               <span
                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                @{{ item.username }} . 16 April </span>
+                @{{ item.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
             </p>
           </div>
         </div>
@@ -21,7 +21,7 @@
     </div>
 
     <div class="">
-      <PostContentText class="pl-16 max-w-[475px]" :content="item.contentData" @click.stop @mousedown="startSelection" @mouseup="endSelection" />
+      <PostContentText class="pl-16 max-w-[475px]" :content="item.content" @click.stop @mousedown="startSelection" @mouseup="endSelection" />
 
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop
@@ -141,6 +141,12 @@ const toggleLike = () => {
   isLiked.value = !isLiked.value
   console.log('after ', isLiked.value)
 }
+
+const convertToRelativeTime = (createdAt) => {
+  return useNuxtApp().$dayjs.utc(createdAt)
+    .tz('Asia/Jakarta')   
+    .fromNow();
+};
 
 const clickPostItem = () => {
   console.log(props.item);
