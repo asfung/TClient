@@ -17,6 +17,9 @@
         #{{ trend.title }}
       </span> -->
     </div>
+    <!-- <div class="flex mt-8 justify-center">
+      <hr class="w-56">
+    </div> -->
   </div>
 </template>
 

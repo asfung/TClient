@@ -109,6 +109,7 @@ const contentData = ref("@Elon Day 07 of the challenge #100DaysOfCode I was wond
 
 const postMe = ref({
   id: `1`,
+  profile_image: faker.image.url({ width: 100, height: 100 }),
   username: `JoeGolberg`,
   display_name: `Im Joe Golberg`,
   subtitle: `substile me 1`,
