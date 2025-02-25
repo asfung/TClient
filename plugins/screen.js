@@ -44,6 +44,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   })
   nuxtApp.hook('app:mounted', () => {
-    console.log('Nuxt app is mounted and screen is ready')
+    // console.log('Nuxt app is mounted and screen is ready')
+    console.log('Screen PLugin ✅')
   })
 })

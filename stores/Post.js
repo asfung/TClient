@@ -330,14 +330,9 @@ export const usePostStore = defineStore('PostStore', {
         show: false,
         liked: false,
         // contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie",
-        media: [
-        'https://picsum.photos/600/800?random=1',
-        'https://picsum.photos/600/800?random=2',
-        'https://picsum.photos/600/800?random=3',
-        'https://picsum.photos/600/800?random=4',
-        'https://picsum.photos/600/800?random=5',
-        'https://picsum.photos/600/800?random=6'
-        ],
+        media: Array.from({ length: Math.floor(Math.random() * 6) + 1 }, () => 
+          faker.image.url({ width: 600, height: 800 })
+        ),
       }));
   
       // console.log(`before fetch: ${this.posts.length}`);

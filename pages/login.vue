@@ -13,6 +13,7 @@
               clip-rule="evenodd" />
           </svg>
         </button>
+        <!-- <button @click="changeLocalStorage">change localstorage</button> -->
         <h2 class="mb-5 text-gray-900 dark:text-neutral-light font-mono font-bold text-xl">Log In</h2>
         <form @submit.prevent>
           <input v-model="email" type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium " placeholder="Email"
@@ -43,14 +44,7 @@
         <p class="text-center mt-3 text-[14px]">Don&#x27;t have an account?
           <NuxtLink to="/register" class="text-gray-600">Create one</NuxtLink>
         </p>
-        <!-- <p class="text-center mt-3 text-[14px]">By clicking continue, you agree to our
-        <a href="/terms" class="text-gray-600">Terms of Service</a> and <a href="/privacy" class="text-gray-600">Privacy
-          Policy</a>.
-      </p> -->
       </div>
-      <!-- <div class="my-48">
-        dsalkmdas
-      </div> -->
     </div>
 
     <v-snackbar
@@ -62,7 +56,6 @@
     >
       <p>{{ text }}</p>
     </v-snackbar>
-
 
 
   </div>
@@ -86,28 +79,42 @@ const snackbar = ref(false)
 const text = ref('')
 const timeout = ref(2000)
 
+const changeLocalStorage = () => {
+  authStore.setCredentialBy(Credentials.USER, {
+    name: 'paungc',
+    email: 'paung@gmail.com',
+    profile_image: 'dasmkdlms'
+  })
+  // authStore.setCredentialBy(Credentials.USER, 'ini new token')
+}
 
 onMounted(() => {
-  console.log(authStore.getCredentials(Credentials.USER))
+  // console.log(authStore.getCredentials(Credentials.USER))
   // console.log(authStore.hello)
   // localStorage.removeItem('token')
+  // localStorage.setItem('test', 'ini belum diubah')
+  // authStore.testCredentials()
 });
 
 
 const loginEvent = async () => {
   try{
     const { response, status, data, message } = await authStore.loginAction({email: email.value, password: password.value});
-    if(status === 401 || status === 404 || status === 422){
+    // do not use 401 (incorrect password) cause it can affecting the refresh token on axios interceptor.response
+    // UPDATES: IT STILL PASS THE 401, {"status":"error","message":"Incorrect password"}, maybe its trigger when the 401 loop on axios.interceptor.response
+    if(status === 401 || status === 404 || status === 422){ 
       snackbar.value = true
       text.value = message
     }
     if(response.status === 200){
       console.log(data)
-      const mergeCredentials = {
-        ...data.user,
-        authorization: data.authorization
-      };
-      authStore.setCredentials(mergeCredentials)
+      // const mergeCredentials = {
+      //   ...data.user,
+      //   authorization: data.authorization
+      // };
+      // authStore.setCredentials(mergeCredentials)
+      const credentials = authStore.formattedCredentials(data)
+      authStore.setCredentials(credentials)
       // navigateTo('/')
       window.location.href = '/'
     }

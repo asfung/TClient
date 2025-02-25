@@ -26,6 +26,43 @@ export const useAuthStore = defineStore('AuthStore', {
       localStorage.setItem('credentials', encryptedCredentials);
       this.credentials = encryptedCredentials
     },
+    // testCredentials(){
+    //   const dataEncrypt = CryptoJS.AES.encrypt('halo test', SECRET_KEY).toString();
+    //   localStorage.setItem('test', dataEncrypt)
+    //   console.log('mount test encrypt: ', dataEncrypt)
+
+    //   const dataDecrypt = CryptoJS.AES.decrypt(dataEncrypt, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+    //   localStorage.setItem('testValue', dataDecrypt)
+    //   console.log('mount test value:', dataDecrypt)
+    // },
+    setCredentialBy(credentialType, data){
+      if(!this.credentials){
+        return null
+      }
+      const decryptCredentials = CryptoJS.AES.decrypt(this.credentials, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+      const jsonCredentialsOri = JSON.parse(decryptCredentials)
+      var jsonCredentials = JSON.parse(decryptCredentials)
+      console.log(jsonCredentialsOri)
+
+      if(credentialType === Credentials.TOKEN){
+        jsonCredentials.authorization.token = data 
+        const jsonCredentialsStr = JSON.stringify(jsonCredentials);
+        const encryptedCredentials = this.encrypt(jsonCredentialsStr);
+        // localStorage.setItem('credentials', encryptedCredentials) // ON/OFF FOR A WHILE
+      }
+      if(credentialType === Credentials.USER){
+        if(typeof data !== "object"){
+          console.log('tidak bisa')
+          return 'can\'t set cause isn\'t object type';
+        } 
+        const authorizationTemp = jsonCredentials.authorization
+        jsonCredentials = data
+        jsonCredentials.authorization = authorizationTemp
+        const jsonCredentialsStr = JSON.stringify(jsonCredentials)
+        const encryptedCredentials = this.encrypt(jsonCredentialsStr)
+        // localStorage.setItem('credentials', encryptedCredentials) // ON/OFF FOR A WHILE
+      }
+    },
     getCredentials(credentials){
       if(!this.credentials){
         return null
@@ -45,6 +82,14 @@ export const useAuthStore = defineStore('AuthStore', {
         return jsonCredentials
       }
     },
+    formattedCredentials(data){
+      const formattedData = {
+        ...data.user,
+        authorization: data.authorization
+      };
+      return formattedData
+    },
+
     setToken(token) {
       const encryptedToken = CryptoJS.AES.encrypt(token, SECRET_KEY).toString();
       localStorage.setItem('token', encryptedToken);
@@ -101,10 +146,14 @@ export const useAuthStore = defineStore('AuthStore', {
       }
     },
 
+    encrypt(value){
+      const encryptedValue = CryptoJS.AES.encrypt(value, SECRET_KEY).toString();
+      return encryptedValue
+    },
+
     decrypt(value){
-      const bytes = CryptoJS.AES.decrypt(value, SECRET_KEY);
-      // const decryptedValue = bytes.toString(CryptoJS.enc.Utf8);
-      return bytes;
+      const decryptedValue = CryptoJS.AES.decrypt(value, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+      return decryptedValue
     },
 
     // async loginAction(payload){

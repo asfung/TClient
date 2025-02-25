@@ -21,8 +21,6 @@
             placeholder="Username" value="" />
           <input v-model="email" type="text" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
             placeholder="Email" value="" />
-          <!-- <input v-model="password" type="password" class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium "
-            placeholder="Password" value="" /> -->
           <div class="relative w-full">
             <input v-model="password" :type="isPasswordVisible ? 'text' : 'password'"
               class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium pr-10" placeholder="Password" value="" />
@@ -40,12 +38,9 @@
               </svg>
             </button>
           </div>
-          <!-- <input v-model="passwordConfirm" type="password"
-            class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium " placeholder="Confirm password"
-            value="" /> -->
           <div class="relative w-full">
             <input v-model="passwordConfirm" :type="isPasswordConfirmVisible ? 'text' : 'password'"
-              class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium pr-10" placeholder="Password" value="" />
+              class="w-full px-6 py-3 mb-2 border-input rounded-lg font-medium pr-10" placeholder="Confirm Password" value="" />
             <button type="button" @click="isPasswordConfirmVisible = !isPasswordConfirmVisible"
               class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500">
               <svg v-if="!isPasswordConfirmVisible" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
@@ -129,8 +124,6 @@ const registerEvent = async () => {
     console.log(e)
   }
 }
-
-
 
 </script>
 
