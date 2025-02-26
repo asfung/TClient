@@ -1,6 +1,7 @@
 <template>
   <div class="">
-    <div>
+    <div class="grid justify-start">
+      <button @click="checkTokenEvent()">Check Token</button>
       <button @click="signOutEvent()">Sign Out</button>
     </div>
   </div>
@@ -18,6 +19,11 @@ const signOutEvent = () => {
   authStore.signOut()
   window.location.href = '/'
 }
+
+const checkTokenEvent = () => {
+  authStore.checkToken()
+}
+
 
 </script>
 

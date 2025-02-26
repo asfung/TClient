@@ -8,7 +8,6 @@ export default defineNuxtPlugin((app) => {
   })
   app.vueApp.use(vuetify)
   app.hook('app:mounted', () => {
-    // console.log('Nuxt app is mounted and vuetify is ready')
     console.log('Vuetify PLugin ✅')
   })
 })

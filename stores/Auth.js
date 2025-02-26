@@ -117,6 +117,27 @@ export const useAuthStore = defineStore('AuthStore', {
       return await this.apiRequest('/Register', payload);
     },
 
+    async checkToken(){
+      try{
+        const { $axios } = useNuxtApp()
+        const response = await $axios.post('/CheckToken')
+
+        return {
+          response: response,
+          status: response.status,
+          data: response.data,
+          message: response.data.message || response.data.error || 'An error occurred'
+        };
+
+      }catch(e){
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+
     async apiRequest(endpoint, payload) {
       try {
         const { $axios } = useNuxtApp();

@@ -8,6 +8,9 @@ export default defineNuxtPlugin((nuxtApp) => {
     baseURL: runtimeConfig.public.baseUrl,
   })
 
+  let isRefreshing = false
+  let failedRequests = []
+
   axiosInstance.interceptors.request.use(
     (config) => {
       const userStore = useAuthStore()
@@ -33,6 +36,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       // If 401 and not retrying, try refreshing the token
       if (error.response && error.response.status === 401 && !originalRequest._retry) {
         if (isRefreshing) {
+          console.log('refreshing ')
           return new Promise((resolve, reject) => {
             failedRequests.push({ resolve, reject })
           })
@@ -49,10 +53,13 @@ export default defineNuxtPlugin((nuxtApp) => {
         isRefreshing = true
 
         try {
+          /*
+          This mechanism need to evaluated cause when response return 401(Unauthorize) status code it always refresh the token,
+          sometimes is good but, the right way is catch the key from api (AccessController::class) middleware then refresh the token, or
+          request CheckToken api if its expired then RefreshToken
+          */
           const response = await axios.post(
-            // idk wtf should i pick from this one 
             `${runtimeConfig.public.baseUrl}/RefreshToken`, 
-            // `/RefreshToken`, // it can be cause it already initilize on interceptor.request
             {},
             {
               headers: {
@@ -60,10 +67,6 @@ export default defineNuxtPlugin((nuxtApp) => {
               },
             }
           )
-          // BEFORE
-          // const newToken = response.data.authorization.token
-          // authStore.setToken(newToken) 
-
           const newCredentials = authStore.formattedCredentials(response.data)
           const newToken = authStore.getCredentials(Credentials.TOKEN)
           authStore.setCredentials(newCredentials)
@@ -87,21 +90,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   )
 
-
-  // axiosInstance.interceptors.response.use(
-  //   (response) => {
-  //     return response
-  //   },
-  //   (error) => {
-  //     if (error.response && error.response.status === 401) {
-  //       useAuthStore().logout()
-  //     }
-  //     return Promise.reject(error)
-  //   },
-  // )
-
   nuxtApp.hook('app:mounted', () => {
-    // console.log('Nuxt app is mounted and axios is ready')
     console.log('Axios PLugin ✅')
   })
 
