@@ -12,8 +12,9 @@ export const useAuthStore = defineStore('AuthStore', {
     }
   },
   getters: {
-    hello(){
-      return this.test()
+    credentialsJson(){
+      const credentialJson = this.decrypt(this.credentials);
+      return credentialJson
     },
   },
   actions: {

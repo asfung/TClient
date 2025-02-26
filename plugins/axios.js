@@ -57,26 +57,33 @@ export default defineNuxtPlugin((nuxtApp) => {
           This mechanism need to evaluated cause when response return 401(Unauthorize) status code it always refresh the token,
           sometimes is good but, the right way is catch the key from api (AccessController::class) middleware then refresh the token, or
           request CheckToken api if its expired then RefreshToken
+          --------------------------
+          on AccessControll::class, there has key = 'refresh-token' so that we can use that solution
           */
-          const response = await axios.post(
-            `${runtimeConfig.public.baseUrl}/RefreshToken`, 
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${authStore.getCredentials(Credentials.TOKEN)}`,
-              },
-            }
-          )
-          const newCredentials = authStore.formattedCredentials(response.data)
-          const newToken = authStore.getCredentials(Credentials.TOKEN)
-          authStore.setCredentials(newCredentials)
+          // const response = 
+          // if(response.dataV)
+          if(error.response.data.key === 'refresh-token') {
+            const response = await axios.post(
+              `${runtimeConfig.public.baseUrl}/RefreshToken`, 
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${authStore.getCredentials(Credentials.TOKEN)}`,
+                },
+              }
+            )
+            const newCredentials = authStore.formattedCredentials(response.data)
+            const newToken = authStore.getCredentials(Credentials.TOKEN)
+            authStore.setCredentials(newCredentials)
+            console.log(authStore.credentialsJson)
 
-          isRefreshing = false
-          failedRequests.forEach((req) => req.resolve(newToken))
-          failedRequests = []
+            isRefreshing = false
+            failedRequests.forEach((req) => req.resolve(newToken))
+            failedRequests = []
 
-          originalRequest.headers.Authorization = `Bearer ${newToken}`
-          return axiosInstance(originalRequest)
+            originalRequest.headers.Authorization = `Bearer ${newToken}`
+            return axiosInstance(originalRequest)
+          }
         } catch (err) {
           isRefreshing = false
           failedRequests.forEach((req) => req.reject(err))
