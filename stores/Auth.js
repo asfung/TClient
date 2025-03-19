@@ -1,8 +1,10 @@
 import { defineStore } from "pinia";
 import CryptoJS from "crypto-js";
 import { Credentials } from "~/enums/Credentials"
+import { Utils } from "~/enums/Utils";
 
-const SECRET_KEY = 'SIGMASIGMABOIS';
+// const SECRET_KEY = 'SIGMASIGMABOIS';
+const SECRET_KEY = Utils.SECRET_KEY_CRYPTO
 
 export const useAuthStore = defineStore('AuthStore', {
   state: () => {
@@ -27,15 +29,6 @@ export const useAuthStore = defineStore('AuthStore', {
       localStorage.setItem('credentials', encryptedCredentials);
       this.credentials = encryptedCredentials
     },
-    // testCredentials(){
-    //   const dataEncrypt = CryptoJS.AES.encrypt('halo test', SECRET_KEY).toString();
-    //   localStorage.setItem('test', dataEncrypt)
-    //   console.log('mount test encrypt: ', dataEncrypt)
-
-    //   const dataDecrypt = CryptoJS.AES.decrypt(dataEncrypt, SECRET_KEY).toString(CryptoJS.enc.Utf8);
-    //   localStorage.setItem('testValue', dataDecrypt)
-    //   console.log('mount test value:', dataDecrypt)
-    // },
     setCredentialBy(credentialType, data){
       if(!this.credentials){
         return null

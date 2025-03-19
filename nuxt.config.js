@@ -25,18 +25,25 @@ export default defineNuxtConfig({
       apiBase: 'this is api base url',
     }
   },
-  // plugins: [
-  //   '~/plugins/screen.js',
-  // ],
+  hooks: {
+    'pages:extend' (pages) {
+      function setMiddleware (pages) {
+        for (const page of pages) {
+          if (page.path.startsWith('/dashboard')) {
+            page.meta ||= {}
+            page.meta.middleware = ['dashboard-middleware'];
+          }
+          if (page.children) {
+            setMiddleware(page.children);
+          }
+        }
+      }
+      setMiddleware(pages);
+    }
+  },
+
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  // title: 'Hello Nuxt',
-  // theme: {
-  //   dark: true,
-  //   colors: {
-  //     primary: '#ff0000'
-  //   }
-  // }
   router: {
     // scrollBehavior(to, from, savedPosition) {
     //   if (savedPosition) {

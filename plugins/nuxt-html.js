@@ -63,7 +63,6 @@ function convertAnchorToNuxtLink(html) {
                 }
             });
 
-            // Add the ID to the Set
             idsWithListeners.add(anchor.id);
         }
     });
