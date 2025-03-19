@@ -13,7 +13,7 @@ import { usePostStore } from '~/stores/Post'
 
 definePageMeta({
   scrollToTop: false,
-  middleware: ['auth-middleware'],
+  // middleware: ['auth-middleware'],
 })
 
 const scrollStore = useScrollStore()

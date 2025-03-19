@@ -67,7 +67,7 @@ import { Credentials } from '~/enums/Credentials'
 
 definePageMeta({
   layout: 'none',
-  middleware: ['auth-middleware']
+  // middleware: ['auth-middleware']
 })
 
 const isPasswordVisible = ref(false);

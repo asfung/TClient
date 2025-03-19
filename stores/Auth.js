@@ -97,6 +97,7 @@ export const useAuthStore = defineStore('AuthStore', {
     },
     signOut(){
       localStorage.removeItem('credentials')
+      localStorage.removeItem('resources')
     },
     logout() {
       localStorage.removeItem('token');

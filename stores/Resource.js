@@ -5,7 +5,7 @@ const { setItem, getItem } = useCryptoLocalStorage()
 export const useResourceStore = defineStore('ResourceStore', {
   state: () => {
     return{
-      resources: getItem('resources'),
+      resources: getItem('resources') || null,
       roles: [],
       resourcesAll: [],
       permissionsAll: []
@@ -13,14 +13,16 @@ export const useResourceStore = defineStore('ResourceStore', {
   },
   getters: {
     resourcesResource: () => {
-      const resources = getItem('resources')
-      const resourcesResource = resources.resources
-      return resourcesResource
+      // const resources = getItem('resources')
+      // const resourcesResource = resources.resources
+      // return resourcesResource
+      return this.resources?.resources || null;
     },
     resourcesPermission: () => {
-      const resources = getItem('resources')
-      const resourcesPermissions = resources.permissions
-      return resourcesPermissions
+      // const resources = getItem('resources')
+      // const resourcesPermissions = resources.permissions
+      // return resourcesPermissions
+      return this.resources?.permissions || null;
     }
   },
   actions: {

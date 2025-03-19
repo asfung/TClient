@@ -3,8 +3,8 @@
       <h1>Hello Resources</h1>
   
       <button @click="clickAcl" class="bg-red-500">Acl</button>
-      <p>{{ resourceStore.resourcesPermission }}</p>
-      <!-- <p>{{ $hasResource('resource-dashboard') }}</p> -->
+      <p>{{ $hasResource('resource-dashboard') }}</p>
+      <pre>{{ resourceStore.resources }}</pre>
   
     </div>
   </template>

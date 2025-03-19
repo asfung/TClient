@@ -9,7 +9,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['auth-middleware'],
+  // middleware: ['auth-middleware'],
 })
 import { useAuthStore } from "~/stores/Auth"
 

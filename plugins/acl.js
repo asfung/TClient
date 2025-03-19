@@ -5,15 +5,16 @@ export default defineNuxtPlugin((nuxtApp) => {
     console.log('acl PLugin ✅')
   })
   const resourceStore = useResourceStore()
-  const resources = resourceStore.resourcesResource
-  const permissions = resourceStore.resourcesPermission
+  const resources = computed(() => resourceStore.resources)
 
   const hasResource = (value) => {
-    return resources.includes(value)
+    const resourceList = resources.value?.resources || [];
+    return Array.isArray(resourceList) && resourceList.includes(value);
   }
 
   const hasPermission = (value) => {
-    return permissions.includes(value)
+    const permissionList = resources.value?.permissions || [];
+    return Array.isArray(permissionList) && permissionList.includes(value);
   }
 
   return {

@@ -63,7 +63,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['auth-middleware'],
+  // middleware: ['auth-middleware'],
 })
 
 import { BeakerIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid'

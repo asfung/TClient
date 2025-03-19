@@ -4,7 +4,7 @@
     <v-navigation-drawer>
       <v-list nav>
         <v-list-item 
-          v-if="$hasResource('resource-dashbord')"
+          v-if="$hasResource('resource-dashboard')"
           title="Dashboard" 
           value="dashboard"
           to="/dashboard"
