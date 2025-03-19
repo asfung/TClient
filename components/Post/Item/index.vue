@@ -26,7 +26,8 @@
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
-          <img :src="item" width="200" height="300" draggable="true" @click.stop
+          <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
+          <img :src="item" width="200" draggable="true" @click.stop
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
         </UCarousel>
       </div>

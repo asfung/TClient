@@ -1,6 +1,8 @@
 <template>
   <div class="">
-    <h1>swagggbuckle</h1>
+    <!-- <Dashboard-SideBar /> -->
+    <h1 class="text-primaryLight">swagggbuckle</h1>
+    <h1 class="text-primaryDark">swagggbuckle</h1>
   </div>
 </template>
 
