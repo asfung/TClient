@@ -162,6 +162,7 @@ const likeClass = computed(() => {
 
 const headerClass = computed(() => {
   // console.log(scroll)
+  // fkin small pixel smh
   return scrollY.value > 0
     ? 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 space-between items-center space-x-2'
     : 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 rounded-t-lg space-between items-center space-x-2';
