@@ -6,7 +6,7 @@
 
 <script setup>
 definePageMeta({
-  middleware: ['auth-middleware'],
+  // middleware: ['auth-middleware'],
 })
 import { usePostStore } from '~/stores/Post'
 

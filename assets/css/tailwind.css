@@ -58,40 +58,81 @@
 
 /* Light Mode Scrollbar */
 .scrollable {
-  scrollbar-color: #4b5563 #f3f4f6; /* Thumb color and track color */
+  scrollbar-color: #4b5563 #f3f4f6;
 }
 
 .scrollable::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+  width: 8px;
 }
 
 .scrollable::-webkit-scrollbar-track {
-  background: #f3f4f6; /* Track color */
+  background: #f3f4f6; 
 }
 
 .scrollable::-webkit-scrollbar-thumb {
-  background-color: #4b5563; /* Thumb color */
-  border-radius: 10px; /* Rounded corners for the thumb */
+  background-color: #4b5563; 
+  border-radius: 10px; 
 }
 
 .scrollable::-webkit-scrollbar-thumb:hover {
-  background-color: #6b7280; /* Thumb color on hover */
+  background-color: #6b7280;
 }
 
 /* Dark Mode Scrollbar */
 .dark .scrollable {
-  scrollbar-color: #a1a1a1 #1f2937; /* Thumb color and track color */
+  scrollbar-color: #a1a1a1 #1f2937; 
 }
 
 .dark .scrollable::-webkit-scrollbar-track {
-  background: #1f2937; /* Track color */
+  background: #1f2937; 
 }
 
 .dark .scrollable::-webkit-scrollbar-thumb {
-  background-color: #a1a1a1; /* Thumb color */
+  background-color: #a1a1a1;
 }
 
 .dark .scrollable::-webkit-scrollbar-thumb:hover {
-  background-color: #c1c1c1; /* Thumb color on hover */
+  background-color: #c1c1c1; 
+}
+
+
+/* GLOBAL */
+/* Light Mode Scrollbar */
+/* .scrollable {
+  scrollbar-color: #4b5563 #f3f4f6;
+} */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b5563; 
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Dark Mode Scrollbar */
+/* .dark .scrollable {
+  scrollbar-color: #a1a1a1 #1f2937; 
+} */
+
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937; 
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #a1a1a1;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #c1c1c1; 
 }
 
