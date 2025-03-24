@@ -73,6 +73,9 @@
 <script setup>
 import { useTheme } from 'vuetify'
 import { useResourceStore } from '~/stores/Resource'
+useHead({
+  title: 'Dashboard | Talker'
+})
 
 const resourceStore = useResourceStore()
 const colorMode = useColorMode()

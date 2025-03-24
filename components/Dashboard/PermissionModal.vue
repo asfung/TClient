@@ -79,36 +79,14 @@
       </v-card-actions>
     </v-card>
 
-    <!-- Delete Confirmation Dialog -->
-    <v-dialog
+
+    <DashboardDeleteConfirmation
       v-model="showDeleteConfirm"
-      max-width="400"
-    >
-      <v-card>
-        <v-card-title>Confirm Delete</v-card-title>
-        <v-card-text>
-          Are you sure you want to delete permission "{{ formData.name }}"?
-          This action cannot be undone.
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn
-            variant="text"
-            @click="showDeleteConfirm = false"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            color="error"
-            variant="flat"
-            @click="handleDelete"
-            :loading="isSubmitting"
-          >
-            Delete
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+      :name="formData.name"
+      :loading="isSubmitting"
+      @confirm="handleDelete"
+    />
+
   </v-dialog>
 </template>
 

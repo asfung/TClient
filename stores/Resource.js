@@ -199,6 +199,33 @@ export const useResourceStore = defineStore('ResourceStore', {
         };
       }
     },
+    async deleteResource(roleId, payload) {
+      try {
+        const authStore = useAuthStore()
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post(`/resources/Delete`, payload);
+        const data = response.data.data
+        if(response.status === 200){
+          console.log(data)
+          this.getResourcesResources({
+            roleId: roleId,
+            mode: 'all'
+          })
+        }
+        return {
+          response: response,
+          status: response.status,
+          data: response.data,
+          message: 'Success'
+        };
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
     async createPermission(resourceId, roleId, payload) {
       try {
         const authStore = useAuthStore()
@@ -206,6 +233,60 @@ export const useResourceStore = defineStore('ResourceStore', {
         const response = await $axios.post(`/permissions/${resourceId}/Create`, payload);
         const data = response.data.data
         if(response.status === 201){
+          this.getResourcesPermissions({
+            roleId: roleId,
+            resourceId: resourceId
+          })
+        }
+        return {
+          response: response,
+          status: response.status,
+          data: response.data,
+          message: 'Success'
+        };
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async updatePermission(roleId, resourceId, payload) {
+      try {
+        const authStore = useAuthStore()
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post(`/permissions/Update`, payload);
+        const data = response.data.data
+        if(response.status === 200){
+          console.log(data)
+          this.getResourcesPermissions({
+            roleId: roleId,
+            resourceId: resourceId
+          })
+        }
+        return {
+          response: response,
+          status: response.status,
+          data: response.data,
+          message: 'Success'
+        };
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async deletePermission(roleId, resourceId, payload) {
+      try {
+        const authStore = useAuthStore()
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post(`/permissions/Delete`, payload);
+        const data = response.data.data
+        if(response.status === 200){
+          console.log(data)
           this.getResourcesPermissions({
             roleId: roleId,
             resourceId: resourceId

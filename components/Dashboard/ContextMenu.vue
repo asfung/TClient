@@ -2,14 +2,14 @@
   <div
     v-if="visible"
     :style="{ top: y + 'px', left: x + 'px' }"
-    class="absolute bg-white dark:bg-gray-800 shadow-lg rounded p-2 z-50"
+    class="absolute bg-primaryLight dark:bg-primaryDark shadow-lg rounded p-2 z-50"
     @click.stop
   >
     <ul class="text-sm">
       <li
         v-for="(item, index) in menuItems"
         :key="index"
-        class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"
+        class="p-3 dark:hover:bg-gray-500 hover:bg-white cursor-pointer"
         @click="handleItemClick(item.action)"
       >
         {{ item.label }}

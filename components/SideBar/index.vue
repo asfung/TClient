@@ -38,7 +38,7 @@ const authStore = useAuthStore()
 const userCredentials = authStore.getCredentials(Credentials.USER)
 
 onMounted(() => {
-  console.log(userCredentials)
+  // console.log(userCredentials)
 })
 
 const items = ref([

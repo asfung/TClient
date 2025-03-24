@@ -359,6 +359,90 @@ export const usePostStore = defineStore('PostStore', {
       traverseReplies(this.postReply.replies);
       return allReplies;
     },
+    async createPost(payload){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/CreatePost', payload);
+        const data = response.data.data
+        if(response.status === 201){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async uploadMedia(payload){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/media/Upload', payload);
+        const data = response.data.data
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async editMediaPostId(payload){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/media/MediaPostIdEdit', payload);
+        const data = response.data.data
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async deleteMedia(payload){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/media/MediaDelete', payload);
+        const data = response.data.data
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
   },
   getters: {
   },

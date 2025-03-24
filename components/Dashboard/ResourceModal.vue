@@ -21,6 +21,9 @@
           <v-container>
             <v-row>
               <v-col cols="12">
+                <p>Key Format: resource-[NAME]</p>
+              </v-col>
+              <v-col cols="12">
                 <v-text-field
                   v-model="formData.key"
                   label="Key"
