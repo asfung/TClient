@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="h-screen">
     <div class="grid justify-start">
       <button @click="checkTokenEvent()">Check Token</button>
       <button @click="signOutEvent()">Sign Out</button>

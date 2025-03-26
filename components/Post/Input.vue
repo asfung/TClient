@@ -6,6 +6,7 @@
           src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
       </div>
       <div class="flex-1 px-2 pt-2 mt-2">
+        <!-- TODO: make the textarea more intuitive -->
         <textarea v-model="postMe.content" @input="null"
           class="bg-transparent text-gray-400 font-medium text-lg w-full overflow-y-scroll scrollable" rows="2"
           cols="50" placeholder="What's happening?"></textarea>
@@ -31,7 +32,7 @@
         <div class="flex">
           <div class="flex">
             <div class="flex-1 text-center py-1 m-2">
-              <label for="fileInput"
+              <label :for="uniqueId"
                 class="mt-1 group flex items-center text-primaryLight dark:text-primaryDark hover:bg-primaryLight/50 dark:hover:bg-primaryDark/50 px-2 py-2 text-base leading-6 font-medium rounded-full">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
                   stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +41,7 @@
                   </path>
                 </svg>
               </label>
-              <input id="fileInput" type="file" accept="image/*,video/mp4,image/gif" @change="handleFileUpload"
+              <input :id="uniqueId" type="file" accept="image/*,video/mp4,image/gif" @change="handleFileUpload"
                 class="hidden" multiple />
             </div>
           </div>
@@ -59,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onUnmounted } from 'vue';
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { usePostStore } from '~/stores/Post';
 import { faker } from '@faker-js/faker';
 import { File } from '~/enums/File';
@@ -96,6 +97,12 @@ const postMe = ref({
 
 const fileUploadPrepared = ref([]);
 
+// to make reusable component instance are different from each other in the same page
+const uniqueId = ref('');
+onMounted(() => {
+  uniqueId.value = `fileInput-${Math.random().toString(36).substr(2, 9)}`;
+});
+
 const isPostButtonDisabled = computed(() => {
   const hasContent = postMe.value.content?.trim().length > 0;
   const hasFiles = fileUploadPrepared.value.length > 0;
@@ -131,7 +138,7 @@ const uploadFile = async (fileData) => {
     const index = fileUploadPrepared.value.findIndex(item => item.index === fileData.index);
     if (index !== -1) {
       fileUploadPrepared.value[index] = { ...fileData, ...data, isLoading: false };
-      emit('update:fileUploadPrepared', fileUploadPrepared.value); 
+      emit('update:fileUploadPrepared', fileUploadPrepared.value);
     }
   } catch (error) {
     console.error('Upload failed:', error);
@@ -147,7 +154,7 @@ const removeFile = async (file) => {
     URL.revokeObjectURL(fileUploadPrepared.value[index].preview);
     fileUploadPrepared.value.splice(index, 1);
     fileUploadPrepared.value.forEach((item, idx) => item.index = idx);
-    emit('update:fileUploadPrepared', fileUploadPrepared.value); 
+    emit('update:fileUploadPrepared', fileUploadPrepared.value);
   }
 };
 
@@ -169,7 +176,7 @@ const handlePostCreate = async () => {
 const handleInputClear = () => {
   fileUploadPrepared.value = [];
   postMe.value.content = '';
-  emit('update:fileUploadPrepared', fileUploadPrepared.value); 
+  emit('update:fileUploadPrepared', fileUploadPrepared.value);
 };
 
 watch(fileUploadPrepared, (newValue) => {
