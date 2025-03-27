@@ -12,7 +12,7 @@
             <p class="text-base leading-6 font-medium">
               {{ item.display_name }}
               <span
-                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
                 @{{ item.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
             </p>
           </div>

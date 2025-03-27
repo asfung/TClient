@@ -10,7 +10,7 @@ export const usePostStore = defineStore('PostStore', {
       posts: Array.from({ length: 10 }, (_, i) => ({
         id: faker.string.uuid(),                    
         profile_image: faker.image.url({ width: 100, height: 100 }), 
-        username: faker.internet.userName(),        
+        username: faker.internet.username(),        
         display_name: faker.person.fullName(),      
         content: faker.lorem.sentences(2),          
         created_at: faker.date.recent().toISOString(),
@@ -62,47 +62,6 @@ export const usePostStore = defineStore('PostStore', {
                 media: [
                 ],
                 replies: [
-                  {
-                    id: `1111`,
-                    username: `Mark Sucker`,
-                    title: `Sucker`,
-                    subtitle: `good`,
-                    description: `goodddddddddddddddddddddddddddddddddddddd`,
-                    contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
-                    show: false,
-                    liked: false,
-                    media: [
-                    'https://picsum.photos/600/800?random=1',
-                    'https://picsum.photos/600/800?random=2',
-                    'https://picsum.photos/600/800?random=3',
-                    'https://picsum.photos/600/800?random=4',
-                    'https://picsum.photos/600/800?random=5',
-                    'https://picsum.photos/600/800?random=6'
-                    ],
-                    replies: [
-                      {
-                        id: `111111`,
-                        username: `Lean Wuu`,
-                        title: `Leannnn`,
-                        subtitle: `good`,
-                        description: `goodddddddddddddddddddddddddddddddddddddd`,
-                        contentData: "iyahhhh",
-                        show: false,
-                        liked: false,
-                        media: [
-                        'https://picsum.photos/600/800?random=1',
-                        'https://picsum.photos/600/800?random=2',
-                        'https://picsum.photos/600/800?random=3',
-                        'https://picsum.photos/600/800?random=4',
-                        'https://picsum.photos/600/800?random=5',
-                        'https://picsum.photos/600/800?random=6'
-                        ],
-                        replies: [
-                
-                        ],
-                      }
-                    ],
-                  }, 
                 ],
               },
               {
@@ -123,47 +82,6 @@ export const usePostStore = defineStore('PostStore', {
                 'https://picsum.photos/600/800?random=6'
                 ],
                 replies: [
-                  {
-                    id: `1121`,
-                    username: `Mark Sucker`,
-                    title: `Sucker`,
-                    subtitle: `good`,
-                    description: `goodddddddddddddddddddddddddddddddddddddd`,
-                    contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
-                    show: false,
-                    liked: false,
-                    media: [
-                    'https://picsum.photos/600/800?random=1',
-                    'https://picsum.photos/600/800?random=2',
-                    'https://picsum.photos/600/800?random=3',
-                    'https://picsum.photos/600/800?random=4',
-                    'https://picsum.photos/600/800?random=5',
-                    'https://picsum.photos/600/800?random=6'
-                    ],
-                    replies: [
-                      {
-                        id: `112111`,
-                        username: `Lean Wuu`,
-                        title: `Leannnn`,
-                        subtitle: `good`,
-                        description: `goodddddddddddddddddddddddddddddddddddddd`,
-                        contentData: "iyahhhh",
-                        show: false,
-                        liked: false,
-                        media: [
-                        'https://picsum.photos/600/800?random=1',
-                        'https://picsum.photos/600/800?random=2',
-                        'https://picsum.photos/600/800?random=3',
-                        'https://picsum.photos/600/800?random=4',
-                        'https://picsum.photos/600/800?random=5',
-                        'https://picsum.photos/600/800?random=6'
-                        ],
-                        replies: [
-                
-                        ],
-                      }
-                    ],
-                  }, 
                 ],
               }
             ],
@@ -175,7 +93,7 @@ export const usePostStore = defineStore('PostStore', {
             title: `Sucker`,
             subtitle: `good`,
             description: `goodddddddddddddddddddddddddddddddddddddd`,
-            contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
+            contentData: "kamu jawa yahhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhh?",
             show: false,
             liked: false,
             media: [
@@ -216,7 +134,7 @@ export const usePostStore = defineStore('PostStore', {
             title: `Sucker`,
             subtitle: `good`,
             description: `goodddddddddddddddddddddddddddddddddddddd`,
-            contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
+            contentData: "kamu jawa yahhhhhhhhhhhh hhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhh?",
             show: false,
             liked: false,
             media: [
@@ -246,7 +164,6 @@ export const usePostStore = defineStore('PostStore', {
                 'https://picsum.photos/600/800?random=6'
                 ],
                 replies: [
-        
                 ],
               },
               {
@@ -278,7 +195,7 @@ export const usePostStore = defineStore('PostStore', {
             title: `Sucker`,
             subtitle: `good`,
             description: `goodddddddddddddddddddddddddddddddddddddd`,
-            contentData: "kamu jawa yahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh?",
+            contentData: "kamu jawa yahhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhh hhhhhhhhhhhhhhhhhhhhhh?",
             show: false,
             liked: false,
             media: [
@@ -442,6 +359,38 @@ export const usePostStore = defineStore('PostStore', {
           message: e.response?.data?.message || e.message || 'An error occurred'
         };
       }
+    },
+    loadMoreReplies(replyId, amount = 5) {
+      const generateReply = () => ({
+        id: faker.string.uuid(),
+        username: faker.internet.userName(),
+        title: faker.person.firstName(),
+        subtitle: 'good',
+        description: 'goodddddddddddddddddddddddddddddddddddddd',
+        contentData: faker.lorem.sentence(),
+        show: false,
+        liked: false,
+        media: Array.from({ length: Math.floor(Math.random() * 3) }, () => 
+          faker.image.url({ width: 600, height: 800 })
+        ),
+        replies: []
+      });
+
+      function findAndAddReplies(repliesArray) {
+        for (let reply of repliesArray) {
+          if (reply.id === replyId) {
+            const newReplies = Array.from({ length: amount }, () => generateReply());
+            reply.replies.push(...newReplies);
+            return true;
+          }
+          if (reply.replies && reply.replies.length > 0) {
+            const found = findAndAddReplies(reply.replies);
+            if (found) return true;
+          }
+        }
+        return false;
+      }
+      findAndAddReplies(this.postReply.replies);
     },
   },
   getters: {

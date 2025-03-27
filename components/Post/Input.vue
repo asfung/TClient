@@ -7,9 +7,14 @@
       </div>
       <div class="flex-1 px-2 pt-2 mt-2">
         <!-- TODO: make the textarea more intuitive -->
-        <textarea v-model="postMe.content" @input="null"
+        <!-- <textarea v-model="postMe.content" @input="null"
           class="bg-transparent text-gray-400 font-medium text-lg w-full overflow-y-scroll scrollable" rows="2"
-          cols="50" placeholder="What's happening?"></textarea>
+          cols="50" placeholder="What's happening?"></textarea> -->
+          <TextAreaInput 
+            v-model="postMe.content"
+            :character-limit="280"
+            @update:overLimit="handleOverLimit"
+          />
 
         <div class="image-list mt-4" v-if="fileUploadPrepared.length">
           <UCarousel v-slot="{ item }" :items="fileUploadPrepared" @click.stop
@@ -96,6 +101,7 @@ const postMe = ref({
 });
 
 const fileUploadPrepared = ref([]);
+const isOverCharacterLimit = ref(false);
 
 // to make reusable component instance are different from each other in the same page
 const uniqueId = ref('');
@@ -107,8 +113,12 @@ const isPostButtonDisabled = computed(() => {
   const hasContent = postMe.value.content?.trim().length > 0;
   const hasFiles = fileUploadPrepared.value.length > 0;
   const isUploading = fileUploadPrepared.value.some(file => file.isLoading);
-  return (!hasContent && !hasFiles) || isUploading;
+  return (!hasContent && !hasFiles) || isUploading || isOverCharacterLimit.value;
 });
+
+const handleOverLimit = (value) => {
+  isOverCharacterLimit.value = value;
+};
 
 const handleFileUpload = (event) => {
   const files = Array.from(event.target.files);

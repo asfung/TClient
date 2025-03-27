@@ -13,8 +13,8 @@
               <p class="text-base leading-6 font-medium">
                 Sonali Hirave {{ item.id }}
                 <span
-                  class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                  @{{ item.username }} . 16 April </span>
+                  class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
+                  @{{ item.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
               </p>
             </div>
             <PostContentText class="max-w-[475px]" :content="item.contentData" />
@@ -22,7 +22,7 @@
             <div class="pl-0 mb-2">
               <UCarousel v-slot="{ item }" :items="item.media"
                 :ui="{ item: 'mx-1', container: 'pr-5 snap-none scroll-smooth' }">
-                <img :src="item" width="200" height="300" draggable="true"
+                <img :src="item" width="200" draggable="true"
                   class="rounded-lg cursor-pointer duration-200 active:scale-95" />
               </UCarousel>
             </div>
@@ -107,5 +107,10 @@ const props = defineProps({
     required: true
   },
 })
+const convertToRelativeTime = (createdAt) => {
+  return useNuxtApp().$dayjs.utc(createdAt)
+    .tz('Asia/Jakarta')   
+    .fromNow();
+};
 
 </script>

@@ -69,7 +69,7 @@ const closeReplyDialog = () => {
   height: 45px;
 }
 .footer-bottom {
-  height: 45px;
+  /* height: 45px; */
   bottom: 0;
   position: fixed;
   /* position: sticky; */

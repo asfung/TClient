@@ -1,16 +1,4 @@
 <template>
-  <!-- <div class="flex flex-shrink-0 p-8 pb-0">
-    <ol class="relative border-timeline" :class="{ 'border-none': item.replies.length === 0 }">
-      <li class="ms-8 -mt-6">
-        <PostItemReply :item="item" />
-      </li>
-      <li class="ms-8 -mt-6" v-for="(reply, replyI) in item.replies" :key="replyI">
-        <PostItemReply :item="reply" />
-      </li>
-      <hr class="border-gray-600 dark:border-white w-full" />
-    </ol>
-  </div> -->
-
   <div class="">
     <div class="p-5">
       <v-timeline 
@@ -24,15 +12,32 @@
             <v-avatar image="https://i.pravatar.cc/64"></v-avatar>
           </template>
           <PostItemReply :item="item" />
+          <button 
+            v-if="!showReplies && item.replies.length > 0"
+            @click="toggleReplies" 
+            class="text-primaryLight dark:text-primaryDark hover:underline focus:outline-none">
+            <!-- {{ showReplies ? 'Hide Replies' : `Show Replies (${item.replies.length})` }} -->
+              Show Replies
+          </button>
         </v-timeline-item>
-        <v-timeline-item v-for="(reply, replyI) in item.replies" :key="replyI">
-          <template v-slot:icon>
-            <v-avatar image="https://i.pravatar.cc/64"></v-avatar>
-          </template>
-          <div>
-            <PostItemReply :item="reply" />
-          </div>
-        </v-timeline-item>
+
+        <template v-if="showReplies" v-slot:default>
+          <v-timeline-item v-for="(reply, replyI) in item.replies" :key="replyI">
+            <template v-slot:icon>
+              <v-avatar image="https://i.pravatar.cc/64"></v-avatar>
+            </template>
+            <div>
+              <PostItemReply :item="reply" />
+            </div>
+            <button 
+              v-if="replyI === item.replies.length - 1"
+              @click="handleLoadMoreReplies()" 
+              class="text-blue-500 hover:underline focus:outline-none">
+              <!-- {{ showReplies ? 'Hide Replies' : `Show Replies (${item.replies.length})` }} -->
+                More Replies
+            </button>
+          </v-timeline-item>
+        </template>
       </v-timeline>
       <!-- <hr> -->
     </div>
@@ -53,11 +58,20 @@ const props = defineProps({
 })
 
 const postStore = usePostStore()
-
+const showReplies = ref(false)
 const postsReply = computed(() => postStore.postsReply);
+
 
 const clickedItemReply = (item) => {
   console.log('parent : ', item.id)
+}
+
+const toggleReplies = () => {
+  showReplies.value = !showReplies.value
+}
+
+const handleLoadMoreReplies = () => {
+  postStore.loadMoreReplies(props.item.id, 3)
 }
 
 </script>
