@@ -21,8 +21,8 @@
           </button>
         </v-timeline-item>
 
-        <template v-if="showReplies" v-slot:default>
-          <v-timeline-item v-for="(reply, replyI) in item.replies" :key="replyI">
+        <!-- <template v-if="showReplies" v-slot:default> -->
+          <v-timeline-item v-if="showReplies" v-for="(reply, replyI) in item.replies" :key="replyI">
             <template v-slot:icon>
               <v-avatar image="https://i.pravatar.cc/64"></v-avatar>
             </template>
@@ -37,7 +37,7 @@
                 More Replies
             </button>
           </v-timeline-item>
-        </template>
+        <!-- </template> -->
       </v-timeline>
       <!-- <hr> -->
     </div>

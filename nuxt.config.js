@@ -18,9 +18,13 @@ export default defineNuxtConfig({
       ]
     }
   },
+  appConfig: {
+    storagelUrl: process.env.STORAGE_URL,
+  },
   runtimeConfig: {
     TALKER_API: process.env.TALKER_API,
     public: {
+      storagelUrl: process.env.STORAGE_URL,
       baseUrl: process.env.TALKER_API,
       apiBase: 'this is api base url',
     }

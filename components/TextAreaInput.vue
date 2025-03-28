@@ -8,8 +8,7 @@
       :class="{ 'over-limit': isOverLimit }"
       class="bg-transparent text-gray-400 font-medium text-lg w-full resize-none p-2 rounded min-h-[40px]"
     ></textarea>
-
-    <div class="progress-container flex items-center gap-2 text-sm text-gray-600">
+    <div v-if="modelValue.length > 0" class="progress-container flex items-center gap-2 text-sm text-gray-600">
       <svg class="progress-circle w-6 h-6 -rotate-90" width="24" height="24">
         <circle
           class="progress-circle-bg"

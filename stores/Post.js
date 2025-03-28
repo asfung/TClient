@@ -6,36 +6,77 @@ export const usePostStore = defineStore('PostStore', {
     return {
       isLoading: false,
       hasNextPage: true,
+      activeTab: "forYou", 
       post: [],
-      posts: Array.from({ length: 10 }, (_, i) => ({
-        id: faker.string.uuid(),                    
-        profile_image: faker.image.url({ width: 100, height: 100 }), 
-        username: faker.internet.username(),        
-        display_name: faker.person.fullName(),      
-        content: faker.lorem.sentences(2),          
-        created_at: faker.date.recent().toISOString(),
-        show: false,
-        liked: false,
-        media: Array.from({ length: Math.floor(Math.random() * 6) + 1 }, () => 
-          faker.image.url({ width: 600, height: 800 })
-        ),
-      })),
+      postsFollowing: [],
+      // posts: Array.from({ length: 10 }, (_, i) => ({
+      //   id: faker.string.uuid(),                    
+      //   profile_image: faker.image.url({ width: 100, height: 100 }), 
+      //   username: faker.internet.username(),        
+      //   display_name: faker.person.fullName(),      
+      //   content: faker.lorem.sentences(2) + '@Paung \n #good #nice #cool',          
+      //   created_at: faker.date.recent().toISOString(),
+      //   show: false,
+      //   liked: false,
+      //   media: Array.from({ length: Math.floor(Math.random() * 6) + 1 }, () => 
+      //     faker.image.url({ width: 600, height: 800 })
+      //   ),
+      // })),
+      posts: [],
       postReply: {
-        id: `1`,
-        username: `Dylan Jabbowzz`,
-        title: `Dylan`,
-        subtitle: `good`,
-        description: `goodddddddddddddddddddddddddddddddddddddd`,
-        contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie ",
-        show: false,
-        liked: false,
-        media: [
-        'https://picsum.photos/600/800?random=1',
-        'https://picsum.photos/600/800?random=2',
-        'https://picsum.photos/600/800?random=3',
-        'https://picsum.photos/600/800?random=4',
-        'https://picsum.photos/600/800?random=5',
-        'https://picsum.photos/600/800?random=6'
+        // id: `1`,
+        // username: `Dylan Jabbowzz`,
+        // title: `Dylan`,
+        // subtitle: `good`,
+        // description: `goodddddddddddddddddddddddddddddddddddddd`,
+        // contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie ",
+        // show: false,
+        // liked: false,
+        // media: [
+        // 'https://picsum.photos/600/800?random=1',
+        // 'https://picsum.photos/600/800?random=2',
+        // 'https://picsum.photos/600/800?random=3',
+        // 'https://picsum.photos/600/800?random=4',
+        // 'https://picsum.photos/600/800?random=5',
+        // 'https://picsum.photos/600/800?random=6'
+        // ],
+        parent: [
+          {
+            id: `1`,
+            username: `Dylan Jabbowzz`,
+            title: `Dylan`,
+            subtitle: `good`,
+            description: `goodddddddddddddddddddddddddddddddddddddd`,
+            contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie ",
+            show: false,
+            liked: false,
+            media: [
+            'https://picsum.photos/600/800?random=1',
+            'https://picsum.photos/600/800?random=2',
+            'https://picsum.photos/600/800?random=3',
+            'https://picsum.photos/600/800?random=4',
+            'https://picsum.photos/600/800?random=5',
+            'https://picsum.photos/600/800?random=6'
+            ]
+          },
+          {
+            id: `2`,
+            username: `Sauki`,
+            title: `Sauki`,
+            subtitle: `good`,
+            description: `goodddddddddddddddddddddddddddddddddddddd`,
+            contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie ",
+            show: false,
+            liked: false,
+            media: [
+            'https://picsum.photos/600/800?random=1',
+            'https://picsum.photos/600/800?random=2',
+            'https://picsum.photos/600/800?random=3',
+            'https://picsum.photos/600/800?random=4',
+            'https://picsum.photos/600/800?random=5',
+            'https://picsum.photos/600/800?random=6'
+            ]
+          },
         ],
         replies: [
           {
@@ -236,6 +277,46 @@ export const usePostStore = defineStore('PostStore', {
     }
   },
   actions: {
+    async getPost(payload) {
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.get('/post', {
+          params: payload, 
+        });
+        const data = response.data.data;
+        if (response.status === 200) {
+          if (payload.type === 'foryou') {
+            this.posts = payload.page === 1 ? data : [...this.posts, ...data];
+          } else if (payload.type === 'following') {
+            this.postsFollowing = payload.page === 1 ? data : [...this.postsFollowing, ...data];
+          } else if (payload.type === 'post_id') {
+            this.post = data;
+          }
+          this.hasNextPage = data.length === (payload.limit || 10); 
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message,
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred',
+        };
+      }
+    },
+    pushPostForYou(newPost){
+      this.posts.push(newPost);
+    },
+    pushPostFollowing(newPost){
+      this.postsFollowing.push(newPost);
+    },
+    pushNewPost(newPost){
+      this.posts.unshift(newPost);
+    },
     loadMoreData(){
       const newData = Array.from({ length: 10 }, (_, i) => ({
         id: faker.string.uuid(),                    
@@ -391,6 +472,9 @@ export const usePostStore = defineStore('PostStore', {
         return false;
       }
       findAndAddReplies(this.postReply.replies);
+    },
+    setActiveTab(tab) {
+      this.activeTab = tab;
     },
   },
   getters: {

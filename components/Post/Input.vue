@@ -70,7 +70,7 @@ import { usePostStore } from '~/stores/Post';
 import { faker } from '@faker-js/faker';
 import { File } from '~/enums/File';
 
-defineProps({
+const props = defineProps({
   inputPost: {
     type: Boolean,
     required: false,
@@ -170,7 +170,7 @@ const removeFile = async (file) => {
 
 const handlePostCreate = async () => {
   const { status, data } = await postStore.createPost({
-    parent_id: null,
+    parent_id: props.parent_id,
     content: postMe.value.content,
   });
   if (fileUploadPrepared.value.length > 0 && status === 201) {

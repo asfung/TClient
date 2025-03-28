@@ -6,14 +6,14 @@
         <div class="flex items-center">
           <div>
             <img class="inline-block h-10 w-10 rounded-full"
-              :src="item.profile_image" alt="" />
+              :src="item.user.profile_image ? baseStorageUrl + item.user.profile_image.key : randomProfileImage(item.user.display_name)" alt="" />
           </div>
           <div class="ml-3">
             <p class="text-base leading-6 font-medium">
-              {{ item.display_name }}
+              {{ item.user.display_name }}
               <span
                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
-                @{{ item.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
+                @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
             </p>
           </div>
         </div>
@@ -27,7 +27,7 @@
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
           <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
-          <img :src="item" width="200" draggable="true" @click.stop
+          <img :src="baseStorageUrl + item.key" width="200" draggable="true" @click.stop
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
         </UCarousel>
       </div>
@@ -101,6 +101,11 @@
 <script setup>
 import { toggle } from "~/node_modules/@nuxt/ui/dist/runtime/ui.config/index"
 
+const baseStorageUrl = computed(() => {
+  const runtimeConfig = useRuntimeConfig()
+  return runtimeConfig.public.storagelUrl
+})
+
 const isBookmarked = ref(false)
 const isLiked = ref(false)
 const isSelecting = ref(false);
@@ -112,11 +117,11 @@ const props = defineProps({
 })
 
 const bookmarkClass = computed(() => {
-  return isBookmarked.value ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
+  return props.item.is_bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
 });
 
 const likeClass = computed(() => {
-  return isLiked.value ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
+  return props.item.is_liked ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
 });
 
 const startSelection = () => {
@@ -152,8 +157,17 @@ const convertToRelativeTime = (createdAt) => {
 const clickPostItem = () => {
   console.log(props.item);
   // i want to navigate to the post page /post/:id
-  useNuxtApp().$router.push(`/post/${props.item.id}`)
+  useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`)
 }
 
+const randomProfileImage = (display_name) => {
+  const formattedName = display_name.replace(/\s+/g, "+"); 
+  // return `https://ui-avatars.com/api/?name=${formattedName}&background=random&color=fff&bold=true&size=128&rounded=true`;
+  return `https://eu.ui-avatars.com/api/?background=random&name=${formattedName}`;
+}
+
+onMounted(() => {
+  // console.log(baseStorageUrl)
+})
 
 </script>

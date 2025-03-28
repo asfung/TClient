@@ -15,6 +15,7 @@
           class="mt-4"
           :uniqueId="'post-input-dialog'"
           :inputPost="true"
+          :parent_id="props.parent_id"
           @update:fileUploadPrepared="handleFileUploaded"
           @post-created="handlePostCreated"
         />
@@ -34,6 +35,10 @@ const props = defineProps({
   },
   post: {
     required: false,
+  },
+  parent_id: {
+    required: false,
+    default: null,
   },
 });
 

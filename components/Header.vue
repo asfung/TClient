@@ -9,9 +9,21 @@
 
     <!-- center -->
     <div class="flex space-x-4">
-      <a href="#" class="hover:underline hover:decoration-blue-600">For you</a>
-      <div class="w-px h-6 bg-gray-400"></div>
-      <a href="#" class="hover:underline hover:decoration-blue-600">Following</a>
+      <NuxtLink
+        to="/"
+        :class="activeTab === 'forYou' ? 'text-primaryLight dark:text-primaryDark font-base-bold' : ''"
+        @click.prevent="setActiveTab('forYou')"
+        >For you
+        <div :class="{'h-1 bg-primaryLight dark:bg-primaryDark rounded-md' : activeTab === 'forYou'}"></div>
+      </NuxtLink>
+
+      <NuxtLink
+        to="/"
+        :class="activeTab === 'following' ? 'text-primaryLight dark:text-primaryDark font-base-bold' : ''"
+        @click.prevent="setActiveTab('following')"
+        >Following
+        <div :class="{'h-1 bg-primaryLight dark:bg-primaryDark rounded-md' : activeTab === 'following'}"></div>
+      </NuxtLink>
     </div>
 
     <!-- right -->
@@ -32,19 +44,21 @@
   </div>
 </template>
 
-<script>
-export default {
-  computed: {
-    logoImage() {
-      return "/images/TALKER_TRANSPARENT.png";
-    },
-  },
+<script setup>
+import { usePostStore } from '~/stores/Post';
 
-  methods: {
-    setColorTheme(newTheme) {
-      console.log(newTheme);
-      useColorMode().preference = newTheme;
-    },
-  },
+const postStore = usePostStore();
+
+const logoImage = "/images/TALKER_TRANSPARENT.png"
+const activeTab = computed(() => postStore.activeTab)
+
+const setActiveTab = (tab) => {
+  postStore.activeTab = tab;
 };
+
+const setColorTheme = (newTheme) => {
+  console.log(newTheme);
+  useColorMode().preference = newTheme;
+};
+
 </script>
