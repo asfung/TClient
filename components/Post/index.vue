@@ -26,19 +26,45 @@ const props = defineProps({
     required: false,
     default: true,
   },
+  posts: {
+    type: Array,
+    required: false,
+    default: () => [],
+  },
 });
 const activeTab = computed(() => postStore.activeTab);
 const postForYou = computed(() => postStore.posts);
 const postFollowing = computed(() => postStore.postsFollowing);
 const route = useRoute()
 
+// myself 
+const postMyself = computed(() => postStore.postsMyself);
+const postLikeMyself = computed(() => postStore.postsLikeMyself);
+const postRepliesMyself = computed(() => postStore.postRepliesMyself);
+
 const posts = computed(() => {
     if(activeTab.value === 'forYou') {
       console.log('For you');
-      console.log(postForYou)
       return postForYou
-    } else {
+    } else if (activeTab.value === 'following') {
+      console.log('Following');
+      console.log(postFollowing)
       return postFollowing
+    } else if (activeTab.value === 'bookmarks') {
+      console.log('Bookmarks');
+      return postStore.postsBookmark
+    } else if (activeTab.value === 'search') {
+      console.log('Search');
+      return postStore.postsSearch
+    } else if (activeTab.value === 'profile') {
+      console.log('Profile');
+      return postMyself
+    } else if (activeTab.value === 'posts'){
+      return postMyself
+    }else if (activeTab.value === 'likes'){
+      return postLikeMyself
+    }else if (activeTab.value === 'replies'){
+      return postRepliesMyself
     }
   }
 );
@@ -94,11 +120,15 @@ onMounted(async () => {
   }
 });
 
+// i mean if the posts is exist dont make the api call again
 watch(route, async (newRoute) => {
-  if (newRoute.name === 'home') {
+  if (newRoute.name === 'index') {
     currentPage.value = 1;
     await loadPosts();
+  }else if(newRoute.name === 'bookmark') {
+    console.log('Bookmark page');
   }
+  console.log('Route changed:', newRoute.name);
 });
 
 watch(activeTab, async (newTab) => {
