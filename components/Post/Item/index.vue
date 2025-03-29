@@ -1,7 +1,7 @@
 <template>
   <div @click="clickPostItem" class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20">
     <hr class="border-gray-600 dark:border-white" />
-    <div class="flex flex-shrink-0 p-4 pb-0">
+    <div class="flex flex-shrink-0 p-4 pb-0 bg-blue-400">
       <a href="#" class="flex-shrink-0 group block">
         <div class="flex items-center">
           <div>
@@ -9,11 +9,16 @@
               :src="item.user.profile_image ? baseStorageUrl + item.user.profile_image.key : randomProfileImage(item.user.display_name)" alt="" />
           </div>
           <div class="ml-3">
-            <p class="text-base leading-6 font-medium">
-              {{ item.user.display_name }}
-              <span
-                class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
-                @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
+            <p class="text-base leading-6 font-medium hover:underline">
+              <NuxtLink 
+                :to="`/@${item.user.username}`"
+                @click.stop
+                >
+                {{ item.user.display_name }}
+                <span
+                  class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
+                  @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
+              </NuxtLink>
             </p>
           </div>
         </div>
@@ -21,18 +26,25 @@
     </div>
 
     <div class="">
-      <PostContentText class="pl-16 max-w-[475px]" :content="item.content" @click.stop @mousedown="startSelection" @mouseup="endSelection" />
+      <div class="bg-white">
+        <PostContentText 
+          class="pl-16 max-w-[475px]" 
+          :content="item.content?? ''" 
+          @mousedown="startSelection" 
+          @mouseup="endSelection" 
+        />
+      </div>
 
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
           <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
-          <img :src="baseStorageUrl + item.key" width="200" draggable="true" @click.stop
+          <img :src="baseStorageUrl + item.key" width="300" draggable="true" @click.stop
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
         </UCarousel>
       </div>
 
-      <div class="flex pl-16" @click.stop>
+      <div class="flex pl-16 bg-red-500" @click.stop>
         <div class="w-full">
           <div class="flex items-center">
             <div class="flex-1 text-center">
@@ -94,6 +106,11 @@
         </div>
       </div>
     </div>
+    <transition name="fade">
+      <div v-if="showWarning" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md">
+        Please slow down! You're clicking too fast.
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -110,6 +127,11 @@ const isBookmarked = ref(false)
 const isLiked = ref(false)
 const isSelecting = ref(false);
 
+const showWarning = ref(false);
+let clickTimeout = null;
+let lastClickTime = 0;
+const CLICK_DELAY = 500; 
+
 const props = defineProps({
   item: {
     required: true
@@ -117,23 +139,30 @@ const props = defineProps({
 })
 
 const bookmarkClass = computed(() => {
-  return props.item.is_bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
+  return props.item.bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
 });
 
 const likeClass = computed(() => {
-  return props.item.is_liked ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
+  return props.item.liked ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
 });
 
 const startSelection = () => {
-  isSelecting.value = true;
-  console.log('start selection');
+  document.onselectionchange = () => {
+    // console.log('selecting text')
+    const selection = document.getSelection()
+    if(selection.focusOffset > 0){
+      isSelecting.value = true
+    }else{
+      isSelecting.value = false
+    }
+  };
 };
 
 const endSelection = () => {
-  setTimeout(() => {
-    isSelecting.value = false;
-    console.log('end selection');
-  }, 0);
+  // setTimeout(() => {
+  //   isSelecting.value = false;
+  //   console.log('end selection');
+  // }, 1000);
 };
 
 const toggleBookmark = () => {
@@ -155,10 +184,31 @@ const convertToRelativeTime = (createdAt) => {
 };
 
 const clickPostItem = () => {
-  console.log(props.item);
-  // i want to navigate to the post page /post/:id
-  useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`)
+  // console.log(isSelecting.value)
+  const currentTime = Date.now();
+  if ((currentTime - lastClickTime < CLICK_DELAY) || !isSelecting) {
+    useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`)
+    return;
+  }
+  lastClickTime = currentTime;
+  // useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`)
 }
+
+watch(isSelecting, (newVal, oldVal) => {
+  console.log('watcher ', newVal)
+  document.onselectionchange = () => {
+    const selection = document.getSelection()
+    console.log(selection.focusOffset)
+    if(selection.focusOffset > 0){
+      console.log('not redirect to the talk')
+    }else{
+      console.log('it redirect to the talk')
+    }
+  }
+  if(newVal){
+
+  }
+})
 
 const randomProfileImage = (display_name) => {
   const formattedName = display_name.replace(/\s+/g, "+"); 
