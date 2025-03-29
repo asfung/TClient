@@ -12,22 +12,18 @@
 </template>
 
 <script setup>
-import { createPinia } from 'pinia'
-import { useAuthStore } from '~/stores/Auth'
 import { usePostStore } from '~/stores/Post'
-// import { useScrollStore } from '~/stores/Scroll'
+import { useScrollStore } from '~/stores/Scroll'
 
 definePageMeta({
   scrollToTop: false,
-  // middleware: ['auth-middleware'],
 })
 
 const scrollStore = useScrollStore()
 const postStore = usePostStore()
 
-const scrollYForYou = computed(()=> scrollStore.scrollYForYou)
-const scrollYFollowing = computed(()=> scrollStore.scrollYFollowing)
-const scrollY = computed((() => scrollStore.scrollY))
+const scrollYForYou = computed(() => scrollStore.scrollYForYou)
+const scrollYFollowing = computed(() => scrollStore.scrollYFollowing)
 const activeTab = computed(() => postStore.activeTab)
 
 const posts = computed(() => postStore.posts)
@@ -39,41 +35,45 @@ const postsFollowingPage = computed(() => postStore.postsFollowingPage)
 const hasNextPageFollowing = computed(() => postStore.postsFollowingHasNextPage)
 
 onMounted(() => {
-  // console.log("masuk ke page index")
-  if(activeTab.value === 'forYou'){
-    window.scrollTo(0, scrollYForYou.value)
-  }else{
-    window.scrollTo(0, scrollYFollowing.value)
-  }
-  // console.log('scrollY pada halaman index: ', scrollY.value)
+  window.scrollTo(0, activeTab.value === 'forYou' 
+    ? scrollStore.scrollYForYou 
+    : scrollStore.scrollYFollowing)
+  
+  window.addEventListener('scroll', handleScroll)
+})
 
-  // if(process.client && window){
-  //   window.history.scrollRestoration = 'auto'
-  // }
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+const handleScroll = () => {
+  if (activeTab.value === 'forYou') {
+    scrollStore.scrollYForYou = window.scrollY
+  } else {
+    scrollStore.scrollYFollowing = window.scrollY
+  }
+}
+
+watch(activeTab, (newTab, oldTab) => {
+  if (oldTab === 'forYou') {
+    scrollStore.scrollYForYou = window.scrollY
+    window.scrollTo(0, scrollStore.scrollYFollowing)
+  } else {
+    scrollStore.scrollYFollowing = window.scrollY
+    window.scrollTo(0, scrollStore.scrollYForYou)
+  }
 })
 
 const postsHandler = computed(() => {
-  if (activeTab.value === 'forYou') {
-    return posts.value
-  } else {
-    return postsFollowing.value
-  }
+  return activeTab.value === 'forYou' ? posts.value : postsFollowing.value
 })
 
 const pagesHandler = computed(() => {
-  if (activeTab.value === 'forYou') {
-    return postsPage.value
-  } else {
-    return postsFollowingPage.value
-  }
+  return activeTab.value === 'forYou' ? postsPage.value : postsFollowingPage.value
 })
 
 const hasNextPageHandler = computed(() => {
-  if (activeTab.value === 'forYou') {
-    return hasNextPage.value
-  } else {
-    return hasNextPageFollowing.value
-  }
+  return activeTab.value === 'forYou' ? hasNextPage.value : hasNextPageFollowing.value
 })
 
 const loadMore = async (page) => {
@@ -82,36 +82,9 @@ const loadMore = async (page) => {
     page: activeTab.value === 'forYou' ? postsPage.value : postsFollowingPage.value,
   })
   if (activeTab.value === 'forYou') {
-    postStore.postsPage = page; 
+    postStore.postsPage = page
   } else {
-    postStore.postsFollowingPage = page;
+    postStore.postsFollowingPage = page
   }
 }
-
-watch(activeTab, async (newTab) => {
-  if(activeTab.value === 'forYou'){
-    scrollStore.scrollYForYou = window.scrollY
-    window.scrollTo(0, scrollYForYou.value)
-  }else{
-    scrollStore.scrollYFollowing = window.scrollY
-    window.scrollTo(0, scrollYFollowing.value)
-  }
-  if(posts.value.length < 0 && postsFollowing.value.length < 0){
-    await loadMore()
-  }
-});
-
-onBeforeRouteLeave((to, from, next) => {
-  // scrollStore.updateScrollY(window.scrollY)
-  // console.log('pindah dengan scrollY : ', window.scrollY)
-  if(activeTab.value === 'forYou'){
-    scrollStore.scrollYForYou = window.scrollY
-  }else{
-    scrollStore.scrollYFollowing = window.scrollY
-  }
-  next()
-})
-
-
 </script>
-
