@@ -8,12 +8,12 @@
       :posts="postsHandler"
     />
   </div>
-
 </template>
 
 <script setup>
 import { usePostStore } from '~/stores/Post'
 import { useScrollStore } from '~/stores/Scroll'
+import { nextTick } from 'vue'
 
 definePageMeta({
   scrollToTop: false,
@@ -22,8 +22,6 @@ definePageMeta({
 const scrollStore = useScrollStore()
 const postStore = usePostStore()
 
-const scrollYForYou = computed(() => scrollStore.scrollYForYou)
-const scrollYFollowing = computed(() => scrollStore.scrollYFollowing)
 const activeTab = computed(() => postStore.activeTab)
 
 const posts = computed(() => postStore.posts)
@@ -35,10 +33,11 @@ const postsFollowingPage = computed(() => postStore.postsFollowingPage)
 const hasNextPageFollowing = computed(() => postStore.postsFollowingHasNextPage)
 
 onMounted(() => {
-  window.scrollTo(0, activeTab.value === 'forYou' 
-    ? scrollStore.scrollYForYou 
-    : scrollStore.scrollYFollowing)
-  
+  nextTick(() => {
+    window.scrollTo(0, activeTab.value === 'forYou' 
+      ? scrollStore.scrollYForYou 
+      : scrollStore.scrollYFollowing)
+  })
   window.addEventListener('scroll', handleScroll)
 })
 
@@ -48,20 +47,21 @@ onUnmounted(() => {
 
 const handleScroll = () => {
   if (activeTab.value === 'forYou') {
-    scrollStore.scrollYForYou = window.scrollY
+    scrollStore.setScrollYForYou(window.scrollY)
   } else {
-    scrollStore.scrollYFollowing = window.scrollY
+    scrollStore.setScrollYFollowing(window.scrollY)
   }
 }
 
-watch(activeTab, (newTab, oldTab) => {
+watch(activeTab, async (newTab, oldTab) => {
   if (oldTab === 'forYou') {
-    scrollStore.scrollYForYou = window.scrollY
-    window.scrollTo(0, scrollStore.scrollYFollowing)
+    scrollStore.setScrollYForYou(window.scrollY)
   } else {
-    scrollStore.scrollYFollowing = window.scrollY
-    window.scrollTo(0, scrollStore.scrollYForYou)
+    scrollStore.setScrollYFollowing(window.scrollY)
   }
+
+  await nextTick()
+  window.scrollTo(0, newTab === 'forYou' ? scrollStore.scrollYForYou : scrollStore.scrollYFollowing)
 })
 
 const postsHandler = computed(() => {
