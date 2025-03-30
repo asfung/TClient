@@ -9,21 +9,26 @@
 
     <!-- center -->
     <div class="flex space-x-4">
-      <NuxtLink
-        to="/"
-        :class="activeTab === 'forYou' ? 'text-primaryLight dark:text-primaryDark font-base-bold' : ''"
-        @click.prevent="setActiveTab('forYou')"
-        >For you
-        <div :class="{'h-1 bg-primaryLight dark:bg-primaryDark rounded-md' : activeTab === 'forYou'}"></div>
-      </NuxtLink>
+      <div
+        v-if="showCenter"
+        class="flex space-x-4"
+        >
+        <NuxtLink
+          to="/"
+          :class="activeTab === 'forYou' ? 'text-primaryLight dark:text-primaryDark font-base-bold' : ''"
+          @click.prevent="debouncedSetActiveTab('forYou')"
+          >For you
+          <div :class="{'h-1 bg-primaryLight dark:bg-primaryDark rounded-md' : activeTab === 'forYou'}"></div>
+        </NuxtLink>
 
-      <NuxtLink
-        to="/"
-        :class="activeTab === 'following' ? 'text-primaryLight dark:text-primaryDark font-base-bold' : ''"
-        @click.prevent="setActiveTab('following')"
-        >Following
-        <div :class="{'h-1 bg-primaryLight dark:bg-primaryDark rounded-md' : activeTab === 'following'}"></div>
-      </NuxtLink>
+        <NuxtLink
+          to="/"
+          :class="activeTab === 'following' ? 'text-primaryLight dark:text-primaryDark font-base-bold' : ''"
+          @click.prevent="debouncedSetActiveTab('following')"
+          >Following
+          <div :class="{'h-1 bg-primaryLight dark:bg-primaryDark rounded-md' : activeTab === 'following'}"></div>
+        </NuxtLink>
+      </div>
     </div>
 
     <!-- right -->
@@ -41,24 +46,102 @@
         </svg>
       </button>
     </div>
+
+    <transition name="fade">
+      <div v-if="showWarning" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md">
+        Please slow down! You're clicking too fast.
+      </div>
+    </transition>
   </div>
 </template>
 
 <script setup>
+import { useTheme } from 'vuetify';
 import { usePostStore } from '~/stores/Post';
 
 const postStore = usePostStore();
+const route = useRoute()
+const colorMode = useColorMode()
+const theme = useTheme()
 
 const logoImage = "/images/TALKER_TRANSPARENT.png"
 const activeTab = computed(() => postStore.activeTab)
+const showCenter = ref(true);
+const lastScrollPosition = ref(0);
+
+const showWarning = ref(false);
+let clickTimeout = null;
+let lastClickTime = 0;
+const CLICK_DELAY = 500; 
 
 const setActiveTab = (tab) => {
   postStore.activeTab = tab;
 };
 
 const setColorTheme = (newTheme) => {
-  console.log(newTheme);
+  // console.log(newTheme);
   useColorMode().preference = newTheme;
 };
 
+const handleScroll = () => {
+  const currentScrollPosition = window.scrollY;
+  const isProfilePage = /^\/@[^/]+$/.test(route.path);
+  if (isProfilePage) {
+    if(currentScrollPosition > 0){
+      showCenter.value = false;
+    }
+    if (currentScrollPosition < 242) {
+      showCenter.value = true;
+    }
+  }
+  lastScrollPosition.value = currentScrollPosition;
+};
+
+// in the future it will be composable 
+const debouncedSetActiveTab = (tab) => {
+  const currentTime = Date.now();
+  if (currentTime - lastClickTime < CLICK_DELAY) {
+    showWarning.value = true;
+    // clear timeout
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+    }
+    // hide warning in 2 sec 
+    clickTimeout = setTimeout(() => {
+      showWarning.value = false;
+    }, 2000);
+    
+    return;
+  }
+  
+  lastClickTime = currentTime;
+  setActiveTab(tab);
+};
+
+watch(() => route.path, (newPath, oldPath) => {
+  if (/^\/@[^/]+$/.test(oldPath) && !/^\/@[^/]+$/.test(newPath)) {
+    showCenter.value = true;
+  }
+});
+
+watch(() => colorMode.value, (newMode) => {
+  theme.global.name.value = newMode
+})
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
 </script>
+
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

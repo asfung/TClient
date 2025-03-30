@@ -32,12 +32,18 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      laravel-echo:
+        specifier: ^2.0.2
+        version: 2.0.2
       nuxt:
         specifier: ^3.12.4
         version: 3.15.4(@parcel/watcher@2.5.1)(@types/node@22.13.7)(db0@0.2.4)(ioredis@5.5.0)(magicast@0.3.5)(rollup@4.34.8)(terser@5.39.0)(typescript@5.8.2)(vite@5.4.14(@types/node@22.13.7)(terser@5.39.0))(yaml@2.7.0)
       pinia:
         specifier: ^2.3.1
         version: 2.3.1(typescript@5.8.2)(vue@3.5.13(typescript@5.8.2))
+      pusher-js:
+        specifier: ^8.4.0
+        version: 8.4.0
       vite:
         specifier: ^5.4.1
         version: 5.4.14(@types/node@22.13.7)(terser@5.39.0)
@@ -2450,6 +2456,10 @@ packages:
   kolorist@1.8.0:
     resolution: {integrity: sha512-Y+60/zizpJ3HRH8DCss+q95yr6145JXZo46OTpFvDZWLfRCE4qChOyk1b26nMaNpfHHgxagk9dXT5OP0Tfe+dQ==}
 
+  laravel-echo@2.0.2:
+    resolution: {integrity: sha512-Ciai6hA7r35MFqNRb8G034cvm9WiveSTFQQKRGJhWtZGbng7C8BBa5QvqDxk/Mw5GeJ+q19jrEwQhf7r1b1lcg==}
+    engines: {node: '>=20'}
+
   launch-editor@2.10.0:
     resolution: {integrity: sha512-D7dBRJo/qcGX9xlvt/6wUYzQxjh5G1RvZPgPv8vi4KRU99DVQL/oW7tnVOCCTm2HGeo3C5HvGE5Yrh6UBoZ0vA==}
 
@@ -3135,6 +3145,9 @@ packages:
   proxy-from-env@1.1.0:
     resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
 
+  pusher-js@8.4.0:
+    resolution: {integrity: sha512-wp3HqIIUc1GRyu1XrP6m2dgyE9MoCsXVsWNlohj0rjSkLf+a0jLvEyVubdg58oMk7bhjBWnFClgp8jfAa6Ak4Q==}
+
   quansync@0.2.6:
     resolution: {integrity: sha512-u3TuxVTuJtkTxKGk5oZ7K2/o+l0/cC6J8SOyaaSnrnroqvcVy7xBxtvBUyd+Xa8cGoCr87XmQj4NR6W+zbqH8w==}
 
@@ -3510,6 +3523,9 @@ packages:
   tsscmp@1.0.6:
     resolution: {integrity: sha512-LxhtAkPDTkVCMQjt2h6eBVY28KCjikZqZfMcC15YBeNjkgUpdCfBu5HoiOTDu86v6smE8yOjyEktJ8hlbANHQA==}
     engines: {node: '>=0.6.x'}
+
+  tweetnacl@1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
 
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
@@ -6518,6 +6534,8 @@ snapshots:
 
   kolorist@1.8.0: {}
 
+  laravel-echo@2.0.2: {}
+
   launch-editor@2.10.0:
     dependencies:
       picocolors: 1.1.1
@@ -7340,6 +7358,10 @@ snapshots:
 
   proxy-from-env@1.1.0: {}
 
+  pusher-js@8.4.0:
+    dependencies:
+      tweetnacl: 1.0.3
+
   quansync@0.2.6: {}
 
   queue-microtask@1.2.3: {}
@@ -7776,6 +7798,8 @@ snapshots:
   ts-interface-checker@0.1.13: {}
 
   tsscmp@1.0.6: {}
+
+  tweetnacl@1.0.3: {}
 
   type-fest@0.21.3: {}
 

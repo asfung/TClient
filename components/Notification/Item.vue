@@ -19,7 +19,7 @@
     <div class="ms-3 text-sm font-normal">
       <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.from }}</div>
       <div class="text-sm font-normal">{{ item.content }}</div>
-      <span class="text-xs font-medium text-primaryLight dark:text-primaryDark">a few seconds ago</span>
+      <span class="text-xs font-medium text-primaryLight dark:text-primaryDark">a few seconds ago {{ item.read }}</span>
     </div>
   </div>
 </template>

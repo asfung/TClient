@@ -1,8 +1,6 @@
 <template>
   <div class="border-default rounded-lg">
-    <!-- <div v-for="(item, index) in 1000" :key="index">
-      <p>notification</p>
-    </div> -->
+    {{ message }}
     <NotificationCard />
   </div>
 </template>
@@ -13,11 +11,31 @@ definePageMeta({
   scrollToTop: false,
   // middleware: ['auth-middleware'],
 })
+const { $encryptUserId, $listen } = useNuxtApp()
+const { getItem } = useCryptoLocalStorage()
 
 const scrollY = computed(() => sessionStorage.getItem('notification-scrollY'))
+const message = ref([])
+const user = getItem('credentials')
+
+const channel = '_notifications.' + user.id
+const event = 'PostNotificationEvent'
+
+const socketListen = () => {
+  $listen(channel, event, (data) => {
+    console.log(data)
+    message.value.push(data.message)
+  })
+}
 
 onMounted(() => {
   window.scrollTo(0, scrollY)
+  console.log(channel)
+  socketListen()
+})
+
+watch(message, (oldVal, newVal) => {
+  console.log('da;slmlkdsamldmlkm')
 })
 
 onBeforeRouteLeave((to, from, next) => {

@@ -17,9 +17,12 @@
 
 <script setup>
 import { useAuthStore } from '~/stores/Auth';
+import { usePostStore } from '~/stores/Post';
 import { Credentials } from '~/enums/Credentials'
 
 const authStore = useAuthStore()
+const postStore = usePostStore()
+
 const route = useRoute()
 
 const userCredentials = authStore.getCredentials(Credentials.USER)
@@ -37,11 +40,18 @@ const items = ref([
   { text: "Settings", icon: "mdi-cog", iconOutline: "mdi-cog-outline", name: "settings" },
 ])
 
+const setActiveTab = (tab) => {
+  postStore.activeTab = tab;
+};
+
 const isActive = (item) => {
   if (item.name === route.name) {
+    // console.log(item.name)
+    // setActiveTab(item.name)
     return true
   }
   if (item.name === 'profile') {
+    // setActiveTab('profile')
     const normalizedPath = route.path.toLowerCase()
     const normalizedUsername = `/@${userCredentials.username}`.toLowerCase()
     return normalizedPath === normalizedUsername

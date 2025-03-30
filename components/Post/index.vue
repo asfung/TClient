@@ -1,13 +1,14 @@
 <template>
   <div :class="{ 'border-default rounded': inputPost }">
     <PostInput 
+      v-if="inputPost"
       :uniqueId="'post-input-main'"
       :inputPost="inputPost" 
       @update:fileUploadPrepared="handleFileUploaded"
       @post-created="handlePostCreated" 
     />
 
-    <div v-for="(item, index) in posts.value" :key="index">
+    <div v-for="(item, index) in displayPosts" :key="index">
       <PostItem :item="item" />
     </div>
 
@@ -16,10 +17,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue';
-import { usePostStore } from '~/stores/Post';
+import { ref, computed, onMounted } from 'vue';
 
-const postStore = usePostStore();
 const props = defineProps({
   inputPost: {
     type: Boolean,
@@ -31,69 +30,34 @@ const props = defineProps({
     required: false,
     default: () => [],
   },
+  hasNextPage: {
+    type: Boolean,
+    default: false,
+  }, 
+  currentPage: {
+    type: Number,
+    default: 1,
+  },
 });
-const activeTab = computed(() => postStore.activeTab);
-const postForYou = computed(() => postStore.posts);
-const postFollowing = computed(() => postStore.postsFollowing);
-const route = useRoute()
 
-// myself 
-const postMyself = computed(() => postStore.postsMyself);
-const postLikeMyself = computed(() => postStore.postsLikeMyself);
-const postRepliesMyself = computed(() => postStore.postRepliesMyself);
+const emit = defineEmits(['load-more']);
 
-const posts = computed(() => {
-    if(activeTab.value === 'forYou') {
-      console.log('For you');
-      return postForYou
-    } else if (activeTab.value === 'following') {
-      console.log('Following');
-      console.log(postFollowing)
-      return postFollowing
-    } else if (activeTab.value === 'bookmarks') {
-      console.log('Bookmarks');
-      return postStore.postsBookmark
-    } else if (activeTab.value === 'search') {
-      console.log('Search');
-      return postStore.postsSearch
-    } else if (activeTab.value === 'profile') {
-      console.log('Profile');
-      return postMyself
-    } else if (activeTab.value === 'posts'){
-      return postMyself
-    }else if (activeTab.value === 'likes'){
-      return postLikeMyself
-    }else if (activeTab.value === 'replies'){
-      return postRepliesMyself
-    }
-  }
-);
-
-// const posts = computed(() => postStore.posts);
-const postHasNextPage = computed(() => postStore.hasNextPage);
 const uploadedFiles = ref([]);
-const currentPage = ref(1);
-const isHomePage = computed(() => route.name === 'index'); 
 
-const loadPosts = async () => {
-  const payload = {
-    type: activeTab.value === 'forYou' ? 'foryou' : 'following',
-    page: currentPage.value,
-  };
-  await postStore.getPost(payload);
-};
+const displayPosts = computed(() => props.posts);
 
-// loading more posts when the sentinel is in view
-// https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
 const observeSentinel = () => {
+  // console.log(props.currentPage)
   const sentinel = document.getElementById("checkpoint-section");
   if (!sentinel) return;
 
   const observer = new IntersectionObserver(
-    async (entries) => {
-      if (entries[0].isIntersecting && postStore.hasNextPage) {
-        currentPage.value += 1;
-        await loadPosts();
+    (entries) => {
+      if (entries[0].isIntersecting && props.hasNextPage) {
+        // props.currentPage += 1;
+        // emit('load-more', props.currentPage);
+        const nextPage = props.currentPage + 1;
+        emit('load-more', nextPage);
       }
     },
     { threshold: 1.0 }
@@ -102,37 +66,15 @@ const observeSentinel = () => {
 };
 
 const handleFileUploaded = (files) => {
-  uploadedFiles.value = files; 
-  console.log('Files uploaded in Post/index.vue:', files);
+  uploadedFiles.value = files;
+  console.log('Files uploaded:', files);
 };
 
 const handlePostCreated = (newPost) => {
-  console.log('Post created in Post/index.vue:', newPost);
+  console.log('Post created:', newPost);
 };
 
-onMounted(async () => {
-  // console.log(route.name);
-  // await loadPosts();
-  // observeSentinel();
-  if (isHomePage.value) {
-    await loadPosts();
-    observeSentinel();
-  }
-});
-
-// i mean if the posts is exist dont make the api call again
-watch(route, async (newRoute) => {
-  if (newRoute.name === 'index') {
-    currentPage.value = 1;
-    await loadPosts();
-  }else if(newRoute.name === 'bookmark') {
-    console.log('Bookmark page');
-  }
-  console.log('Route changed:', newRoute.name);
-});
-
-watch(activeTab, async (newTab) => {
-  currentPage.value = 1;
-  await loadPosts();
+onMounted(() => {
+  observeSentinel();
 });
 </script>

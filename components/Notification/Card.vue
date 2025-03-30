@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="(item, index) in notifications" :key="index">
+    <div v-for="(item, index) in notifications" :key="index" :ref="(el) => registerObserver(el, item)">
       <NotificationItem :item="item" />
     </div>
 
@@ -16,6 +16,7 @@ const notifications = reactive([]);
 let page = 1;
 const pageSize = 20;
 let hasNextPage = true;
+const visibleNotifications = ref(new Set());
 
 const generateFakeNotifications = (count = pageSize) => {
   for (let i = 0; i < count; i++) {
@@ -24,10 +25,33 @@ const generateFakeNotifications = (count = pageSize) => {
       from: faker.person.fullName(),
       content: faker.lorem.sentence(),
       time: faker.date.recent().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      read: faker.datatype.boolean(),
+      // read: faker.datatype.boolean(),
+      read: false, 
     });
   }
 };
+
+const registerObserver = (el, item) => {
+  if (!el) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          console.log(`Notification from ${item.from} is visible.`);
+          item.read = true; 
+          visibleNotifications.value.add(item.id); 
+        } else {
+          visibleNotifications.value.delete(item.id); 
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  observer.observe(el);
+};
+
 
 const loadMoreData = () => {
   if (hasNextPage) {

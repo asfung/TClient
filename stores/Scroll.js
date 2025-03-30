@@ -3,9 +3,14 @@ import { defineStore } from "pinia";
 export const useScrollStore = defineStore('ScrollStore', {
   state: () => {
     return {
+      scrollYForYou: 0,
+      scrollYFollowing: 0,
+      scrollYPostsMyself: 0,
+      scrollYPostsRepliesMyself: 0,
+      scrollYPostsLikesMyself: 0,
       scrollY: 0,
       scrollX: 0,
-    }
+    };
   },
   actions: {
     updateScrollY(scrollY) {
@@ -14,13 +19,22 @@ export const useScrollStore = defineStore('ScrollStore', {
     updateScrollX(scrollX) {
       this.scrollX = scrollX;
     },
-  },
-  getters: {
-    getScrollY() {
-      return this.scrollY;
+    setScrollYForYou(scrollY) {
+      this.scrollYForYou = scrollY;
     },
-    getScrollX() {
-      return this.scrollX;
-    }
-  }
-})
+    setScrollYFollowing(scrollY) {
+      this.scrollYFollowing = scrollY;
+    },
+
+    // user profile
+    setScrollYscrollYPostsMyself(scrollY){
+      this.scrollYPostsMyself = scrollY
+    },
+    setScrollYscrollYPostsRepliesMyself(scrollY){
+      this.scrollYPostsRepliesMyself = scrollY
+    },
+    setScrollYscrollYPostsLikesMyself(scrollY){
+      this.scrollYPostsLikesMyself = scrollY
+    },
+  },
+});

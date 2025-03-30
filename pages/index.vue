@@ -47,9 +47,11 @@ onUnmounted(() => {
 
 const handleScroll = () => {
   if (activeTab.value === 'forYou') {
-    scrollStore.setScrollYForYou(window.scrollY)
+    scrollStore.scrollYForYou = window.scrollY
+    // scrollStore.setScrollYForYou(window.scrollY)
   } else {
-    scrollStore.setScrollYFollowing(window.scrollY)
+    scrollStore.scrollYFollowing = window.scrollY
+    // scrollStore.setScrollYFollowing(window.scrollY)
   }
 }
 

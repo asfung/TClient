@@ -1,50 +1,71 @@
 <template>
-  <div @click="clickPostItem" class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20">
+  <div 
+    @click="clickPostItem" 
+    @mousedown="startSelection"
+    @mouseup="endSelection"
+    class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
+    >
     <hr class="border-gray-600 dark:border-white" />
-    <div class="flex flex-shrink-0 p-4 pb-0 bg-blue-400">
-      <a href="#" class="flex-shrink-0 group block">
+    <div class="flex flex-shrink-0 p-4 pb-0">
+      <a class="flex-shrink-0 group block">
         <div class="flex items-center">
           <div>
-            <img class="inline-block h-10 w-10 rounded-full"
-              :src="item.user.profile_image ? baseStorageUrl + item.user.profile_image.key : randomProfileImage(item.user.display_name)" alt="" />
+            <TooltipCard>
+              <template v-slot:body>
+                <img v-bind="props" class="inline-block h-10 w-10 rounded-full"
+                  :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)" alt="" />
+              </template>
+              <template v-slot:tooltip>
+                <div class="mt-2">
+                  <TooltipUser :user="item.user" />
+                </div>
+              </template>
+            </TooltipCard>
           </div>
-          <div class="ml-3">
-            <p class="text-base leading-6 font-medium hover:underline">
-              <NuxtLink 
-                :to="`/@${item.user.username}`"
-                @click.stop
-                >
-                {{ item.user.display_name }}
-                <span
-                  class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
-                  @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
-              </NuxtLink>
-            </p>
-          </div>
+        <TooltipCard>
+          <template v-slot:body>
+            <div class="ml-3">
+                <p class="text-base leading-6 font-medium ">
+                  <NuxtLink 
+                    :to="`/@${item.user.username}`"
+                    @click.stop
+                    >
+                    <span class="hover:underline">{{ item.user.display_name }}</span>
+                    <span
+                      class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
+                      @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
+                  </NuxtLink>
+                </p>
+              </div>
+          </template>
+          <template v-slot:tooltip>
+            <div>
+              <TooltipUser :user="item.user" />
+            </div>
+          </template>
+        </TooltipCard>
         </div>
       </a>
     </div>
 
     <div class="">
-      <div class="bg-white">
+      <!-- <div class=""> -->
         <PostContentText 
           class="pl-16 max-w-[475px]" 
           :content="item.content?? ''" 
-          @mousedown="startSelection" 
-          @mouseup="endSelection" 
         />
-      </div>
+      <!-- </div> -->
 
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
           <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
-          <img :src="baseStorageUrl + item.key" width="300" draggable="true" @click.stop
+          <img :src="$getImage(item.key)" width="300" draggable="true" @click.stop
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
         </UCarousel>
       </div>
 
-      <div class="flex pl-16 bg-red-500" @click.stop>
+      <div class="flex pl-16" @click.stop>
         <div class="w-full">
           <div class="flex items-center">
             <div class="flex-1 text-center">
@@ -106,37 +127,19 @@
         </div>
       </div>
     </div>
-    <transition name="fade">
-      <div v-if="showWarning" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md">
-        Please slow down! You're clicking too fast.
-      </div>
-    </transition>
-  </div>
+</div>
 </template>
 
 
 <script setup>
-import { toggle } from "~/node_modules/@nuxt/ui/dist/runtime/ui.config/index"
-
-const baseStorageUrl = computed(() => {
-  const runtimeConfig = useRuntimeConfig()
-  return runtimeConfig.public.storagelUrl
-})
-
 const isBookmarked = ref(false)
 const isLiked = ref(false)
-const isSelecting = ref(false);
+const isSelectingText = ref(false);
 
-const showWarning = ref(false);
-let clickTimeout = null;
-let lastClickTime = 0;
-const CLICK_DELAY = 500; 
-
-const props = defineProps({
-  item: {
-    required: true
-  },
-})
+const isTooltipVisibleFirst = ref(false);
+let timeoutFirst;
+const isTooltipVisibleSecond = ref(false);
+let timeoutSecond;
 
 const bookmarkClass = computed(() => {
   return props.item.bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
@@ -146,25 +149,27 @@ const likeClass = computed(() => {
   return props.item.liked ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
 });
 
+// about 3 hours looking for the perfect mechanism 
+// the start will be false, cause when mouse start selecting the text it make isSelectingText true
+// when unselecting the text by click the selected area it will be always true
+// however unselecting the text by click the outside of selected area it will false, 
+// in fact if unselecting outside of PostContentText component
 const startSelection = () => {
-  document.onselectionchange = () => {
-    // console.log('selecting text')
-    const selection = document.getSelection()
-    if(selection.focusOffset > 0){
-      isSelecting.value = true
-    }else{
-      isSelecting.value = false
-    }
-  };
+  isSelectingText.value = false;
 };
 
 const endSelection = () => {
-  // setTimeout(() => {
-  //   isSelecting.value = false;
-  //   console.log('end selection');
-  // }, 1000);
+  const selection = window.getSelection().toString();
+  if (selection.length > 0) {
+    isSelectingText.value = true;
+  }
 };
 
+const props = defineProps({
+  item: {
+    required: true
+  },
+})
 const toggleBookmark = () => {
   console.log('before ', isBookmarked.value)
   isBookmarked.value = !isBookmarked.value
@@ -184,40 +189,22 @@ const convertToRelativeTime = (createdAt) => {
 };
 
 const clickPostItem = () => {
-  // console.log(isSelecting.value)
-  const currentTime = Date.now();
-  if ((currentTime - lastClickTime < CLICK_DELAY) || !isSelecting) {
-    useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`)
-    return;
+  if (!isSelectingText.value) {
+    useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`);
   }
-  lastClickTime = currentTime;
-  // useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`)
 }
 
-watch(isSelecting, (newVal, oldVal) => {
-  console.log('watcher ', newVal)
-  document.onselectionchange = () => {
-    const selection = document.getSelection()
-    console.log(selection.focusOffset)
-    if(selection.focusOffset > 0){
-      console.log('not redirect to the talk')
-    }else{
-      console.log('it redirect to the talk')
-    }
-  }
-  if(newVal){
 
-  }
-})
+const showTooltipFirst = () => {
+  clearTimeout(timeoutFirst);
+  timeout = setTimeout(() => {
+    isTooltipVisibleFirst.value = true;
+  }, 300);
+};
 
-const randomProfileImage = (display_name) => {
-  const formattedName = display_name.replace(/\s+/g, "+"); 
-  // return `https://ui-avatars.com/api/?name=${formattedName}&background=random&color=fff&bold=true&size=128&rounded=true`;
-  return `https://eu.ui-avatars.com/api/?background=random&name=${formattedName}`;
-}
-
-onMounted(() => {
-  // console.log(baseStorageUrl)
-})
+const hideTooltipFirst = () => {
+  clearTimeout(timeoutFirst);
+  isTooltipVisibleFirst.value = false;
+};
 
 </script>
