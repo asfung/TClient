@@ -39,10 +39,11 @@
         </v-timeline-item>
         
         <!-- BUG BIG BROO, CLICK REPLY CLICK POST STILL REDIRECT TO item not item.replies -->
+        <!-- NOW IT SOLVED -->
         <v-timeline-item 
           v-if="showReplies" v-for="(reply, replyI) in item.replies" 
           class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
-          @click="(event) => clickPostItem(item, event)" 
+          @click="(event) => clickPostItem(reply, event)" 
           @mousedown="startSelection"
           @mouseup="endSelection"
           :key="replyI">

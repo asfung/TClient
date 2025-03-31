@@ -6,7 +6,7 @@
           <TooltipCard v-if="item.user">
             <template v-slot:body>
               <span class="hover:underline">
-                {{ item.user.display_name }} {{ item.id }}
+                {{ item.user.display_name }} 
               </span>
               <span
                 class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
