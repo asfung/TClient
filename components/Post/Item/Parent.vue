@@ -1,14 +1,13 @@
 <template>
-  <div class="">
-    <!-- edge of header must be top-11 -->
-    <!-- <div class="flex sticky top-0  z-10 bg-[#ffff] dark:bg-black p-5 rounded-t-lg space-between items-center space-x-2"> -->
+  <div class="" v-if="item">
     <div :class="headerClass">
       <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
       <p>Post</p>
     </div>
     <div class="flex flex-shrink-0 p-4 pb-2 justify-between">
-      <!-- {{ item.parent[0] }} -->
       <v-timeline 
+          dot-color="grey-darken-2"
+          fill-dot="false"
           align="start" 
           density="compact" 
           :line-color="$colorMode.preference === 'dark' ? 'grey-darken-3' : ''"
@@ -18,25 +17,36 @@
           <v-timeline-item 
             v-for="(item, index) in reversedParent" 
             :ref="el => setTimelineRef(el, index)"
+            @click="(event) => clickPostItem(item,index, event)" 
+            @mousedown="startSelection"
+            @mouseup="endSelection"
+            :class="index === lastIndex ? 'cursor-default' : 'cursor-pointer'"
+            class="hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
             :key="index">
-            <p>{{ `timeLineItem-${index}` }}</p>
             <template v-slot:icon>
-              <v-avatar image="https://i.pravatar.cc/64"></v-avatar>
+              <TooltipCard v-if="item.user">
+                  <template v-slot:body>
+                    <img v-bind="props" class="h-10 w-10 rounded-full"
+                      :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)" alt="" />
+                  </template>
+                  <template v-slot:tooltip>
+                    <div class="mt-2">
+                      <TooltipUser :user="item.user" />
+                    </div>
+                  </template>
+                </TooltipCard>
             </template>
-            <PostItemReply :item="item" />
+            <PostItemReply 
+              v-if="item"
+              :hide-click="index === lastIndex"
+              :item="item" 
+            />
           </v-timeline-item>
 
       </v-timeline>
     </div>
 
     <div class="flex items-center justify-between p-4 border-y">
-      <!-- <div @click="replyDialog = true" class="hover:bg-gray-600 w-full hover:rounded-full hover:bg-opacity-20 cursor-pointer duration-400">
-        <div class="dark:text-gray-500 ">
-          <img class="inline-block h-10 w-10 rounded-full"
-            src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
-          Reply
-        </div>
-      </div> -->
       <div class="w-full">
         <PostInput 
           :uniqueId="'post-input-reply'"
@@ -52,6 +62,7 @@
         <PostReplyCard :item="item" :index="index" />
       </div>
     </div>
+    
 
     <DialogTextArea :dialog="replyDialog" @close-dialog="closeReplyDialog" :parent_id="props.parent_id" />
 
@@ -72,6 +83,8 @@ const replyDialog = ref(false)
 const postsReply = computed(() => postStore.postsReply);
 const timelineRefs = ref([])
 const uploadedFiles = ref([]);
+const isSelectingText = ref(false)
+const lastIndex = computed(() => reversedParent.value.length - 1);
 
 const props = defineProps({
   item: {
@@ -123,26 +136,10 @@ const toggleLike = () => {
   console.log('after ', isLiked.value)
 }
 
-const clickPostItem = () => {
-  console.log(props.item);
-  // i want to navigate to the post page /post/:id
-  useNuxtApp().$router.push(`/post/${props.item.id}`)
-}
 
 const closeReplyDialog = () => {
   replyDialog.value = false
 }
-
-// watch(reversedParent, (newVal) => {
-//   nextTick(() => {
-//     setTimeout(() => {
-//       const lastIndex = newVal.length - 1;
-//       if (timelineRefs.value[lastIndex]) {
-//         timelineRefs.value[lastIndex].scrollIntoView({ behavior: 'instant', block: 'end' });
-//       }
-//     }, 100);
-//   });
-// }, { immediate: true });
 
 const handleTimeLineBody = () => {
   const lastIndex = reversedParent.value.length - 1;
@@ -185,6 +182,44 @@ onMounted(() => {
       handleTimeLineBody();
     }, 100); 
   });
+
+  nextTick(() => {
+    const timeline = document.querySelector('.v-timeline');
+    if (timeline) {
+      console.log('v-timeline height:', timeline.offsetHeight, 'px');
+    } else {
+      console.warn('v-timeline component not found');
+    }
+  });
+
 })
 
+const clickPostItem = (item, index, event) => {
+  if (!isSelectingText.value && index !== lastIndex.value) {
+    if (event.target.closest('.v-timeline-divider')) {
+      return;
+    }
+    useNuxtApp().$router.push(`/@${item.user.username}/talk/${item.id}`);
+  }
+}
+
+const startSelection = () => {
+  isSelectingText.value = false;
+};
+
+const endSelection = () => {
+  const selection = window.getSelection().toString();
+  if (selection.length > 0) {
+    isSelectingText.value = true;
+  }
+};
+
+
 </script>
+
+
+<style scope>
+.v-timeline-divider {
+  cursor: default;
+}
+</style>

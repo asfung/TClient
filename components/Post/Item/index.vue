@@ -58,10 +58,12 @@
 
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item }" :items="item.media" @click.stop
-          :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth' }">
+          :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth flex items-center' }">
           <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
-          <img :src="$getImage(item.key)" width="300" draggable="true" @click.stop
+          <img v-if="item.mimetypes.startsWith('image/')" :src="$getImage(item.key)" width="300" draggable="true" @click.stop
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
+          <video v-else-if="item.mimetypes === 'video/mp4'" :src="$getImage(item.key)" class="w-full h-52 object-cover rounded"
+            controls @click.stop />
         </UCarousel>
       </div>
 
@@ -136,11 +138,6 @@ const isBookmarked = ref(false)
 const isLiked = ref(false)
 const isSelectingText = ref(false);
 
-const isTooltipVisibleFirst = ref(false);
-let timeoutFirst;
-const isTooltipVisibleSecond = ref(false);
-let timeoutSecond;
-
 const bookmarkClass = computed(() => {
   return props.item.bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
 });
@@ -190,21 +187,7 @@ const convertToRelativeTime = (createdAt) => {
 
 const clickPostItem = () => {
   if (!isSelectingText.value) {
-    useNuxtApp().$router.push(`@${props.item.user.username}/talk/${props.item.id}`);
+    useNuxtApp().$router.push(`/@${props.item.user.username}/talk/${props.item.id}`);
   }
 }
-
-
-const showTooltipFirst = () => {
-  clearTimeout(timeoutFirst);
-  timeout = setTimeout(() => {
-    isTooltipVisibleFirst.value = true;
-  }, 300);
-};
-
-const hideTooltipFirst = () => {
-  clearTimeout(timeoutFirst);
-  isTooltipVisibleFirst.value = false;
-};
-
 </script>

@@ -172,14 +172,17 @@ const handlePostCreate = async () => {
   const { status, data } = await postStore.createPost({
     parent_id: props.parent_id,
     content: postMe.value.content,
+    media: fileUploadPrepared.value
   });
-  if (fileUploadPrepared.value.length > 0 && status === 201) {
-    await postStore.editMediaPostId({
-      post_id: data.id,
-      data: fileUploadPrepared.value,
-    });
-  }
-  emit('post-created', { ...postMe.value, id: data.id, media: fileUploadPrepared.value });
+  // if (fileUploadPrepared.value.length > 0 && status === 201) {
+  //   await postStore.editMediaPostId({
+  //     post_id: data.id,
+  //     data: fileUploadPrepared.value,
+  //   });
+  // }
+  // emit('post-created', { ...postMe.value, id: data.id, media: fileUploadPrepared.value });
+  // emit('post-created', { ...data, media: fileUploadPrepared.value });
+  emit('post-created', data );
   handleInputClear();
 };
 

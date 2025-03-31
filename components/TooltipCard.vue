@@ -23,7 +23,7 @@ const props = defineProps({
 
 const showTooltip = () => {
   clearTimeout(timeoutSecond);
-  timeout = setTimeout(() => {
+  setTimeout(() => {
     isTooltipVisible.value = true;
   }, 500);
 };

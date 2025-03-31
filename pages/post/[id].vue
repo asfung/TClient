@@ -18,7 +18,7 @@ const parent_id = computed(() => route.params.id)
 const postStore = usePostStore()
 
 const postReply = computed(() => postStore.postReply)
-const allReplies = postStore.getAllReplies()
+// const allReplies = postStore.getAllReplies()
 
 onMounted(() => {
   // console.log(allReplies)

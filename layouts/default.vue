@@ -51,11 +51,19 @@
 </template>
 
 <script setup>
+import { useTheme } from 'vuetify';
+
+const theme = useTheme()
+const colorMode = useColorMode()
 const postDialog = ref(false)
 
 const closeReplyDialog = () => {
   postDialog.value = false
 }
+
+onMounted(() => {
+  theme.global.name.value = colorMode.preference
+})
 </script>
 
 

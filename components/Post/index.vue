@@ -72,6 +72,7 @@ const handleFileUploaded = (files) => {
 
 const handlePostCreated = (newPost) => {
   console.log('Post created:', newPost);
+  displayPosts.value.unshift(newPost)
 };
 
 onMounted(() => {

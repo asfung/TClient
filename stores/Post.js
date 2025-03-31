@@ -41,6 +41,19 @@ export const usePostStore = defineStore('PostStore', {
       postsRepostMyselfPage: 1,
       postsRepostMyselfHasNextPage: true,
 
+      // POST DETAILS
+      postDetails: {
+        parent: [
+          // POST
+        ],
+        replies: [
+          {
+            // POST
+            replies: []
+          },
+        ],
+      },
+
       postReply: {
         parent: [
           {
@@ -295,8 +308,8 @@ export const usePostStore = defineStore('PostStore', {
             this.postsFollowing = payload.page === 1 ? data : [...this.postsFollowing, ...data];
             this.postsFollowingPage = payload.page;
             this.postsFollowingHasNextPage = data.length === (payload.limit || 10);
-          } else if (payload.type === 'post_id') {
-            this.post = data;
+          } else if (!payload.type && !payload.page && payload.post_id) {
+            // this.postDetails.parent = data;
           } else if (payload.type === 'bookmarks') {
             this.postsBookmark = payload.page === 1 ? data : [...this.postsBookmark, ...data];
             this.postsBookmarkPage = payload.page;
@@ -462,6 +475,30 @@ export const usePostStore = defineStore('PostStore', {
             data: data,
             message: data.message
           };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async getReplies(payload){
+      try{
+        const { $axios } = useNuxtApp();
+        const response = await $axios.get('/post/Replies', {
+          params: payload, 
+        });
+        const data = response.data.data;
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message,
+            hasNextPage: data.length === (payload.limit || 10)
+          }
         }
       } catch (e) {
         return {
