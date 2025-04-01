@@ -5,7 +5,7 @@
     @mouseup="endSelection"
     class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
     >
-    <hr class="border-gray-600 dark:border-white" />
+    <hr v-if="props.index !== 0" class="border-gray-600 dark:border-white" />
     <div class="flex flex-shrink-0 p-4 pb-0">
       <a class="flex-shrink-0 group block">
         <div class="flex items-center">
@@ -165,6 +165,9 @@ const endSelection = () => {
 const props = defineProps({
   item: {
     required: true
+  },
+  index: {
+    required: false
   },
 })
 const toggleBookmark = () => {

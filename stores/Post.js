@@ -70,44 +70,45 @@ export const usePostStore = defineStore('PostStore', {
           if (payload.type === 'foryou') {
             this.posts = payload.page === 1 ? data : [...this.posts, ...data];
             this.postsPage = payload.page;
-            this.postsHasNextPage = data.length === (payload.limit || 10);
+            this.postsHasNextPage = data.length === (payload.per_page || 10);
           } else if (payload.type === 'following') {
             this.postsFollowing = payload.page === 1 ? data : [...this.postsFollowing, ...data];
             this.postsFollowingPage = payload.page;
-            this.postsFollowingHasNextPage = data.length === (payload.limit || 10);
+            this.postsFollowingHasNextPage = data.length === (payload.per_page || 10);
           } else if (!payload.type && !payload.page && payload.post_id) {
             // this.postDetails.parent = data;
           } else if (payload.type === 'bookmarks') {
             this.postsBookmark = payload.page === 1 ? data : [...this.postsBookmark, ...data];
             this.postsBookmarkPage = payload.page;
-            this.postsBookmarkHasNextPage = data.length === (payload.limit || 10);
+            this.postsBookmarkHasNextPage = data.length === (payload.per_page || 10);
           } else if (payload.type === 'post') {
             this.postsMyself = payload.page === 1 ? data : [...this.postsMyself, ...data];
             this.postsMyselfPage = payload.page;
-            this.postsMyselfHasNextPage = data.length === (payload.limit || 10);
+            this.postsMyselfHasNextPage = data.length === (payload.per_page || 10);
           } else if (payload.type === 'replies') {
             this.postsRepliesMyself = payload.page === 1 ? data : [...this.postsRepliesMyself, ...data];
             this.postsRepliesMyselfPage = payload.page;
-            this.postsRepliesMyselfHasNextPage = data.length === (payload.limit || 10);
+            this.postsRepliesMyselfHasNextPage = data.length === (payload.per_page || 10);
           } else if (payload.type === 'likes') {
             this.postsLikeMyself = payload.page === 1 ? data : [...this.postsLikeMyself, ...data];
             this.postsLikeMyselfPage = payload.page;
-            this.postsLikeMyselfHasNextPage = data.length === (payload.limit || 10);
+            this.postsLikeMyselfHasNextPage = data.length === (payload.per_page || 10);
           } else if (payload.type === 'repost') {
             this.postsRepostMyself = payload.page === 1 ? data : [...this.postsRepostMyself, ...data];
             this.postsRepostMyselfPage = payload.page;
-            this.postsRepostMyselfHasNextPage = data.length === (payload.limit || 10);
+            this.postsRepostMyselfHasNextPage = data.length === (payload.per_page || 10);
           } else if (!payload.type && payload.q) {
             this.postsSearch = payload.page === 1 ? data : [...this.postsSearch, ...data];
             this.postsSearchPage = payload.page;
-            this.postsSearchHasNextPage = data.length === (payload.limit || 10);
+            this.postsSearchHasNextPage = data.length === (payload.per_page || 10);
           }
-          this.hasNextPage = data.length === (payload.limit || 10); 
+          this.hasNextPage = data.length === (payload.per_page || 10); 
           return {
             response: response,
             status: response.status,
             data: data,
             message: data.message,
+            // hasNextPage: data.length === (payload.per_page || 10)
           };
         }
       } catch (e) {
@@ -126,46 +127,6 @@ export const usePostStore = defineStore('PostStore', {
     },
     pushNewPost(newPost){
       this.posts.unshift(newPost);
-    },
-    loadMoreData(){
-      const newData = Array.from({ length: 10 }, (_, i) => ({
-        id: faker.string.uuid(),                    
-        username: faker.internet.userName(),        
-        profile_image: faker.image.url({ width: 100, height: 100 }), 
-        display_name: faker.person.fullName(),      
-        content: faker.lorem.sentences(2),          
-        created_at: faker.date.recent().toISOString(),
-        show: false,
-        liked: false,
-        // contentData: "https://www.trpkovski.com/2024/03/24/is-it-possible-to-use-nuxt-link-in-content-rendered-with-v-html @Elon Day 07 of the challenge #100DaysOfCode I was wondering what I can do with #tailwindcss, so just started building Twitter UI using Tailwind and so far it looks so promising. I will post my code after completion. [07/100] #WomenWhoCode #CodeNewbie",
-        media: Array.from({ length: Math.floor(Math.random() * 6) + 1 }, () => 
-          faker.image.url({ width: 600, height: 800 })
-        ),
-      }));
-  
-      // console.log(`before fetch: ${this.posts.length}`);
-      this.posts.push(...newData);
-      // this.post.push(...newData);
-      // console.log(`after fetch: ${this.posts.length}`);
-  
-      this.isLoading = false
-      this.hasNextPage = newData.length === 10;
-      // console.log(this.hasNextPage);
-    },
-    getAllReplies(){
-      let allReplies = [];
-
-      function traverseReplies(replies) {
-        replies.forEach(reply => {
-          allReplies.push(reply);
-          if (reply.replies && reply.replies.length > 0) {
-            traverseReplies(reply.replies);
-          }
-        });
-      }
-
-      traverseReplies(this.postReply.replies);
-      return allReplies;
     },
     async createPost(payload){
       try {

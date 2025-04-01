@@ -8,6 +8,7 @@ export const useScrollStore = defineStore('ScrollStore', {
       scrollYPostsMyself: 0,
       scrollYPostsRepliesMyself: 0,
       scrollYPostsLikesMyself: 0,
+      scrollYBookmarks: 0,
       scrollY: 0,
       scrollX: 0,
     };
@@ -35,6 +36,9 @@ export const useScrollStore = defineStore('ScrollStore', {
     },
     setScrollYscrollYPostsLikesMyself(scrollY){
       this.scrollYPostsLikesMyself = scrollY
+    },
+    setScrollYBookmarks(scrollY){
+      this.scrollYBookmarks = scrollY
     },
   },
 });

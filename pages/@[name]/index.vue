@@ -87,7 +87,10 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  console.log('reset the scrollY')
+  // console.log('reset the scrollY')
+  scrollStore.setScrollYscrollYPostsMyself(0)
+  scrollStore.setScrollYscrollYPostsRepliesMyself(0)
+  scrollStore.setScrollYscrollYPostsLikesMyself(0)
   // window.removeEventListener('scroll', handleScroll)
 })
 
