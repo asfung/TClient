@@ -3,6 +3,7 @@
     <div v-for="(item, index) in postsBookmark" :key="index">
       <PostItem :item="item" :index="index" />
     </div>
+    <!-- <v-progress-circular color="primary" indeterminate></v-progress-circular> -->
 
     <div id="checkpoint-section"></div>
   </div>
@@ -19,8 +20,6 @@ import { useScrollStore } from '~/stores/Scroll'
 
 const postStore = usePostStore()
 const scrollStore = useScrollStore()
-
-const posts = computed(() => postStore.posts);
 
 const scrollYBookmarks = computed(() => scrollStore.scrollYBookmarks)
 const postsBookmark = computed(() => postStore.postsBookmark)
@@ -50,7 +49,7 @@ const bookmarksFetch = async (page) => {
     page: postsBookmarkPage.value,
     per_page: 5, // for now it just 5
   })
-  // postsBookmarkPage.value = page
+  // postsBookmarkPage.value = page // not reactive cause it using computed(), hell nawhhhh chattt
   postStore.postsBookmarkPage = page
 }
 
