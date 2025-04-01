@@ -44,16 +44,29 @@ const handleScroll = () => {
 
 const bookmarksFetch = async (page) => {
   console.log(postsBookmarkPage.value)
-  await postStore.getPost({
+  const response = await postStore.getPost({
     type: 'bookmarks',
     page: postsBookmarkPage.value,
     per_page: 5, // for now it just 5
   })
   // postsBookmarkPage.value = page // not reactive cause it using computed(), hell nawhhhh chattt
   postStore.postsBookmarkPage = page
+  // TODO: using current_page, last_page do not using data.lenght on Post.js
+  // "meta": {
+  //       "current_page": 2,
+  //       "last_page": 2,
+  //       "per_page": 5,
+  //       "total": 10
+  //   },
+  console.log(response.response)
+  if(response.status === 404){
+    postStore.postsBookmarkHasNextPage = false
+  }
 }
 
 const observeSentinel = () => {
+  console.log(postsBookmarkHasNextPage.value)
+  if(postsBookmarkHasNextPage.value === false) return;
   const sentinel = document.getElementById("checkpoint-section")
   if (!sentinel) return;
 
