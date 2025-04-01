@@ -49,7 +49,7 @@
                   </path>
                 </svg>
               </a>
-              {{ item.reply_count }}
+              <!-- {{ item.reply_count }} -->
             </div>
 
             <div class="flex-1 text-center py-2 m-2">

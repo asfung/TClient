@@ -51,11 +51,11 @@
             <TooltipCard >
                 <template v-slot:body>
                   <img v-bind="props" class="h-10 w-10 rounded-full"
-                    :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)" alt="" />
+                    :src="reply.user.profile_image ? $getImage(reply.user.profile_image.key) : $randomProfileImage(reply.user.display_name)" alt="" />
                 </template>
                 <template v-slot:tooltip>
                   <div class="mt-2">
-                    <TooltipUser :user="item.user" />
+                    <TooltipUser :user="reply.user" />
                   </div>
                 </template>
               </TooltipCard>
@@ -64,15 +64,16 @@
             <PostItemReply :item="reply" />
           </div>
           <button 
-            v-if="replyI === item.replies.length - 1 && hasNextPage"
+            v-if="replyI === item.replies.length - 1 && replyRepliesHasNextPage"
             @click.stop="handleLoadMoreReplies" 
             class="text-blue-500 hover:underline focus:outline-none">
             More Replies
           </button>
         </v-timeline-item>
       </v-timeline>
+
     </div>
-    <hr class="border-gray-600 dark:border-white" />
+    <hr v-if="props.lastIndex !== props.index" class="border-gray-600 dark:border-white" />
   </div>
 </template>
 
@@ -86,22 +87,32 @@ const props = defineProps({
   },
   index: {
     required: false
-  }
+  },
+  lastIndex: {
+    required: false
+  },
 });
 
 const postStore = usePostStore();
 const showReplies = ref(false);
-const hasNextPage = ref(false);
 const isSelectingText = ref(false)
+
+const replyRepliesPerPage = ref(1)
+const replyRepliesPage = ref(1)
+const replyRepliesHasNextPage = ref(true)
 
 const fetchReplies = async () => {
   if (!showReplies.value) {
     const response = await postStore.getReplies({
       post_id: props.item.id,
+      page: replyRepliesPage.value,
+      per_page: replyRepliesPerPage.value,
+      sort: 'asc'
     });
     if (response.status === 200) {
       props.item.replies = response.data;
-      hasNextPage.value = response.hasNextPage;
+      replyRepliesHasNextPage.value = response.hasNextPage;
+      replyRepliesPage.value += 1
       showReplies.value = true;
     }
   } else {
@@ -110,21 +121,27 @@ const fetchReplies = async () => {
 };
 
 const handleLoadMoreReplies = async () => {
-  const response = await postStore.getReplies({ postId: props.item.id, limit: 3, offset: props.item.replies.length });
+  const response = await postStore.getReplies({ 
+    post_id: props.item.id, 
+    page: replyRepliesPage.value,
+    per_page: replyRepliesPerPage.value,
+    sort: 'asc'
+  });
   if (response.status === 200) {
     props.item.replies.push(...response.data);
-    hasNextPage.value = response.hasNextPage;
+    replyRepliesHasNextPage.value = response.hasNextPage;
+    replyRepliesPage.value += 1
   }
+  console.log(replyRepliesHasNextPage.value)
 };
 
 const clickPostItem = (item, event) => {
-  console.log(item.id)
-  // if (!isSelectingText.value ) {
-  //   if (event.target.closest('.v-timeline-divider')) {
-  //     return;
-  //   }
-  //   useNuxtApp().$router.push(`/@${item.user.username}/talk/${item.id}`);
-  // }
+  if (!isSelectingText.value ) {
+    if (event.target.closest('.v-timeline-divider')) {
+      return;
+    }
+    useNuxtApp().$router.push(`/@${item.user.username}/talk/${item.id}`);
+  }
 }
 
 const startSelection = () => {

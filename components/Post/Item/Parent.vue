@@ -1,5 +1,6 @@
 <template>
-  <div class="" v-if="item">
+  <!-- <div class="" v-if="item"> -->
+  <div class="">
     <div :class="headerClass">
       <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
       <p>Post</p>
@@ -58,9 +59,38 @@
     </div>
 
     <div class="replies">
-      <div v-for="(item, index) in item.replies" :key="index">
-        <PostReplyCard :item="item" :index="index" />
+      <!-- <div v-if="!isLoadingReply">
+        <div v-if="item.replies && item.replies.length > 0">
+          <div v-for="(item, index) in item.replies" :key="index">
+            <PostReplyCard :item="item" :index="index" />
+          </div>
+        </div>
+        <div v-else class="h-screen">
+          No Replies
+        </div>
       </div>
+      <div v-else class="flex h-screen justify-center my-3">
+        <v-progress-circular
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div> -->
+
+      <div v-if="!isLoadingReply">
+        <div v-if="item.replies && item.replies.length > 0">
+          <div v-for="(reply, index) in item.replies" :key="index">
+            <PostReplyCard :item="reply" :index="index" :lastIndex="props.item.replies.length - 1" />
+          </div>
+        </div>
+        <div v-else class="text-center p-4">
+          No Replies
+        </div>
+      </div>
+      <div v-else class="flex h-screen justify-center my-3">
+        <v-progress-circular color="primary" indeterminate></v-progress-circular>
+      </div>
+
+      <div id="checkpoint-section"></div>
     </div>
     
 
@@ -72,7 +102,7 @@
 
 <script setup>
 import { PostReplyCard } from '#components'
-import { ArrowLeftIcon } from '@heroicons/vue/24/outline'
+import { ArrowLeftIcon, CurrencyEuroIcon } from '@heroicons/vue/24/outline'
 import { usePostStore } from '~/stores/Post'
 
 const isBookmarked = ref(false)
@@ -86,6 +116,10 @@ const uploadedFiles = ref([]);
 const isSelectingText = ref(false)
 const lastIndex = computed(() => reversedParent.value.length - 1);
 
+const isLoadingReply = ref(false)
+const postsDetailsRepliesPage = computed(() => postStore.postsDetailsRepliesPage)
+const postsDetailsRepliesHasNextPage = computed(() => postStore.postsDetailsRepliesHasNextPage)
+
 const props = defineProps({
   item: {
     required: true
@@ -94,8 +128,12 @@ const props = defineProps({
     required: true
   }
 })
+const emit = defineEmits(['load-more']);
 
 const reversedParent = computed(() => {
+  if (!props.item?.parent || !Array.isArray(props.item.parent)) {
+    return [];
+  }
   return [...props.item.parent].reverse(); 
 });
 
@@ -144,25 +182,31 @@ const closeReplyDialog = () => {
 const handleTimeLineBody = () => {
   const lastIndex = reversedParent.value.length - 1;
   const timelineItem = timelineRefs.value[lastIndex];
-  // console.log(timelineItem)
 
   if (timelineItem) {
-    const bodyElement = timelineItem.querySelector('.v-timeline-item__body'); 
+    const bodyElement = timelineItem.querySelector('.v-timeline-item__body');
     if (bodyElement) {
-      // bodyElement.scrollIntoView();
-      const offset = 84;
+      const offset = 68; // 64 (the profile_image lil bit cut), 68 (its great for now)
       const elementPosition = bodyElement.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: elementPosition - offset });
-      // console.log('Focused on:', bodyElement);
-
+      console.log(elementPosition)
+      window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
     } else {
       console.warn('class .v-timeline-item__body not found:', timelineItem);
     }
   } else {
-    console.warn('last timelineitem index not found');
+    console.warn('last timeline item index not found');
   }
-
 }
+
+const adjustRepliesHeight = () => {
+  const repliesSection = document.querySelector('.replies');
+  const timeline = document.querySelector('.v-timeline');
+  if (repliesSection && timeline && (!props.item.replies || props.item.replies.length === 0)) {
+    const timelineHeight = timeline.offsetHeight + 20; // setting some offset top when has no replies
+    // make sure the replies section matches timeline height
+    repliesSection.style.minHeight = `${timelineHeight}px`; 
+  }
+};
 
 const handleFileUploaded = (files) => {
   uploadedFiles.value = files; 
@@ -175,23 +219,29 @@ const handlePostCreated = (newPost) => {
 
 onMounted(() => {
   window.addEventListener('scroll', () => {
-    scrollY.value = window.scrollY
-  })
+    scrollY.value = window.scrollY;
+  });
+
   nextTick(() => {
     setTimeout(() => {
-      handleTimeLineBody();
-    }, 100); 
+      // trigger handleTimeLineBody only if both reversedParent and replies have data
+      if (reversedParent.value.length > 0 && props.item.replies?.length > 0) {
+        handleTimeLineBody();
+      } else if (reversedParent.value.length > 0) {
+        // if only reversedParent has data, adjust height and then scroll
+        adjustRepliesHeight();
+        handleTimeLineBody();
+      }
+      observeSentinel();
+    }, 100);
   });
+})
 
-  nextTick(() => {
-    const timeline = document.querySelector('.v-timeline');
-    if (timeline) {
-      console.log('v-timeline height:', timeline.offsetHeight, 'px');
-    } else {
-      console.warn('v-timeline component not found');
-    }
-  });
-
+onUnmounted(() => {
+  // postStore.postDetails = {}
+  postStore.postDetails = { parent: [], replies: [] }; 
+  postStore.postsDetailsRepliesPage = 0;
+  postStore.postsDetailsRepliesHasNextPage = true;
 })
 
 const clickPostItem = (item, index, event) => {
@@ -199,7 +249,7 @@ const clickPostItem = (item, index, event) => {
     if (event.target.closest('.v-timeline-divider')) {
       return;
     }
-    useNuxtApp().$router.push(`/@${item.user.username}/talk/${item.id}`);
+    useNuxtApp().$router.push(`/@${item.user.username}/talk/${item.id}`)
   }
 }
 
@@ -208,10 +258,72 @@ const startSelection = () => {
 };
 
 const endSelection = () => {
-  const selection = window.getSelection().toString();
+  const selection = window.getSelection().toString()
   if (selection.length > 0) {
     isSelectingText.value = true;
   }
+};
+
+  
+// const postDetailsReplyFetch = async (page) => {
+//   try {
+//     isLoadingReply.value = true
+//     const fetch = await postStore.getReplies({
+//       post_id: props.parent_id,
+//       page: page,
+//     })
+//     // postStore.postDetails.replies = fetch.data
+//     // if(fetch.data.length > 0){
+//     console.log(fetch.data.length)
+//     postStore.postDetails.replies.push(fetch.data)
+//     postStore.postsDetailsRepliesPage = page
+//     postStore.postsDetailsRepliesHasNextPage = fetch.hasNextPage
+//     // }
+//   } finally {
+//     isLoadingReply.value = false
+//   }
+// }
+
+const postDetailsReplyFetch = async (page = 1) => {
+  try {
+    // prevent looping fetching  calls
+    if (!postsDetailsRepliesHasNextPage.value) return; 
+    isLoadingReply.value = true;
+
+    const fetch = await postStore.getReplies({
+      post_id: props.parent_id,
+      page: page,
+    });
+
+    if (page === 1) {
+    // reset replies on new fetch at first page
+      postStore.postDetails.replies = fetch.data; 
+    } else {
+      // append only new replies data
+      postStore.postDetails.replies.push(...fetch.data); 
+    }
+
+    postStore.postsDetailsRepliesPage = page;
+    postStore.postsDetailsRepliesHasNextPage = fetch.hasNextPage;
+  } finally {
+    isLoadingReply.value = false;
+  }
+};
+
+
+const observeSentinel = () => {
+  const sentinel = document.getElementById("checkpoint-section");
+  if (!sentinel) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && postsDetailsRepliesHasNextPage.value  && !isLoadingReply.value) {
+        const nextPage = postsDetailsRepliesPage.value + 1;
+        postDetailsReplyFetch(nextPage)
+      }
+    },
+    { threshold: 1.0 }
+  );
+  observer.observe(sentinel);
 };
 
 
@@ -222,4 +334,8 @@ const endSelection = () => {
 .v-timeline-divider {
   cursor: default;
 }
+/* default minimum div.replies height */
+/* .replies {
+  min-height: 100px; 
+} */
 </style>
