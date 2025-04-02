@@ -4,30 +4,37 @@
     <div class="user-info">
       <div class="flex justify-between items-center p-4">
         <div>
-          <p class="font-bold">Mark Sucker</p>
-          <p class="text-neutral">@Mark</p>
+          <p v-if="!isLoadingProfile" class="font-bold">{{ userProfileData?.display_name }}</p>
+          <p v-else class="font-bold animate-pulse bg-gray-300 h-6 w-24 rounded"></p>
+
+          <p v-if="!isLoadingProfile" class="text-neutral">@{{ userProfileData?.username }}</p>
+          <p v-else class="text-neutral animate-pulse bg-gray-300 h-4 w-16 rounded mt-1"></p>
         </div>
         <div class="top-8">
-          <img src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" class="rounded-full"
-            alt="Bonnie image" />
+          <img 
+            v-if="!isLoadingProfile" 
+            :src="userProfileData?.profile_image ? $getImage(userProfileData?.profile_image.key) : $randomProfileImage(userProfileData?.display_name || 'user')" 
+            class="rounded-full h-14 w-14"
+            :alt="userProfileData?.display_name" />
+          <div v-else class="rounded-full bg-gray-300 animate-pulse h-14 w-14"></div>
         </div>
       </div>
       <div class="p-4 max-w-96">
-        <p class="break-words">get up the phone and touch grass</p>
+        <p v-if="!isLoadingProfile" class="break-words">{{ userProfileData?.bio }}</p>
+        <p v-else class="break-words animate-pulse bg-gray-300 h-12 w-full rounded"></p>
         <div class="flex space-between mt-4 space-x-5">
-          <p>
-            2121
-            <span class="text-neutral">Followers</span>
-          </p>
-          <p>
-            78
-            <span class="text-neutral">Following</span>
-          </p>
-          <p>
-            3
-            <span class="text-neutral">Posts</span>
-          </p>
+          <p v-if="!isLoadingProfile"> {{ $numberFormat(userProfileData?.followers_count) }} <span class="text-neutral">Followers</span></p>
+          <p v-else class="animate-pulse bg-gray-300 h-4 w-16 rounded"></p>
+
+          <p v-if="!isLoadingProfile"> {{ $numberFormat(userProfileData?.following_count) }} <span class="text-neutral">Following</span> </p>
+          <p v-else class="animate-pulse bg-gray-300 h-4 w-16 rounded"></p>
+
+          <p v-if="!isLoadingProfile"> {{ $numberFormat(userProfileData?.post_count) }} <span class="text-neutral">Posts</span> </p>
+          <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+
+          <!-- <button @click="userProfileData.username = 'SULE'">click</button> -->
         </div>
+
       </div>
     </div>
 
@@ -68,18 +75,22 @@ import { useScrollStore } from '~/stores/Scroll';
 import { useTheme } from 'vuetify';
 
 const theme = useTheme()
+const route = useRoute()
 
+const username = route.params.name
 const postStore = usePostStore()
 const authStore = useAuthStore()
 const scrollStore = useScrollStore()
 const tab = ref('posts')
+const isLoadingProfile = ref(false)
 
+const { userProfileData } = storeToRefs(authStore)
 const posts = computed(() => postStore.posts);
 const postsSecond = computed(() => postStore.post);
-const token = computed(() => authStore.token);
 const postsReply = computed(() => postStore.postsReply);
 
 onMounted(() => {
+  userProfileFetch()
   nextTick(() => {
     window.scrollTo(0, scrollStore.scrollYPostsMyself)
   })
@@ -87,7 +98,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  // console.log('reset the scrollY')
+  // for now it reset, but if username is same as before its not must reset
   scrollStore.setScrollYscrollYPostsMyself(0)
   scrollStore.setScrollYscrollYPostsRepliesMyself(0)
   scrollStore.setScrollYscrollYPostsLikesMyself(0)
@@ -133,6 +144,17 @@ watch(tab, async(newTab, oldTab) => {
       break;
   }
 })
+
+const userProfileFetch = async () => {
+  isLoadingProfile.value = true
+  try{
+    const fetch = await authStore.userProfile(username)
+    // proof: https://x.com/posva/status/1560020538281582592
+    userProfileData.value = fetch.data
+  }catch(e){}finally{
+    isLoadingProfile.value = false
+  }
+}
 
 </script>
 
