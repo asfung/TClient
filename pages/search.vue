@@ -1,23 +1,18 @@
 <template>
   <div class="border-default rounded-lg">
-    <!-- <div class="search sticky top-12 z-50"> -->
     <div class="search">
-      <!-- <UCommandPalette :groups="groups" :autoselect="false" @update:model-value="actionCompletionItem"
-        :close-button="{ icon: 'i-heroicons-x-mark-20-solid', color: 'gray', variant: 'link', padded: false }" /> -->
       <v-text-field 
         ref="searchInput"
         placeholder="Search..."
         v-model="searchQuery"
-        @update:focused="updateFocus"
-        @keydown="submitSearch"
-        :focused="searchFocus"
+        @focus="updateFocus(true)"
+        @blur="updateFocus(false)"
+        @keydown.enter="submitSearch"
         variant="outlined">
         <template #prepend-inner>
           <MagnifyingGlassIcon class="size-5" />
         </template>
-
       </v-text-field>
-
     </div>
 
     <div class="result-post">
@@ -30,27 +25,34 @@
             </div>
           </div>
           <v-divider></v-divider>
-          <div>
-            <v-list 
-              class="dark:bg-black dark:text-white"
-              >
+
+          <div v-if="userSearch.length">
+            <p class="font-bold">Users</p>
+            <v-list class="dark:bg-black dark:text-white">
               <v-list-item
-                v-for="(item) in userSearch"
+                v-for="item in userSearch"
                 :key="item.username"
-                :prepend-avatar="item.avatar"
+                :prepend-avatar="$getImage(item.profile_image.key)"
                 :ripple="false"
-                @click="clickUser(item)"
+                @click.stop="clickUser(item)"
               >
                 <template v-slot:title>
-                  <div v-html="item.display_nmae"></div>
+                  <div v-html="item.display_name"></div>
                 </template>
-
                 <template v-slot:subtitle>
                   <div v-html="item.username"></div>
                 </template>
               </v-list-item>
             </v-list>
           </div>
+
+          <div v-if="postsSearch.length">
+            <p class="font-bold mt-4">Posts</p>
+            <div v-for="(item, index) in postsSearch" :key="index">
+              <PostItem :item="item" :index="index" />
+            </div>
+          </div>
+
         </div>
       </div>
       <div v-else>
@@ -59,14 +61,10 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
-definePageMeta({
-  // middleware: ['auth-middleware'],
-})
 import { BeakerIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid'
 import { usePostStore } from '~/stores/Post'
 import { useUserStore } from '~/stores/User'
@@ -77,39 +75,56 @@ const searchInput = ref(null)
 const userStore = useUserStore()
 const postStore = usePostStore()
 
-const {
-  userSearch,
-} = storeToRefs(userStore)
+const { userSearch } = storeToRefs(userStore)
+const { postsSearch } = storeToRefs(postStore)
 
-const {
-  postsSearch,
-  postsSearchPage,
-  postsSearchHasNextPage
-} = storeToRefs(postStore)
+const debounce = (fn, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
+}
 
+const userSearchFetch = debounce(async () => {
+  if (searchQuery.value.trim()) {
+    const fetch = await userStore.searchUser({ 
+      q: searchQuery.value 
+    })
+    userStore.userSearch = fetch.status === 200 ? fetch.data : []
+  } else {
+    userStore.userSearch = []
+  }
+}, 300)
 
-watch(searchQuery, (newQuery) => {
-  console.log('User is typing:', newQuery)
-  // You can add more logic here to handle the search query
+const postSearchFetch = debounce(async () => {
+  if (searchQuery.value.trim()) {
+    const fetch = await postStore.getPost({ 
+      q: searchQuery.value, 
+      page: 1, 
+      per_page: 10 
+    })
+    postStore.postsSearch = fetch.status === 200 ? fetch.data : []
+  } else {
+    postStore.postsSearch = []
+  }
+}, 300)
+
+watch(searchQuery, () => {
+  userSearchFetch()
+  postSearchFetch()
 })
 
 const updateFocus = (focus) => {
-  console.log(focus)
   searchFocus.value = focus
 }
 
-const submitSearch = (event) => {
-  if(event.key === 'Enter') {
-    console.log('enter')
-    console.log(searchFocus.value)
-    searchFocus.value = false
-    searchInput.value.blur()
-    console.log(searchFocus.value)
-  }
+const submitSearch = () => {
+  searchFocus.value = false
+  searchInput.value.blur()
 }
 
 const clickUser = (item) => {
-  console.log("user: ", item)
+  console.log("Selected user:", item)
 }
-
 </script>
