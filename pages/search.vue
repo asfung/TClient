@@ -6,7 +6,7 @@
         placeholder="Search..."
         v-model="searchQuery"
         @focus="updateFocus(true)"
-        @blur="updateFocus(false)"
+        @blur="handleBlur"
         @keydown.enter="submitSearch"
         variant="outlined">
         <template #prepend-inner>
@@ -34,7 +34,8 @@
                 :key="item.username"
                 :prepend-avatar="$getImage(item.profile_image.key)"
                 :ripple="false"
-                @click.stop="clickUser(item)"
+                @mousedown.prevent
+                @click="clickUser(item)"
               >
                 <template v-slot:title>
                   <div v-html="item.display_name"></div>
@@ -52,7 +53,6 @@
               <PostItem :item="item" :index="index" />
             </div>
           </div>
-
         </div>
       </div>
       <div v-else>
@@ -119,6 +119,15 @@ const updateFocus = (focus) => {
   searchFocus.value = focus
 }
 
+const handleBlur = (event) => {
+  const relatedTarget = event.relatedTarget || document.activeElement
+  if (relatedTarget && relatedTarget.closest('.result-post')) {
+    searchFocus.value = true
+  } else {
+    searchFocus.value = false
+  }
+}
+
 const submitSearch = () => {
   searchFocus.value = false
   searchInput.value.blur()
@@ -126,5 +135,6 @@ const submitSearch = () => {
 
 const clickUser = (item) => {
   console.log("Selected user:", item)
+  searchFocus.value = true
 }
 </script>
