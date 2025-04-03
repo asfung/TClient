@@ -30,7 +30,7 @@
                     :to="`/@${item.user.username}`"
                     @click.stop
                     >
-                    <span class="hover:underline">{{ item.user.display_name }}</span>
+                    <span :class="$chaosOrb(item.user.username)" class="hover:underline">{{ item.user.display_name }}</span>
                     <span
                       class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
                       @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
@@ -67,10 +67,11 @@
         </UCarousel>
       </div>
 
-      <div class="flex pl-16" @click.stop>
+      <!-- ACTIONS -->
+      <div class="flex pl-16">
         <div class="w-full">
           <div class="flex items-center">
-            <div class="flex-1 text-center">
+            <div class="flex-1 text-center" @click.stop>
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-primaryLight hover:bg-opacity-10 hover:text-primaryLight ">
                 <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -82,7 +83,7 @@
               </a>
             </div>
 
-            <div class="flex-1 text-center py-2 m-2">
+            <div class="flex-1 text-center py-2 m-2"  @click.stop>
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-success hover:bg-opacity-10 hover:text-success">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -92,7 +93,7 @@
               </a>
             </div>
 
-            <div class="flex-1 text-center py-2 m-2" @click="toggleLike">
+            <div class="flex-1 text-center py-2 m-2" @click="toggleLike"  @click.stop>
               <a 
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-accent hover:bg-opacity-10 hover:text-accent">
                 <svg :class="likeClass" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -104,7 +105,7 @@
               </a>
             </div>
 
-            <div class="flex-1 text-center py-2 m-2" @click="toggleBookmark">
+            <div class="flex-1 text-center py-2 m-2" @click="toggleBookmark"  @click.stop>
               <a 
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-highlight hover:bg-opacity-10 hover:text-highlight">
                 <svg :class="bookmarkClass" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -114,7 +115,7 @@
               </a>
             </div>
 
-            <div class="flex-1 text-center py-2 m-2">
+            <div class="flex-1 text-center py-2 m-2"  @click.stop>
               <a href="#"
                 class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
                 <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
@@ -128,6 +129,7 @@
           </div>
         </div>
       </div>
+
     </div>
 </div>
 </template>
@@ -137,6 +139,8 @@
 const isBookmarked = ref(false)
 const isLiked = ref(false)
 const isSelectingText = ref(false);
+
+const emit = defineEmits()
 
 const bookmarkClass = computed(() => {
   return props.item.bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
