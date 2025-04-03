@@ -35,7 +35,7 @@
               class="dark:bg-black dark:text-white"
               >
               <v-list-item
-                v-for="(item) in items"
+                v-for="(item) in userSearch"
                 :key="item.username"
                 :prepend-avatar="item.avatar"
                 :ripple="false"
@@ -54,7 +54,9 @@
         </div>
       </div>
       <div v-else>
-        <Post :input-post="false" />
+        <div v-for="(item, index) in postsSearch" :key="index">
+          <PostItem :item="item" :index="index" />
+        </div>
       </div>
     </div>
 
@@ -65,55 +67,26 @@
 definePageMeta({
   // middleware: ['auth-middleware'],
 })
-
 import { BeakerIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid'
+import { usePostStore } from '~/stores/Post'
+import { useUserStore } from '~/stores/User'
 
 const searchQuery = ref('')
 const searchFocus = ref(false)
 const searchInput = ref(null)
+const userStore = useUserStore()
+const postStore = usePostStore()
 
-const items = ref([
-  {
-    avatar: 'https://picsum.photos/250/300?image=660',
-    display_nmae: 'Mark The Sucker',
-    username: '@Mark',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=821',
-    display_nmae: 'John The Brave',
-    username: '@John',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=783',
-    display_nmae: 'Bella The Explorer',
-    username: '@Bella',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=1006',
-    display_nmae: 'LaToya The Wise',
-    username: '@LaToya',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=146',
-    display_nmae: 'Nancy The Quick',
-    username: '@Nancy',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=1008',
-    display_nmae: 'Daniel The Strong',
-    username: '@Daniel',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=839',
-    display_nmae: 'Spike The Bold',
-    username: '@Spike',
-  },
-  {
-    avatar: 'https://picsum.photos/250/300?image=145',
-    display_nmae: 'Emma The Kind',
-    username: '@Emma',
-  },
-])
+const {
+  userSearch,
+} = storeToRefs(userStore)
+
+const {
+  postsSearch,
+  postsSearchPage,
+  postsSearchHasNextPage
+} = storeToRefs(postStore)
+
 
 watch(searchQuery, (newQuery) => {
   console.log('User is typing:', newQuery)
