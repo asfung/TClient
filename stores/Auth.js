@@ -11,6 +11,7 @@ export const useAuthStore = defineStore('AuthStore', {
     return {
       token: localStorage.getItem('token') || null,
       credentials: localStorage.getItem('credentials') || null,
+      userProfileData: null,
     }
   },
   getters: {

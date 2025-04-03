@@ -21,7 +21,7 @@ export const useCryptoLocalStorage = () => {
       if (item === null) return defaultValue;
       return JSON.parse(decryptItem);
     } catch (error) {
-      console.error(`err: ${error.message}`);
+      console.error(`err: ${error.message}`); // err: Cannot read properties of null (reading 'salt')
       return defaultValue;
     }
   };

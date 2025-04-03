@@ -81,7 +81,7 @@ export const usePostStore = defineStore('PostStore', {
             this.postsBookmark = payload.page === 1 ? data : [...this.postsBookmark, ...data];
             this.postsBookmarkPage = payload.page;
             this.postsBookmarkHasNextPage = data.length === (payload.per_page || 10);
-          } else if (payload.type === 'post') {
+          } else if (payload.type === 'posts') {
             this.postsMyself = payload.page === 1 ? data : [...this.postsMyself, ...data];
             this.postsMyselfPage = payload.page;
             this.postsMyselfHasNextPage = data.length === (payload.per_page || 10);
@@ -108,7 +108,8 @@ export const usePostStore = defineStore('PostStore', {
             status: response.status,
             data: data,
             message: data.message,
-            // hasNextPage: data.length === (payload.per_page || 10)
+            // hasNextPage: data.length === (payload.per_page || 10),
+            meta: response.data.meta
           };
         }
       } catch (e) {
@@ -236,37 +237,49 @@ export const usePostStore = defineStore('PostStore', {
         };
       }
     },
-    loadMoreReplies(replyId, amount = 5) {
-      const generateReply = () => ({
-        id: faker.string.uuid(),
-        username: faker.internet.userName(),
-        title: faker.person.firstName(),
-        subtitle: 'good',
-        description: 'goodddddddddddddddddddddddddddddddddddddd',
-        contentData: faker.lorem.sentence(),
-        show: false,
-        liked: false,
-        media: Array.from({ length: Math.floor(Math.random() * 3) }, () => 
-          faker.image.url({ width: 600, height: 800 })
-        ),
-        replies: []
-      });
-
-      function findAndAddReplies(repliesArray) {
-        for (let reply of repliesArray) {
-          if (reply.id === replyId) {
-            const newReplies = Array.from({ length: amount }, () => generateReply());
-            reply.replies.push(...newReplies);
-            return true;
-          }
-          if (reply.replies && reply.replies.length > 0) {
-            const found = findAndAddReplies(reply.replies);
-            if (found) return true;
+    async toggleLike(payload){
+      try{
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/like/Like', payload);
+        const data = response.data.data;
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message,
+            state: data.state,
           }
         }
-        return false;
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
       }
-      findAndAddReplies(this.postReply.replies);
+    },
+    async toggleBookmark(payload){
+      try{
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/bookmark/ToggleBookmark', payload);
+        const data = response.data.data;
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message,
+            state: data.state,
+          }
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
     },
     setActiveTab(tab) {
       this.activeTab = tab;

@@ -1,28 +1,30 @@
+<!-- https://github.com/vuetifyjs/vuetify/issues/17288 -->
+ <!-- 100% is fine for now -->
 <template>
-  <!-- <div class="" v-if="item"> -->
   <div class="">
     <div :class="headerClass">
       <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
       <p>Post</p>
     </div>
-    <div class="flex flex-shrink-0 p-4 pb-2 justify-between">
+    <div class="flex flex-shrink-0 pt-4 pb-2 justify-between">
       <v-timeline 
           dot-color="grey-darken-2"
           fill-dot="false"
           align="start" 
-          density="compact" 
+          density="comfortable" 
           :line-color="$colorMode.preference === 'dark' ? 'grey-darken-3' : ''"
           line-inset="8" 
           truncate-line="both"
           >
           <v-timeline-item 
+            width="100%"
             v-for="(item, index) in reversedParent" 
             :ref="el => setTimelineRef(el, index)"
             @click="(event) => clickPostItem(item,index, event)" 
             @mousedown="startSelection"
             @mouseup="endSelection"
             :class="index === lastIndex ? 'cursor-default' : 'cursor-pointer'"
-            class="hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
+            class=" hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
             :key="index">
             <template v-slot:icon>
               <TooltipCard v-if="item.user">
@@ -59,23 +61,6 @@
     </div>
 
     <div class="replies">
-      <!-- <div v-if="!isLoadingReply">
-        <div v-if="item.replies && item.replies.length > 0">
-          <div v-for="(item, index) in item.replies" :key="index">
-            <PostReplyCard :item="item" :index="index" />
-          </div>
-        </div>
-        <div v-else class="h-screen">
-          No Replies
-        </div>
-      </div>
-      <div v-else class="flex h-screen justify-center my-3">
-        <v-progress-circular
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
-      </div> -->
-
       <div v-if="!isLoadingReply">
         <div v-if="item.replies && item.replies.length > 0">
           <div v-for="(reply, index) in item.replies" :key="index">
@@ -93,9 +78,7 @@
       <div id="checkpoint-section"></div>
     </div>
     
-
     <DialogTextArea :dialog="replyDialog" @close-dialog="closeReplyDialog" :parent_id="props.parent_id" />
-
   </div>
 </template>
 
@@ -128,7 +111,20 @@ const props = defineProps({
     required: true
   }
 })
-const emit = defineEmits(['load-more']);
+// WARN: load-more unused, 
+const emit = defineEmits(['load-more', 'update-replies']);
+
+// credit: https://www.youtube.com/watch?v=AQt5HDOH-HY
+// not use this again 
+const replies = computed({
+  get(){
+    return props.item.replies
+  },
+  set(value){
+    console.log(value)
+    emit('update-replies', value)
+  }
+})
 
 const reversedParent = computed(() => {
   if (!props.item?.parent || !Array.isArray(props.item.parent)) {
@@ -138,9 +134,6 @@ const reversedParent = computed(() => {
 });
 
 const setTimelineRef = (el, index) => {
-  // if (el) {
-  //   timelineRefs.value[index] = el
-  // }
   if (el?.$el) {
     timelineRefs.value[index] = el.$el; 
   }
@@ -188,8 +181,7 @@ const handleTimeLineBody = () => {
     if (bodyElement) {
       const offset = 68; // 64 (the profile_image lil bit cut), 68 (its great for now)
       const elementPosition = bodyElement.getBoundingClientRect().top + window.scrollY;
-      console.log(elementPosition)
-      window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+      window.scrollTo({ top: elementPosition - offset });
     } else {
       console.warn('class .v-timeline-item__body not found:', timelineItem);
     }
@@ -215,6 +207,13 @@ const handleFileUploaded = (files) => {
 
 const handlePostCreated = (newPost) => {
   console.log('Post created in Post/index.vue:', newPost);
+  emit('update-replies', newPost)
+  const post = postStore.posts.find((post) => post.id === newPost.id);
+  // sementara, later using websocket
+  // if (post) {
+  //   post.count = newCount;  
+  //   post.liked = newLikedStatus;  
+  // }
 };
 
 onMounted(() => {
@@ -263,26 +262,6 @@ const endSelection = () => {
     isSelectingText.value = true;
   }
 };
-
-  
-// const postDetailsReplyFetch = async (page) => {
-//   try {
-//     isLoadingReply.value = true
-//     const fetch = await postStore.getReplies({
-//       post_id: props.parent_id,
-//       page: page,
-//     })
-//     // postStore.postDetails.replies = fetch.data
-//     // if(fetch.data.length > 0){
-//     console.log(fetch.data.length)
-//     postStore.postDetails.replies.push(fetch.data)
-//     postStore.postsDetailsRepliesPage = page
-//     postStore.postsDetailsRepliesHasNextPage = fetch.hasNextPage
-//     // }
-//   } finally {
-//     isLoadingReply.value = false
-//   }
-// }
 
 const postDetailsReplyFetch = async (page = 1) => {
   try {

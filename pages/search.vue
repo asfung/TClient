@@ -32,13 +32,13 @@
               <v-list-item
                 v-for="item in userSearch"
                 :key="item.username"
-                :prepend-avatar="$getImage(item.profile_image.key)"
+                :prepend-avatar="item.profile_image ? $getImage(item.profile_image?.key) : $randomProfileImage(item.display_name)"
                 :ripple="false"
                 @mousedown.prevent
                 @click="clickUser(item)"
               >
                 <template v-slot:title>
-                  <div v-html="item.display_name"></div>
+                  <div :class="$chaosOrb(item.username)" v-html="item.display_name"></div>
                 </template>
                 <template v-slot:subtitle>
                   <div v-html="item.username"></div>
@@ -68,12 +68,16 @@
 import { BeakerIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/solid'
 import { usePostStore } from '~/stores/Post'
 import { useUserStore } from '~/stores/User'
+import { useRoute, useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 
 const searchQuery = ref('')
 const searchFocus = ref(false)
 const searchInput = ref(null)
 const userStore = useUserStore()
 const postStore = usePostStore()
+const route = useRoute()
+const router = useRouter()
 
 const { userSearch } = storeToRefs(userStore)
 const { postsSearch } = storeToRefs(postStore)
@@ -110,9 +114,14 @@ const postSearchFetch = debounce(async () => {
   }
 }, 300)
 
-watch(searchQuery, () => {
+watch(searchQuery, (newQuery) => {
   userSearchFetch()
   postSearchFetch()
+  if (newQuery.trim()) {
+    router.push({ query: { q: newQuery } })
+  } else {
+    router.push({ query: {} })
+  }
 })
 
 const updateFocus = (focus) => {
@@ -137,4 +146,14 @@ const clickUser = (item) => {
   console.log("Selected user:", item)
   searchFocus.value = true
 }
+
+onMounted(() => {
+  const query = route.query.q
+  if (query) {
+    searchQuery.value = query
+    searchFocus.value = true 
+    userSearchFetch()
+    postSearchFetch()
+  }
+})
 </script>

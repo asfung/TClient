@@ -5,8 +5,10 @@
     @mouseup="endSelection"
     class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
     >
-    <hr v-if="props.index !== 0" class="border-gray-600 dark:border-white" />
-    <div class="flex flex-shrink-0 p-4 pb-0">
+    <hr v-if="props.index !== 0" class="border-gray-400 dark:border-white" />
+
+    <!-- <div class="flex flex-shrink-0 p-4 pb-0"> -->
+    <div class="flex p-4 pb-0 justify-between items-start">
       <a class="flex-shrink-0 group block">
         <div class="flex items-center">
           <div>
@@ -26,6 +28,7 @@
           <template v-slot:body>
             <div class="ml-3">
                 <p class="text-base leading-6 font-medium ">
+                  <NuxtLink @click.stop v-if="item.reply" :to="`/@${item.reply.user.username}/talk/${item.reply.id}`"><p class="text-primaryLight dark:text-primaryDark hover:underline">{{ item.__typename === 'reply' ? `Replying @${item.reply.user.username}` : '' }}</p></NuxtLink>
                   <NuxtLink 
                     :to="`/@${item.user.username}`"
                     @click.stop
@@ -46,12 +49,22 @@
         </TooltipCard>
         </div>
       </a>
+
+      <button 
+        v-if="$user.id === props.item.user.id"
+        @click.stop="handleMoreOptions"
+        class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0"
+      >
+        <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM18 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      </button>
     </div>
 
     <div class="">
       <!-- <div class=""> -->
         <PostContentText 
-          class="pl-16 max-w-[475px]" 
+          class="pl-[70px] max-w-[475px]" 
           :content="item.content?? ''" 
         />
       <!-- </div> -->
@@ -69,65 +82,11 @@
 
       <!-- ACTIONS -->
       <div class="flex pl-16">
-        <div class="w-full">
-          <div class="flex items-center">
-            <div class="flex-1 text-center" @click.stop>
-              <a href="#"
-                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-primaryLight hover:bg-opacity-10 hover:text-primaryLight ">
-                <svg class="text-center h-6 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                  </path>
-                </svg>
-              </a>
-            </div>
-
-            <div class="flex-1 text-center py-2 m-2"  @click.stop>
-              <a href="#"
-                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-success hover:bg-opacity-10 hover:text-success">
-                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
-                </svg>
-              </a>
-            </div>
-
-            <div class="flex-1 text-center py-2 m-2" @click="toggleLike"  @click.stop>
-              <a 
-                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-accent hover:bg-opacity-10 hover:text-accent">
-                <svg :class="likeClass" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
-                  </path>
-                </svg>
-              </a>
-            </div>
-
-            <div class="flex-1 text-center py-2 m-2" @click="toggleBookmark"  @click.stop>
-              <a 
-                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-highlight hover:bg-opacity-10 hover:text-highlight">
-                <svg :class="bookmarkClass" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M5 3v18l7-5 7 5V3z"></path>
-                </svg>
-              </a>
-            </div>
-
-            <div class="flex-1 text-center py-2 m-2"  @click.stop>
-              <a href="#"
-                class="w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-blue-800 hover:text-blue-300">
-                <svg class="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round"
-                  stroke-width="2" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                  </path>
-                </svg>
-              </a>
-            </div>
-          </div>
-        </div>
+        <ActionPostLike @click.stop :liked="item.liked" :post_id="item.id" :count="item.like_count" @update-like="handleUpdateLike" />
+        <ActionPostReply @click.stop :count="item.reply_count" />
+        <ActionPostRepost @click.stop :count="item.repost_count" />
+        <ActionPostBookmark @click.stop :bookmarked="item.bookmarked" :post_id="item.id" @update-bookmark="handleUpdateBookmark" />
+        <ActionPostShared @click.stop />
       </div>
 
     </div>
@@ -140,21 +99,25 @@ const isBookmarked = ref(false)
 const isLiked = ref(false)
 const isSelectingText = ref(false);
 
+const props = defineProps({
+  item: {
+    required: true
+  },
+  index: {
+    required: false
+  },
+})
 const emit = defineEmits()
 
-const bookmarkClass = computed(() => {
-  return props.item.bookmarked ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
-});
+const handleUpdateLike = (payload) => {
+  props.item.liked = payload.liked
+  props.item.like_count = payload.count
+}
 
-const likeClass = computed(() => {
-  return props.item.liked ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
-});
+const handleUpdateBookmark = (payload) => {
+  props.item.bookmarked = payload.bookmarked
+}
 
-// about 3 hours looking for the perfect mechanism 
-// the start will be false, cause when mouse start selecting the text it make isSelectingText true
-// when unselecting the text by click the selected area it will be always true
-// however unselecting the text by click the outside of selected area it will false, 
-// in fact if unselecting outside of PostContentText component
 const startSelection = () => {
   isSelectingText.value = false;
 };
@@ -166,24 +129,7 @@ const endSelection = () => {
   }
 };
 
-const props = defineProps({
-  item: {
-    required: true
-  },
-  index: {
-    required: false
-  },
-})
-const toggleBookmark = () => {
-  console.log('before ', isBookmarked.value)
-  isBookmarked.value = !isBookmarked.value
-  console.log('after ', isBookmarked.value)
-}
-
-const toggleLike = () => {
-  console.log('before ', isLiked.value)
-  isLiked.value = !isLiked.value
-  console.log('after ', isLiked.value)
+const handleTypePost = () => {
 }
 
 const convertToRelativeTime = (createdAt) => {
@@ -196,5 +142,9 @@ const clickPostItem = () => {
   if (!isSelectingText.value) {
     useNuxtApp().$router.push(`/@${props.item.user.username}/talk/${props.item.id}`);
   }
+}
+
+const handleMoreOptions = () => {
+  console.log('item post ', props.item.id)
 }
 </script>

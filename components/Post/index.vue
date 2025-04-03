@@ -43,7 +43,7 @@ const props = defineProps({
 const emit = defineEmits(['load-more']);
 
 const uploadedFiles = ref([]);
-
+const isFetching = ref(false); 
 const displayPosts = computed(() => props.posts);
 
 const observeSentinel = () => {
@@ -53,11 +53,14 @@ const observeSentinel = () => {
 
   const observer = new IntersectionObserver(
     (entries) => {
-      if (entries[0].isIntersecting && props.hasNextPage) {
-        // props.currentPage += 1;
-        // emit('load-more', props.currentPage);
+      if (entries[0].isIntersecting && props.hasNextPage && !isFetching.value) {
+        isFetching.value = true; 
         const nextPage = props.currentPage + 1;
         emit('load-more', nextPage);
+
+        setTimeout(() => {
+          isFetching.value = false; 
+        }, 2000); // unstable code tho
       }
     },
     { threshold: 1.0 }

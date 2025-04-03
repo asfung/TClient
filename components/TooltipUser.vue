@@ -12,7 +12,7 @@
                   :src="user.profile_image ? baseStorageUrl + user.profile_image.key : randomProfileImage(user.display_name)" alt="" />
                 </div>
                 <div class="">
-                  <p>{{ userProfile.display_name }}</p>
+                  <p :class="$chaosOrb(userProfile.username)">{{ userProfile.display_name }}</p>
                   <p class="text-neutral-dark dark:text-neutral">@{{ userProfile.username }}</p>
                 </div>
               </div>
@@ -28,10 +28,10 @@
           <div class="max-w-64 breaks-word">{{ userProfile.bio?? 'No Bio Available'}}</div>
           <div class="flex justify-start space-x-2">
             <p class="text-primaryDark dark:text-primaryLight">
-              <span class="font-base-bold">{{ userProfile.followers_count }}</span>
+              <span class="font-base-bold">{{ $numberFormat(userProfile.followers_count) }}</span>
               Followers</p>
             <p class="text-primaryDark dark:text-primaryLight">
-              <span class="font-base-bold">{{ userProfile.following_count }}</span>
+              <span class="font-base-bold">{{ $numberFormat(userProfile.following_count) }}</span>
               Following</p>
           </div>
         </div>
@@ -48,9 +48,9 @@ const props = defineProps({
     default: []
   }
 })
-import { useAuthStore } from '~/stores/Auth'
+import { useUserStore } from '~/stores/User'
 
-const authStore = useAuthStore()
+const userStore = useUserStore()
 const isLoading = ref(false)
 const userProfile = ref([])
 const baseStorageUrl = computed(() => {
@@ -62,7 +62,7 @@ const baseStorageUrl = computed(() => {
 const getUserProfile = async () => {
   try{
     isLoading.value = false
-    const { data, status } = await authStore.userProfile(props.user.username)
+    const { data, status } = await userStore.userProfile(props.user.username)
     userProfile.value = data
   }catch(e){console.log(e)}
   finally{

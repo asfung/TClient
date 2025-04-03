@@ -3,7 +3,7 @@
     <div v-if="inputPost" class="flex">
       <div class="m-2 w-10 py-1">
         <img class="inline-block h-10 w-10 rounded-full"
-          src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
+          :src="$user.profile_image ? $getImage($user.profile_image?.key) : $randomProfileImage($user.display_name)" alt="" />
       </div>
       <div class="flex-1 px-2 pt-2 mt-2">
         <!-- TODO: make the textarea more intuitive -->
@@ -12,7 +12,7 @@
           cols="50" placeholder="What's happening?"></textarea> -->
           <TextAreaInput 
             v-model="postMe.content"
-            :character-limit="280"
+            :character-limit="$user.username === 'Paung' ? 999 : 360" 
             @update:overLimit="handleOverLimit"
           />
 

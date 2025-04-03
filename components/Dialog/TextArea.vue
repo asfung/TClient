@@ -26,6 +26,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import { usePostStore } from '~/stores/Post';
 
 const props = defineProps({
   dialog: {
@@ -57,6 +58,7 @@ const handleFileUploaded = (files) => {
 
 const handlePostCreated = (newPost) => {
   console.log('Post created in Dialog/TextArea.vue:', newPost);
+
   closeModal();
 };
 </script>

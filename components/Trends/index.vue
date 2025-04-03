@@ -2,29 +2,30 @@
   <div class="trend-section rounded-lg ">
     <h2 class="px-4 pb-2 font-semibold text-lg">Trending</h2>
     <div class="flex flex-wrap gap-2 mt-4 px-4">
-      <div v-for="(trend, index) in trends" :key="index">
-        <NuxtLink :to="`/search?q=${trend.title}`">
+      <div v-for="(trend, index) in hashtags" :key="index">
+        <NuxtLink :to="`/search?q=${trend.tag_name}`">
           <v-chip class="text-primaryLight dark:text-primaryDark" variant="outlined" link >
-              <p class="font-semibold">{{ trend.title }}</p>
+              <p class="font-semibold">{{ trend.tag_name }} <span class="font-thin text-primaryDark dark:text-primaryLight">{{ $numberFormat(trend.tag_count) }}</span></p>
           </v-chip>
         </NuxtLink>
       </div>
-      <!-- <span
-        v-for="(trend, index) in trends"
-        :key="index"
-        class="bg-gray-200 text-gray-700 dark:text-gray-300 px-3 py-1 rounded-full text-sm font-semibold hover:bg-gray-300 dark:hover:bg-primaryDark dark:bg-opacity-20 transition-colors cursor-pointer"
-      >
-        #{{ trend.title }}
-      </span> -->
     </div>
-    <!-- <div class="flex mt-8 justify-center">
-      <hr class="w-56">
-    </div> -->
   </div>
 </template>
 
 <script setup>
 import { faker } from '@faker-js/faker'
+import { useTagStore } from '~/stores/Tag'
+
+const tagStore = useTagStore()
+const {
+  tags,
+  mentions,
+  hashtags
+} = storeToRefs(tagStore)
+
+onMounted(() => {
+})
 
 const trends = Array.from({ length: 15 }, () => ({
   id: faker.string.uuid(),

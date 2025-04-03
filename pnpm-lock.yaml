@@ -17,6 +17,9 @@ importers:
       '@mdi/font':
         specifier: ^7.4.47
         version: 7.4.47
+      '@number-flow/vue':
+        specifier: ^0.4.6
+        version: 0.4.6(vue@3.5.13(typescript@5.8.2))
       '@nuxt/ui':
         specifier: ^2.19.2
         version: 2.21.0(axios@1.8.1)(change-case@5.4.4)(magicast@0.3.5)(typescript@5.8.2)(vite@5.4.14(@types/node@22.13.7)(terser@5.39.0))(vue@3.5.13(typescript@5.8.2))
@@ -795,6 +798,11 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
+
+  '@number-flow/vue@0.4.6':
+    resolution: {integrity: sha512-91rNu2F4awAY0ejIffzCIwxLYRmGgG2twzg8+XO031gwwlDtxW23SAgKb2/+ZbUgQcClhhZdKGRh9p/qs8uhCQ==}
+    peerDependencies:
+      vue: ^3
 
   '@nuxt/cli@3.22.2':
     resolution: {integrity: sha512-Xtu3Loe3fVLvOE1/NC/SrE6Buu7Aj6qrnu3hewAfamUyZ7mVUBOsJ5ScUhofSK2L6muGPvS3R1PisuJMFbdexg==}
@@ -1984,6 +1992,9 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
+  esm-env@1.2.2:
+    resolution: {integrity: sha512-Epxrv+Nr/CaL4ZcFGPJIYLWFom+YeV1DqMLHJoEd9SYRxNbaFruBwfEX/kkHUJf55j2+TUbmDcmuilbP1TmXHA==}
+
   estree-walker@2.0.2:
     resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
 
@@ -2732,6 +2743,9 @@ packages:
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
+
+  number-flow@0.5.6:
+    resolution: {integrity: sha512-3K4lWNn+zWYeWEgaJMbFIjqy6WnvIETXTVIybKnaPU0XmhsqQmdXfxXf7tmB4MybzHwrl5GN4oFT34EU/B2yhg==}
 
   nuxt@3.15.4:
     resolution: {integrity: sha512-hSbZO4mR0uAMJtZPNTnCfiAtgleoOu28gvJcBNU7KQHgWnNXPjlWgwMczko2O4Tmnv9zIe/CQged+2HsPwl2ZA==}
@@ -4569,6 +4583,12 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
+  '@number-flow/vue@0.4.6(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      esm-env: 1.2.2
+      number-flow: 0.5.6
+      vue: 3.5.13(typescript@5.8.2)
+
   '@nuxt/cli@3.22.2(magicast@0.3.5)':
     dependencies:
       c12: 2.0.4(magicast@0.3.5)
@@ -6026,6 +6046,8 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
+  esm-env@1.2.2: {}
+
   estree-walker@2.0.2: {}
 
   estree-walker@3.0.3:
@@ -6854,6 +6876,10 @@ snapshots:
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
+
+  number-flow@0.5.6:
+    dependencies:
+      esm-env: 1.2.2
 
   nuxt@3.15.4(@parcel/watcher@2.5.1)(@types/node@22.13.7)(db0@0.2.4)(ioredis@5.5.0)(magicast@0.3.5)(rollup@4.34.8)(terser@5.39.0)(typescript@5.8.2)(vite@5.4.14(@types/node@22.13.7)(terser@5.39.0))(yaml@2.7.0):
     dependencies:

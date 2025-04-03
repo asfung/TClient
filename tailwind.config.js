@@ -19,6 +19,23 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      // this is just for fun
+      animation: {
+        text: 'text 5s ease infinite',
+      },
+      keyframes: {
+        text: {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center',
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center',
+          },
+        },
+      },
+
       fontFamily: {
         // 'ia-writer': ['IA Writer Quattro S', 'sans-serif'],
         // 'ia-writer-bold': ['IA Writer Quattro S Bold', 'sans-serif'],

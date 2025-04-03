@@ -4,6 +4,7 @@
       v-if="!isLoading"
       :item="postDetails" 
       :parent_id="parent_id"
+      @update-replies="handleUpdateReplies"
     />
     <div v-else class="flex h-screen justify-center my-3">
       <v-progress-circular
@@ -25,7 +26,9 @@
   const postStore = usePostStore()
   const isLoading = ref(false)
   
-  const postDetails = computed(() => postStore.postDetails)
+  const {
+    postDetails
+  } = storeToRefs(postStore)
 
   const postDetailsParentFetch = async () => {
     try{
@@ -38,6 +41,16 @@
     }finally{
       isLoading.value = false
     }
+  }
+
+  const handleUpdateReplies = (replies) => {
+    console.log(replies)
+    if (!postDetails.value.replies) {
+      postDetails.value.replies = []
+      postDetails.value.replies.push(replies)
+      return;
+    }
+    postDetails.value.replies.unshift(replies);
   }
   
   const postDetailsReplyFetch = async () => {

@@ -50,6 +50,7 @@ function convertAnchorToNuxtLink(html) {
 
       link?.addEventListener("click", (event) => {
         event.preventDefault();
+        event.stopPropagation() // https://developer.mozilla.org/en-US/docs/Web/API/Event/stopPropagation
         const to = anchor.getAttribute("href");
         const target = anchor.getAttribute("target");
         if (to) {

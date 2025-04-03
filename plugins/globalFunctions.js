@@ -8,6 +8,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   })
 
   // Var List
+  const { getItem } = useCryptoLocalStorage()
   const baseStorageUrl = computed(() => {
     const runtimeConfig = useRuntimeConfig()
     return runtimeConfig.public.storagelUrl
@@ -15,6 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const SECRET_KEY = Utils.SECRET_KEY_CRYPTO
   const encryptionKey = CryptoJS.enc.Utf8.parse(CryptoJS.SHA256("__n0t1f1c4t10n").toString(CryptoJS.enc.Hex).slice(0, 32));
   const iv = CryptoJS.enc.Utf8.parse('1223334444555556'); 
+  const user = getItem('credentials')
 
   // Func List
   const randomProfileImage = (display_name) => {
@@ -26,6 +28,38 @@ export default defineNuxtPlugin((nuxtApp) => {
     return url
   }
 
+  const formatNumberWithK = (num) => {
+    if (num < 1000) return num.toString();
+    const formatted = (num / 1000).toFixed(num % 1000 === 0 ? 0 : 1);
+    return `${formatted.replace('.0', '')}k`;
+  };
+
+  const numberFormat = (number) => {
+    // https://stackoverflow.com/questions/9461621/format-a-number-as-2-5k-if-a-thousand-or-more-otherwise-900
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat
+    const formatter = Intl.NumberFormat('en', { notation: 'compact' });
+    return `${formatter.format(number)}`
+  }
+
+  const chaosOrbFor = (...usernames) => {
+    // const highlightedUsers = new Set(usernames);
+    const highlightedUsers = new Set(usernames.map((username) => username.toLowerCase()));
+  
+    return (username) => 
+      // highlightedUsers.has(username)
+      highlightedUsers.has(username?.toLowerCase())
+        ? 'animate-text bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent' 
+        : '';
+  };
+
+  const chaosOrb = (username) => {
+    const highlightedUsers = ['paung', 'ilham'].map(u => u.toLowerCase());
+    return highlightedUsers.includes(username?.toLowerCase())
+      ? 'animate-text bg-gradient-to-r from-teal-500 via-purple-500 to-orange-500 bg-clip-text text-transparent font-base-bold' // sementara bold
+      : '';
+  } 
+
+  // no priority func here
   const encrypt = (value) => {
     const encryptedValue = CryptoJS.AES.encrypt(value, SECRET_KEY).toString();
     return encryptedValue
@@ -62,6 +96,11 @@ export default defineNuxtPlugin((nuxtApp) => {
       decrypt,
       encryptUserId,
       decryptUserId,
+      formatNumberWithK,
+      numberFormat,
+      chaosOrbFor,
+      chaosOrb,
+      user,
     }
   }
 

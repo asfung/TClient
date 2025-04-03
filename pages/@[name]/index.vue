@@ -97,7 +97,7 @@
 import { computed, onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/Post';
-import { useAuthStore } from '~/stores/Auth';
+import { useUserStore } from '~/stores/User';
 import { useScrollStore } from '~/stores/Scroll';
 import { useTheme } from 'vuetify';
 
@@ -105,14 +105,14 @@ const theme = useTheme();
 const route = useRoute();
 const username = route.params.name;
 const postStore = usePostStore();
-const authStore = useAuthStore();
+const userStore = useUserStore()
 const scrollStore = useScrollStore();
 
 const tab = ref('posts');
 const isLoadingProfile = ref(false);
 const isFetching = ref(false);
 
-const { userProfileData } = storeToRefs(authStore);
+const { userProfileData } = storeToRefs(userStore);
 const {
   postsMyself,
   postsMyselfPage,
@@ -125,6 +125,12 @@ const {
   postsLikeMyselfHasNextPage,
 } = storeToRefs(postStore);
 
+const {
+  scrollYPostsMyself,
+  scrollYPostsRepliesMyself,
+  scrollYPostsLikesMyself
+} = storeToRefs(scrollStore)
+
 const posts = computed(() => {
   switch(tab.value) {
     case 'posts': return postsMyself.value;
@@ -134,9 +140,9 @@ const posts = computed(() => {
   }
 });
 
-onMounted(() => {
-  userProfileFetch();
-  postsFetch();
+onMounted( async () => {
+  await userProfileFetch();
+  await postsFetch();
   nextTick(() => {
     window.scrollTo(0, getScrollPosition());
     observeSentinel();
@@ -146,34 +152,31 @@ onMounted(() => {
 
 onUnmounted(() => {
   // saving scrollY doesnt worked 
-  // TODO:
-  // 1. make scrollY working again 
-  // 2. are clicking of PostReplyItem not to fit on Parent.vue
-  // 3. psots myself not fetching when refresh the page, and clearing data still not working 
+  // maybe reset the scrollY when onUnmounted but if the username is different
   // saveScrollPosition();
-  clearDataOnUnmount()
+  // clearDataOnUnmount()
   window.removeEventListener('scroll', handleScroll);
 });
 
 const getScrollPosition = () => {
   switch(tab.value) {
-    case 'posts': return scrollStore.scrollYPostsMyself;
-    case 'replies': return scrollStore.scrollYPostsRepliesMyself;
-    case 'likes': return scrollStore.scrollYPostsLikesMyself;
+    case 'posts': return scrollYPostsMyself.value;
+    case 'replies': return scrollYPostsRepliesMyself.value;
+    case 'likes': return scrollYPostsLikesMyself.value;
     default: return 0;
   }
 };
 
 const saveScrollPosition = () => {
   switch(tab.value) {
-    case 'posts':
-      scrollStore.setScrollYscrollYPostsMyself(window.scrollY);
+    case 'posts': 
+      scrollStore.setScrollYPostsMyself(window.scrollY);
       break;
     case 'replies':
-      scrollStore.setScrollYscrollYPostsRepliesMyself(window.scrollY);
+      scrollStore.setScrollYPostsRepliesMyself(window.scrollY);
       break;
     case 'likes':
-      scrollStore.setScrollYscrollYPostsLikesMyself(window.scrollY);
+      scrollStore.setScrollYPostsLikesMyself(window.scrollY);
       break;
   }
 };
@@ -185,8 +188,11 @@ const handleScroll = () => {
 const userProfileFetch = async () => {
   isLoadingProfile.value = true;
   try {
-    const response = await authStore.userProfile(username);
-    userProfileData.value = response.data;
+    const response = await userStore.userProfile(username);
+    if (!userProfileData.value || userProfileData.value.username !== response.data.username) {
+      userProfileData.value = response.data;
+      resetPosts(); 
+    }
   } catch (e) {
     console.error('Error fetching profile:', e);
   } finally {
@@ -220,12 +226,11 @@ const observeSentinel = () => {
     (entries) => {
       if (entries[0].isIntersecting && !isFetching.value) {
         const hasNextPage = tab.value === 'posts' ? postsMyselfHasNextPage.value :
-                          tab.value === 'replies' ? postsRepliesMyselfHasNextPage.value :
-                          postsLikeMyselfHasNextPage.value;
+          tab.value === 'replies' ? postsRepliesMyselfHasNextPage.value :
+            postsLikeMyselfHasNextPage.value;
         const currentPage = tab.value === 'posts' ? postsMyselfPage.value :
-                          tab.value === 'replies' ? postsRepliesMyselfPage.value :
-                          postsLikeMyselfPage.value;
-        
+          tab.value === 'replies' ? postsRepliesMyselfPage.value :
+            postsLikeMyselfPage.value;
         if (hasNextPage) {
           postsFetch(currentPage + 1);
         }
@@ -236,25 +241,32 @@ const observeSentinel = () => {
   observer.observe(sentinel);
 };
 
-const clearDataOnUnmount = () => {
-  postsMyself.value = []
-  postsMyselfPage.value = 1
-  postsMyselfHasNextPage.value = true
-  postsRepliesMyself.value = []
-  postsRepliesMyselfPage.value = 1
-  postsRepliesMyselfHasNextPage.value = true
-  postsLikeMyself.value = []
-  postsLikeMyselfPage.value = 1
-  postsLikeMyselfHasNextPage.value = true
-  userProfileData.value = null
-}
-
 watch(tab, async (newTab, oldTab) => {
   saveScrollPosition();
-  await postsFetch(1);
+  if (newTab === "posts" && postsMyself.value.length === 0) {
+    await postsFetch(postsMyselfPage.value);
+  } else if (newTab === "replies" && postsRepliesMyself.value.length === 0) {
+    await postsFetch(postsRepliesMyselfPage.value);
+  } else if (newTab === "likes" && postsLikeMyself.value.length === 0) {
+    await postsFetch(postsLikeMyselfPage.value);
+  }
   await nextTick();
   window.scrollTo(0, getScrollPosition());
 });
+
+const resetPosts = () => {
+  postStore.postsMyself = [];
+  postStore.postsMyselfPage = 1;
+  postStore.postsMyselfHasNextPage = true;
+
+  postStore.postsRepliesMyself = [];
+  postStore.postsRepliesMyselfPage = 1;
+  postStore.postsRepliesMyselfHasNextPage = true;
+
+  postStore.postsLikeMyself = [];
+  postStore.postsLikeMyselfPage = 1;
+  postStore.postsLikeMyselfHasNextPage = true;
+};
 </script>
 
 <style scoped>
