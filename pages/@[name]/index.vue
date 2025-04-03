@@ -1,10 +1,15 @@
 <template>
+  <!-- Template remains unchanged as it looks structurally sound -->
   <div class="border-default rounded-lg">
-    <!-- {{ posts }} -->
     <div class="user-info">
       <div class="flex justify-between items-center p-4">
         <div>
-          <p v-if="!isLoadingProfile" class="font-bold">{{ userProfileData?.display_name }}</p>
+          <p 
+            v-if="!isLoadingProfile" 
+            :class="$chaosOrb(userProfileData?.username)"
+            class="font-bold">
+            {{ userProfileData?.display_name }}
+          </p>
           <p v-else class="font-bold animate-pulse bg-gray-300 h-6 w-24 rounded"></p>
 
           <p v-if="!isLoadingProfile" class="text-neutral">@{{ userProfileData?.username }}</p>
@@ -19,22 +24,37 @@
           <div v-else class="rounded-full bg-gray-300 animate-pulse h-14 w-14"></div>
         </div>
       </div>
-      <div class="p-4 max-w-96">
+      <div class="px-4 max-w-96">
         <p v-if="!isLoadingProfile" class="break-words">{{ userProfileData?.bio }}</p>
         <p v-else class="break-words animate-pulse bg-gray-300 h-12 w-full rounded"></p>
-        <div class="flex space-between mt-4 space-x-5">
-          <p v-if="!isLoadingProfile"> {{ $numberFormat(userProfileData?.followers_count) }} <span class="text-neutral">Followers</span></p>
-          <p v-else class="animate-pulse bg-gray-300 h-4 w-16 rounded"></p>
+      </div>
 
-          <p v-if="!isLoadingProfile"> {{ $numberFormat(userProfileData?.following_count) }} <span class="text-neutral">Following</span> </p>
-          <p v-else class="animate-pulse bg-gray-300 h-4 w-16 rounded"></p>
-
-          <p v-if="!isLoadingProfile"> {{ $numberFormat(userProfileData?.post_count) }} <span class="text-neutral">Posts</span> </p>
-          <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
-
-          <!-- <button @click="userProfileData.username = 'SULE'">click</button> -->
+      <div class="px-4">
+        <div class="flex flex-wrap sm:justify-start gap-4 mt-4">
+          <div class="flex items-center">
+            <p v-if="!isLoadingProfile" class="text-lg font-medium">
+              {{ $numberFormat(userProfileData?.followers_count) }}
+            </p>
+            <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+            <span class="text-neutral ml-1 text-sm">Followers</span>
+          </div>
+          
+          <div class="flex items-center">
+            <p v-if="!isLoadingProfile" class="text-lg font-medium">
+              {{ $numberFormat(userProfileData?.following_count) }}
+            </p>
+            <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+            <span class="text-neutral ml-1 text-sm">Following</span>
+          </div>
+          
+          <div class="flex items-center">
+            <p v-if="!isLoadingProfile" class="text-lg font-medium">
+              {{ $numberFormat(userProfileData?.post_count) }}
+            </p>
+            <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+            <span class="text-neutral ml-1 text-sm">Posts</span>
+          </div>
         </div>
-
       </div>
     </div>
 
@@ -44,121 +64,199 @@
         color="primary" 
         class="sticky dark:text-white">
         <v-tab text="Posts" value="posts" :ripple="false">Posts</v-tab>
-        <v-tab text="Replies" value="replies"  :ripple="false">Replies</v-tab>
+        <v-tab text="Replies" value="replies" :ripple="false">Replies</v-tab>
         <v-tab text="Likes" value="likes" :ripple="false">Likes</v-tab>
       </v-tabs>
 
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="posts">
-          <Post :input-post="false" :posts="posts" />
+          <div v-for="(item, index) in postsMyself" :key="index">
+            <PostItem :item="item" />
+          </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="replies">
-          <Post :input-post="false" :posts="posts" />
+          <div v-for="(item, index) in postsRepliesMyself" :key="index">
+            <PostItem :item="item" />
+          </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="likes">
-          <Post :input-post="false" :posts="posts" />
+          <div v-for="(item, index) in postsLikeMyself" :key="index">
+            <PostItem :item="item" />
+          </div>
         </v-tabs-window-item>
       </v-tabs-window>
     </div>
 
+    <div id="checkpoint-section"></div>
   </div>
 </template>
-  
-  
+
 <script setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
+import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/Post';
 import { useAuthStore } from '~/stores/Auth';
 import { useScrollStore } from '~/stores/Scroll';
 import { useTheme } from 'vuetify';
 
-const theme = useTheme()
-const route = useRoute()
+const theme = useTheme();
+const route = useRoute();
+const username = route.params.name;
+const postStore = usePostStore();
+const authStore = useAuthStore();
+const scrollStore = useScrollStore();
 
-const username = route.params.name
-const postStore = usePostStore()
-const authStore = useAuthStore()
-const scrollStore = useScrollStore()
-const tab = ref('posts')
-const isLoadingProfile = ref(false)
+const tab = ref('posts');
+const isLoadingProfile = ref(false);
+const isFetching = ref(false);
 
-const { userProfileData } = storeToRefs(authStore)
-const posts = computed(() => postStore.posts);
-const postsSecond = computed(() => postStore.post);
-const postsReply = computed(() => postStore.postsReply);
+const { userProfileData } = storeToRefs(authStore);
+const {
+  postsMyself,
+  postsMyselfPage,
+  postsMyselfHasNextPage,
+  postsRepliesMyself,
+  postsRepliesMyselfPage,
+  postsRepliesMyselfHasNextPage,
+  postsLikeMyself,
+  postsLikeMyselfPage,
+  postsLikeMyselfHasNextPage,
+} = storeToRefs(postStore);
+
+const posts = computed(() => {
+  switch(tab.value) {
+    case 'posts': return postsMyself.value;
+    case 'replies': return postsRepliesMyself.value;
+    case 'likes': return postsLikeMyself.value;
+    default: return [];
+  }
+});
 
 onMounted(() => {
-  userProfileFetch()
+  userProfileFetch();
+  postsFetch();
   nextTick(() => {
-    window.scrollTo(0, scrollStore.scrollYPostsMyself)
-  })
-  window.addEventListener('scroll', handleScroll)
+    window.scrollTo(0, getScrollPosition());
+    observeSentinel();
+  });
+  window.addEventListener('scroll', handleScroll);
 });
 
 onUnmounted(() => {
-  // for now it reset, but if username is same as before its not must reset
-  scrollStore.setScrollYscrollYPostsMyself(0)
-  scrollStore.setScrollYscrollYPostsRepliesMyself(0)
-  scrollStore.setScrollYscrollYPostsLikesMyself(0)
-  // window.removeEventListener('scroll', handleScroll)
-})
+  // saving scrollY doesnt worked 
+  // TODO:
+  // 1. make scrollY working again 
+  // 2. are clicking of PostReplyItem not to fit on Parent.vue
+  // 3. psots myself not fetching when refresh the page, and clearing data still not working 
+  // saveScrollPosition();
+  clearDataOnUnmount()
+  window.removeEventListener('scroll', handleScroll);
+});
+
+const getScrollPosition = () => {
+  switch(tab.value) {
+    case 'posts': return scrollStore.scrollYPostsMyself;
+    case 'replies': return scrollStore.scrollYPostsRepliesMyself;
+    case 'likes': return scrollStore.scrollYPostsLikesMyself;
+    default: return 0;
+  }
+};
+
+const saveScrollPosition = () => {
+  switch(tab.value) {
+    case 'posts':
+      scrollStore.setScrollYscrollYPostsMyself(window.scrollY);
+      break;
+    case 'replies':
+      scrollStore.setScrollYscrollYPostsRepliesMyself(window.scrollY);
+      break;
+    case 'likes':
+      scrollStore.setScrollYscrollYPostsLikesMyself(window.scrollY);
+      break;
+  }
+};
 
 const handleScroll = () => {
-  switch(tab.value){
-    case 'posts':
-      scrollStore.setScrollYscrollYPostsMyself(window.scrollY)
-      break
-    case 'replies':
-      scrollStore.setScrollYscrollYPostsRepliesMyself(window.scrollY)
-      break
-    case 'likes':
-      scrollStore.setScrollYscrollYPostsLikesMyself(window.scrollY)
-      break
-  }
-}
-
-watch(tab, async(newTab, oldTab) => {
-  switch(oldTab){
-    case 'posts':
-      scrollStore.setScrollYscrollYPostsMyself(window.scrollY)
-      break
-    case 'replies':
-      scrollStore.setScrollYscrollYPostsRepliesMyself(window.scrollY)
-      break
-    case 'likes':
-      scrollStore.setScrollYscrollYPostsLikesMyself(window.scrollY)
-      break
-  }
-  await nextTick()
-  switch(newTab){
-    case 'posts':
-      window.scrollTo(0, scrollStore.scrollYPostsMyself)
-      break;
-    case 'replies':
-      window.scrollTo(0, scrollStore.scrollYPostsRepliesMyself)
-      break;
-    case 'likes':
-      window.scrollTo(0, scrollStore.scrollYPostsLikesMyself)
-      break;
-  }
-})
+  saveScrollPosition();
+};
 
 const userProfileFetch = async () => {
-  isLoadingProfile.value = true
-  try{
-    const fetch = await authStore.userProfile(username)
-    // proof: https://x.com/posva/status/1560020538281582592
-    userProfileData.value = fetch.data
-  }catch(e){}finally{
-    isLoadingProfile.value = false
+  isLoadingProfile.value = true;
+  try {
+    const response = await authStore.userProfile(username);
+    userProfileData.value = response.data;
+  } catch (e) {
+    console.error('Error fetching profile:', e);
+  } finally {
+    isLoadingProfile.value = false;
   }
+};
+
+const postsFetch = async (page = 1) => {
+  if (isFetching.value) return;
+  isFetching.value = true;
+  
+  try {
+    await postStore.getPost({
+      type: tab.value,
+      page,
+      user_id: userProfileData.value.id,
+      // username,
+    });
+  } catch (e) {
+    console.error('Error fetching posts:', e);
+  } finally {
+    isFetching.value = false;
+  }
+};
+
+const observeSentinel = () => {
+  const sentinel = document.getElementById("checkpoint-section");
+  if (!sentinel) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && !isFetching.value) {
+        const hasNextPage = tab.value === 'posts' ? postsMyselfHasNextPage.value :
+                          tab.value === 'replies' ? postsRepliesMyselfHasNextPage.value :
+                          postsLikeMyselfHasNextPage.value;
+        const currentPage = tab.value === 'posts' ? postsMyselfPage.value :
+                          tab.value === 'replies' ? postsRepliesMyselfPage.value :
+                          postsLikeMyselfPage.value;
+        
+        if (hasNextPage) {
+          postsFetch(currentPage + 1);
+        }
+      }
+    },
+    { threshold: 1.0 }
+  );
+  observer.observe(sentinel);
+};
+
+const clearDataOnUnmount = () => {
+  postsMyself.value = []
+  postsMyselfPage.value = 1
+  postsMyselfHasNextPage.value = true
+  postsRepliesMyself.value = []
+  postsRepliesMyselfPage.value = 1
+  postsRepliesMyselfHasNextPage.value = true
+  postsLikeMyself.value = []
+  postsLikeMyselfPage.value = 1
+  postsLikeMyselfHasNextPage.value = true
+  userProfileData.value = null
 }
 
+watch(tab, async (newTab, oldTab) => {
+  saveScrollPosition();
+  await postsFetch(1);
+  await nextTick();
+  window.scrollTo(0, getScrollPosition());
+});
 </script>
 
-  
 <style scoped>
 .sticky {
   position: sticky;
@@ -166,4 +264,3 @@ const userProfileFetch = async () => {
   z-index: 2;
 }
 </style>
-  
