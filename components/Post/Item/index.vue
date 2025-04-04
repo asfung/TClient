@@ -1,5 +1,7 @@
 <template>
+  <div>
   <div 
+    v-if="!isDeleted"
     @click="clickPostItem" 
     @mousedown="startSelection"
     @mouseup="endSelection"
@@ -50,15 +52,52 @@
         </div>
       </a>
 
-      <button 
+      <v-menu 
+        v-model="menuDot"
         v-if="$user.id === props.item.user.id"
+        location="bottom end"
         @click.stop="handleMoreOptions"
-        class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0"
-      >
-        <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM18 10a2 2 0 11-4 0 2 2 0 014 0z" />
-        </svg>
-      </button>
+        scroll-strategy="close" 
+        >
+        <!-- :close-on-content-click="false" -->
+        <template v-slot:activator="{ props }">
+          <button 
+            v-bind="props"
+            class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0 transition-transform duration-200 ease-in-out active:scale-90"
+          >
+            <svg class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM18 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </button>
+        </template>
+        
+        <div class="mx-auto shadow-lg bg-gray-100 dark:bg-black rounded-2xl ring-1 ring-primaryDark dark:ring-primaryLight shadow-primaryLight/50 dark:shadow-primaryDark/50">
+          <ul class="p-3 font-base-bold">
+            <li 
+              @click.stop="postEditDialog = !postEditDialog"
+              class="flex items-center hover:bg-gray-300 dark:hover:bg-opacity-10 rounded-lg hover:cursor-pointer">
+              <div class="flex-1 p-2">
+                <p>Edit</p>
+              </div>
+              <div class="p-2">
+                <v-icon class="ml-12">
+                  mdi-pencil-outline
+                </v-icon>
+              </div>
+            </li>
+            <li 
+              @click.stop="showDeleteConfirm = !showDeleteConfirm"
+              class="flex items-center text-red-600 hover:bg-gray-300 dark:hover:bg-opacity-10 rounded-lg hover:cursor-pointer">
+              <div class="flex-1 p-2">
+                <p>Delete</p>
+              </div>
+              <div class="p-2">
+                <v-icon class="ml-12">mdi-trash-can-outline</v-icon>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </v-menu>
     </div>
 
     <div class="">
@@ -84,20 +123,54 @@
       <div class="flex pl-16">
         <ActionPostLike @click.stop :liked="item.liked" :post_id="item.id" :count="item.like_count" @update-like="handleUpdateLike" />
         <ActionPostReply @click.stop :count="item.reply_count" />
-        <ActionPostRepost @click.stop :count="item.repost_count" />
+        <ActionPostRepost @click.stop :count="item.repost_count" :post_id="item.id" :reposted="item.reposted" @update-repost="handleUpdateRepost" />
         <ActionPostBookmark @click.stop :bookmarked="item.bookmarked" :post_id="item.id" @update-bookmark="handleUpdateBookmark" />
         <ActionPostShared @click.stop />
       </div>
 
     </div>
-</div>
+
+  </div>
+
+    <div 
+      v-if="isDeleted"
+      class="p-4 text-gray-500 dark:text-gray-400 border-t border-gray-400 dark:border-white"
+    >
+      <p>This post has been deleted</p>
+    </div>
+
+    <DialogTextArea :dialog="postEditDialog" @close-dialog="closeReplyDialog" :post-to-edit="props.item" @post-updated="handlePostUpdated" />
+    <DashboardDeleteConfirmation
+      v-model="showDeleteConfirm"
+      :name="`${props.item.user.username} Post`"
+      :loading="isSubmitting"
+      @confirm="handlePostDelete"
+    />
+  </div>
 </template>
 
 
 <script setup>
+import { usePostStore } from '~/stores/Post';
+import { useEditPost } from '~/composables/useEditPost'
+import { useDeletePost } from '~/composables/useDeletePost'
+import { useEditPostField } from '~/composables/useEditPostField'
+
+const postStore = usePostStore()
+const { editPost } = useEditPost()
+const { deletePost } = useDeletePost()
+const { editPostField } = useEditPostField()
+
+const isDeleted = ref(false)
 const isBookmarked = ref(false)
 const isLiked = ref(false)
 const isSelectingText = ref(false);
+const menuDot = ref(false)
+const postEditDialog = ref(false)
+
+// delete dialog 
+const isSubmitting = ref(false)
+const showDeleteConfirm = ref(false)
 
 const props = defineProps({
   item: {
@@ -107,15 +180,48 @@ const props = defineProps({
     required: false
   },
 })
-const emit = defineEmits()
+
+const emit = defineEmits(['post-updated', 'post-deleted'])
 
 const handleUpdateLike = (payload) => {
   props.item.liked = payload.liked
   props.item.like_count = payload.count
 }
 
+const handleUpdateRepost = (payload) => {
+  // props.item.reposted = payload.reposted
+  // props.item.repost_count = payload.count
+  editPostField(props.item.id, "reposted", payload.reposted)
+  editPostField(props.item.id, "repost_count", payload.count)
+}
+
 const handleUpdateBookmark = (payload) => {
   props.item.bookmarked = payload.bookmarked
+}
+
+const handlePostUpdated = (updatedPost) => {
+  editPost(props.item.id, updatedPost)
+}
+
+const handlePostDelete = async () => {
+  isSubmitting.value = true
+  try {
+    const fetch = await postStore.deletePost({
+      post_id: props.item.id,
+    })
+    if(fetch.state === true){
+      showDeleteConfirm.value = false
+      isDeleted.value = true
+      deletePost(props.item.id);
+      emit('post-deleted', true)
+    }
+  } finally {
+    isSubmitting.value = false
+  }
+}
+
+const closeReplyDialog = () => {
+  postEditDialog.value = false
 }
 
 const startSelection = () => {
@@ -145,6 +251,7 @@ const clickPostItem = () => {
 }
 
 const handleMoreOptions = () => {
+  menuDot.value = !menuDot.value
   console.log('item post ', props.item.id)
 }
 </script>

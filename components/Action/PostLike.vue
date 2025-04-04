@@ -41,13 +41,25 @@ const emit = defineEmits(['update-like'])
 const isLiked = ref(props.liked);
 const likeClass = computed(() => isLiked.value ? 'text-accent fill-accent' : '');
 
-const toggleLikeFetch = async () => {
+const debounce = (fn, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
+}
+
+const toggleLikeFetch = debounce( async () => {
   isLiked.value = !isLiked.value
+  const update_fast = isLiked.value ? props.count + 1 : props.count - 1
+  emit('update-like', { post_id: props.post_id, liked: isLiked.value, count: update_fast});
   const fetch = await postStore.toggleLike({
     post_id: props.post_id
   })
   isLiked.value = fetch.state
-  const update_count = isLiked.value ? props.count + 1 : props.count - 1
+  // const update_count = isLiked.value ? props.count + 1 : props.count - 1
+  const update_count = props.count
   emit('update-like', { post_id: props.post_id, liked: isLiked.value, count: update_count});
-};
+}, 400);
+
 </script>

@@ -40,6 +40,7 @@
                 </TooltipCard>
             </template>
             <PostItemReply 
+              class="mr-4"
               v-if="item"
               :hide-click="index === lastIndex"
               :item="item" 
@@ -139,14 +140,6 @@ const setTimelineRef = (el, index) => {
   }
 }
 
-const bookmarkClass = computed(() => {
-  return isBookmarked.value ? 'text-center h-7 w-6 fill-current text-highlight' : 'text-center h-7 w-6';
-});
-
-const likeClass = computed(() => {
-  return isLiked.value ? 'text-center h-7 w-6 fill-current text-accent' : 'text-center h-7 w-6';
-});
-
 const headerClass = computed(() => {
   // console.log(scroll)
   // fkin small pixel smh
@@ -154,19 +147,6 @@ const headerClass = computed(() => {
     ? 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 space-between items-center space-x-2'
     : 'flex sticky top-0 z-10 bg-[#ffff] dark:bg-black p-5 rounded-t-lg space-between items-center space-x-2';
 });
-
-const toggleBookmark = () => {
-  console.log('before ', isBookmarked.value)
-  isBookmarked.value = !isBookmarked.value
-  console.log('after ', isBookmarked.value)
-}
-
-const toggleLike = () => {
-  console.log('before ', isLiked.value)
-  isLiked.value = !isLiked.value
-  console.log('after ', isLiked.value)
-}
-
 
 const closeReplyDialog = () => {
   replyDialog.value = false

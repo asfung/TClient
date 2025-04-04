@@ -30,7 +30,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
     resourceStore.getResources()
   }
 
-  if(token && user){
+  if(token && user && tags.value === null){
     tagStore.getTags()
   }
 

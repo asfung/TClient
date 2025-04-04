@@ -53,16 +53,8 @@
     postDetails.value.replies.unshift(replies);
   }
   
-  const postDetailsReplyFetch = async () => {
-    const fetch = await postStore.getReplies({
-      post_id: parent_id.value
-    })
-    postStore.postDetails.replies = fetch.data
-  }
-
   onMounted(() => {
     postDetailsParentFetch()
-    // postDetailsReplyFetch()
   })
 
   onUnmounted(() => {

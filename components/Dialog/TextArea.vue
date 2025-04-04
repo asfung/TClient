@@ -16,8 +16,10 @@
           :uniqueId="'post-input-dialog'"
           :inputPost="true"
           :parent_id="props.parent_id"
+          :post-to-edit="props.postToEdit"
           @update:fileUploadPrepared="handleFileUploaded"
           @post-created="handlePostCreated"
+          @post-updated="handlePostUpdated"
         />
       </div>
     </v-dialog>
@@ -41,9 +43,13 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  postToEdit: {
+    type: Object, 
+    default: null 
+  },
 });
 
-const emit = defineEmits(['update:dialog']);
+const emit = defineEmits(['update:dialog', 'post-created', 'post-updated']);
 
 const closeModal = () => {
   emit('close-dialog');
@@ -53,12 +59,18 @@ const uploadedFiles = ref([]);
 
 const handleFileUploaded = (files) => {
   uploadedFiles.value = files;
-  console.log('Files uploaded in Dialog/TextArea.vue:', files);
+  // console.log('Files uploaded in Dialog/TextArea.vue:', files);
 };
 
 const handlePostCreated = (newPost) => {
-  console.log('Post created in Dialog/TextArea.vue:', newPost);
-
+  // console.log('Post created in Dialog/TextArea.vue:', newPost);
+  emit('post-created', newPost)
   closeModal();
 };
+
+const handlePostUpdated = (updatedPost) => {
+  // console.log('Post updated in Dialog/TextArea.vue:', updatedPost);
+  emit('post-updated', updatedPost)
+  closeModal();
+}
 </script>

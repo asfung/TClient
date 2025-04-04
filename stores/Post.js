@@ -150,6 +150,49 @@ export const usePostStore = defineStore('PostStore', {
         };
       }
     },
+    async updatePost(payload){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/UpdatePost', payload);
+        const data = response.data.data
+        if(response.status === 201){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async deletePost(payload){
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/DeletePost', payload);
+        const data = response.data.data
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message,
+            state: data.state,
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
     async uploadMedia(payload){
       try {
         const { $axios } = useNuxtApp();
@@ -263,6 +306,28 @@ export const usePostStore = defineStore('PostStore', {
       try{
         const { $axios } = useNuxtApp();
         const response = await $axios.post('/post/bookmark/ToggleBookmark', payload);
+        const data = response.data.data;
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: data.message,
+            state: data.state,
+          }
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    async toggleRepost(payload){
+      try{
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post('/post/repost/RepostToggle', payload);
         const data = response.data.data;
         if(response.status === 200){
           return {

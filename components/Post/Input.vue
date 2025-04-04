@@ -23,8 +23,8 @@
               <div v-if="item.isLoading" class="absolute inset-0 flex items-center justify-center bg-black/50">
                 Loading...
               </div>
-              <img v-if="item.type.startsWith('image/')" :src="item.preview" class="w-full h-32 object-cover rounded" />
-              <video v-else-if="item.type === 'video/mp4'" :src="item.preview" class="w-full h-32 object-cover rounded"
+              <img v-if="(item.type?.startsWith('image/') || item.mimetypes?.startsWith('image/'))" :src="item.preview" class="w-full h-32 object-cover rounded" />
+              <video v-else-if="(item.type === 'video/mp4' || item.mimetypes === 'video/mp4')" :src="item.preview" class="w-full h-32 object-cover rounded"
                 controls />
               <button @click="removeFile(item)"
                 class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
@@ -55,7 +55,8 @@
             <button @click="handlePostCreate" :disabled="isPostButtonDisabled"
               :class="{ 'dark:hover:bg-primaryDark hover:bg-primaryLight': !isPostButtonDisabled }"
               class="bg-neutral mt-5 dark:bg-neutral-dark text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
-              Post
+              <!-- Post -->
+              {{ isEditMode ? 'Update' : 'Post' }}
             </button>
           </div>
         </div>
@@ -70,6 +71,7 @@ import { usePostStore } from '~/stores/Post';
 import { faker } from '@faker-js/faker';
 import { File } from '~/enums/File';
 
+const { $getImage } = useNuxtApp()
 const props = defineProps({
   inputPost: {
     type: Boolean,
@@ -81,9 +83,15 @@ const props = defineProps({
     required: false,
     default: null,
   },
+  postToEdit: { 
+    type: Object, 
+    default: null 
+  },
 });
 
-const emit = defineEmits(['post-created', 'update:fileUploadPrepared']);
+const isEditMode = computed(() => !!props.postToEdit);
+
+const emit = defineEmits(['post-created', 'update:fileUploadPrepared', 'post-updated']);
 
 const postStore = usePostStore();
 
@@ -107,10 +115,20 @@ const isOverCharacterLimit = ref(false);
 const uniqueId = ref('');
 onMounted(() => {
   uniqueId.value = `fileInput-${Math.random().toString(36).substr(2, 9)}`;
+  if (isEditMode.value && props.postToEdit) {
+    postMe.value.content = props.postToEdit.content;
+    fileUploadPrepared.value = props.postToEdit.media?.map((file, index) => ({
+      ...file,
+      preview: $getImage(file.key), 
+      index,
+      isLoading: false,
+    })) || [];
+  }
 });
 
 const isPostButtonDisabled = computed(() => {
-  const hasContent = postMe.value.content?.trim().length > 0;
+  const hasContent = (postMe.value.content || '').trim().length > 0; 
+  // const hasContent = postMe.value.content?.trim().length > 0;
   const hasFiles = fileUploadPrepared.value.length > 0;
   const isUploading = fileUploadPrepared.value.some(file => file.isLoading);
   return (!hasContent && !hasFiles) || isUploading || isOverCharacterLimit.value;
@@ -169,21 +187,50 @@ const removeFile = async (file) => {
 };
 
 const handlePostCreate = async () => {
-  const { status, data } = await postStore.createPost({
-    parent_id: props.parent_id,
+  // const { status, data } = await postStore.createPost({
+  //   parent_id: props.parent_id,
+  //   content: postMe.value.content,
+  //   media: fileUploadPrepared.value
+  // });
+  // // if (fileUploadPrepared.value.length > 0 && status === 201) {
+  // //   await postStore.editMediaPostId({
+  // //     post_id: data.id,
+  // //     data: fileUploadPrepared.value,
+  // //   });
+  // // }
+  // // emit('post-created', { ...postMe.value, id: data.id, media: fileUploadPrepared.value });
+  // // emit('post-created', { ...data, media: fileUploadPrepared.value });
+  // emit('post-created', data );
+  // handleInputClear();
+
+
+
+  const payload = {
     content: postMe.value.content,
-    media: fileUploadPrepared.value
-  });
-  // if (fileUploadPrepared.value.length > 0 && status === 201) {
-  //   await postStore.editMediaPostId({
-  //     post_id: data.id,
-  //     data: fileUploadPrepared.value,
-  //   });
-  // }
-  // emit('post-created', { ...postMe.value, id: data.id, media: fileUploadPrepared.value });
-  // emit('post-created', { ...data, media: fileUploadPrepared.value });
-  emit('post-created', data );
-  handleInputClear();
+    media: fileUploadPrepared.value,
+  };
+
+  let response;
+  if (isEditMode.value) {
+    response = await postStore.updatePost({
+      post_id: props.postToEdit.id,
+      ...payload,
+    });
+  } else {
+    response = await postStore.createPost({
+      parent_id: props.parent_id,
+      ...payload,
+    });
+  }
+
+  if (response?.status === 200 || response?.status === 201) {
+    if(isEditMode.value){
+      emit('post-updated', response.data)
+    }else{
+      emit('post-created', response.data);
+    }
+    handleInputClear();
+  }
 };
 
 const handleInputClear = () => {
@@ -193,7 +240,7 @@ const handleInputClear = () => {
 };
 
 watch(fileUploadPrepared, (newValue) => {
-  console.log('fileUploadPrepared updated:', newValue);
+  // console.log('fileUploadPrepared updated:', newValue);
 });
 
 onUnmounted(() => {
