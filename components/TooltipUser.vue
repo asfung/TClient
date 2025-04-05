@@ -18,9 +18,11 @@
               </div>
               <div class="col-span-1 col-end-9">
                 <button 
+                  v-if="$user.username !== userProfile.username"
+                  @click="toggleFollowFetch"
                   class="bg-neutral dark:bg-neutral-dark font-bold py-2 px-4 rounded-full"
                   >
-                  Follow
+                  {{ userProfile.followed ? 'Following' : 'Follow' }}
                 </button>
               </div>
             </div>
@@ -41,6 +43,8 @@
 </template>
 
 <script setup>
+import { useUserStore } from '~/stores/User'
+
 const props = defineProps({
   user: {
     type: Object,
@@ -48,7 +52,6 @@ const props = defineProps({
     default: []
   }
 })
-import { useUserStore } from '~/stores/User'
 
 const userStore = useUserStore()
 const isLoading = ref(false)
@@ -68,6 +71,13 @@ const getUserProfile = async () => {
   finally{
     isLoading.value = true
   }
+}
+
+const toggleFollowFetch = async () => {
+  const fetch = await userStore.toggleFollow({
+    user_id_followed: userProfile.value.id
+  })
+  userProfile.value.followed = fetch.state
 }
 
 const randomProfileImage = (display_name) => {

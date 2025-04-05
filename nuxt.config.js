@@ -30,7 +30,8 @@ export default defineNuxtConfig({
       pusherKey: process.env.PUSHER_APP_KEY,
       pusherSecret: process.env.PUSHER_APP_SECRET,
       pusherCluster: process.env.PUSHER_APP_CLUSTER,
-      apiBase: 'this is api base url',
+      encryptionKey: process.env.ENCRYPTION_KEY,
+      encryptionIv: process.env.ENCRYPTION_IV,
     }
   },
   hooks: {

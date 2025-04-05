@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-dialog v-model="props.dialog" width="600">
+      <p v-if="props.typeFor && props.typeFor === 'quote'" class="font-base-bold">Quoting</p>
       <div
         class="relative border-2 border-primaryLight dark:border-primaryDark rounded-lg dark:bg-black dark:text-white bg-gray-100 text-gray-900 shadow-md py-4 px-6 backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-50"
       >
@@ -13,6 +14,7 @@
         </button>
         <PostInput
           class="mt-4"
+          :type-for="props.typeFor"
           :uniqueId="'post-input-dialog'"
           :inputPost="true"
           :parent_id="props.parent_id"
@@ -46,6 +48,10 @@ const props = defineProps({
   postToEdit: {
     type: Object, 
     default: null 
+  },
+  typeFor: {
+    required: false,
+    default: null,
   },
 });
 

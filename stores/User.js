@@ -74,6 +74,27 @@ export const useUserStore = defineStore('UserStore', {
         };
       }
     },
+    async updateUser(payload) {
+      try {
+        const { $axios } = useNuxtApp();
+        const response = await $axios.post(`/user/Update`, payload);
+        const data = response.data.data
+        if (response.status === 200) {
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: 'Success',
+          };
+        }
+      } catch (e) {
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
 
   }
 })

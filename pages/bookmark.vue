@@ -63,7 +63,7 @@ const bookmarksFetch = async (page) => {
     //       "per_page": 5,
     //       "total": 10
     //   },
-    console.log(response.meta)
+    // console.log(response.meta)
     if(response.status === 404 || response.meta.current_page === response.meta.last_page){
       postStore.postsBookmarkHasNextPage = false
     }

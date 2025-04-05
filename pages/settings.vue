@@ -3,6 +3,9 @@
     <div class="grid justify-start">
       <button @click="checkTokenEvent()">Check Token</button>
       <button @click="signOutEvent()">Sign Out</button>
+      <!-- <pre>{{ user }}</pre>
+      <button @click="changeLocalStorage">change user credentials</button>
+      <p class="break-all">{{ token }}</p> -->
     </div>
   </div>
 </template>
@@ -12,12 +15,24 @@ definePageMeta({
   // middleware: ['auth-middleware'],
 })
 import { useAuthStore } from "~/stores/Auth"
+import { Credentials } from "~/enums/Credentials"
 
 const authStore = useAuthStore()
+
+const user = computed(() => authStore.getCredentials(Credentials.USER))
+const token = computed(() => authStore.getCredentials(Credentials.TOKEN))
 
 const signOutEvent = () => {
   authStore.signOut()
   window.location.href = '/'
+}
+
+const changeLocalStorage = () => {
+  authStore.setCredentialBy(Credentials.USER, {
+    name: 'CHANGED',
+    email: 'CHANGED',
+    profile_image: 'CHANGED'
+  })
 }
 
 const checkTokenEvent = () => {

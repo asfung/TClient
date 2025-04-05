@@ -87,6 +87,10 @@ const props = defineProps({
     type: Object, 
     default: null 
   },
+  typeFor: {
+    required: false,
+    default: null,
+  }
 });
 
 const isEditMode = computed(() => !!props.postToEdit);
@@ -217,6 +221,9 @@ const handlePostCreate = async () => {
       ...payload,
     });
   } else {
+    if (props.typeFor) {
+      payload._for = props.typeFor;
+    }
     response = await postStore.createPost({
       parent_id: props.parent_id,
       ...payload,

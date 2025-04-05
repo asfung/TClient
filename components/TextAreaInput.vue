@@ -4,7 +4,7 @@
       ref="textareaRef"
       :value="modelValue"
       @input="handleInput"
-      placeholder="What's happening?"
+      :placeholder="props.placeholder"
       :class="{ 'over-limit': isOverLimit }"
       class="bg-transparent text-gray-400 font-medium text-lg w-full resize-none p-2 rounded min-h-[40px]"
     ></textarea>
@@ -52,6 +52,9 @@ const props = defineProps({
     type: Number,
     default: 22,
   },
+  placeholder: {
+    default: "What's happening?"
+  }
 });
 
 const emit = defineEmits(['update:modelValue', 'update:overLimit']);

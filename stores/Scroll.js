@@ -10,6 +10,7 @@ export const useScrollStore = defineStore('ScrollStore', {
       scrollYPostsLikesMyself: 0,
       scrollYBookmarks: 0,
       scrollYSearch: 0,
+      scrollYNotification: 0,
       scrollY: 0,
       scrollX: 0,
     };
@@ -45,6 +46,10 @@ export const useScrollStore = defineStore('ScrollStore', {
     // search
     setScrollYBookmarks(scrollY){
       this.scrollYSearch = scrollY
+    },
+    //  notification
+    setScrollYNotication(scrollY){
+      this.scrollYNotification = scrollY
     },
   },
 });

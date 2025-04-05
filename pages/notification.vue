@@ -1,47 +1,113 @@
 <template>
   <div class="border-default rounded-lg">
-    {{ message }}
-    <NotificationCard />
+    <NotificationCard :notifications="notifications" />
+    
+    <div id="checkpoint-section"></div>
   </div>
 </template>
 
 <script setup>
+import { useNotificationStore } from '~/stores/Notifications'
+import { useScrollStore } from '~/stores/Scroll'
 
 definePageMeta({
   scrollToTop: false,
   // middleware: ['auth-middleware'],
 })
-const { $encryptUserId, $listen } = useNuxtApp()
+
+const notficationStore = useNotificationStore()
+const scrollStore = useScrollStore()
+
+const { $listen, $hashSha256 } = useNuxtApp()
 const { getItem } = useCryptoLocalStorage()
 
-const scrollY = computed(() => sessionStorage.getItem('notification-scrollY'))
+const isFetching = ref(false); 
+
+const {
+  notifications,
+  notificationPage,
+  notificationHasNextPage
+} = storeToRefs(notficationStore)
+
+// const notifications = computed(() => notficationStore.notifications)
+// const notificationPage = computed(() => notficationStore.page)
+// const hasNextPage = computed(() => notficationStore.hasNextPage)
+
+const scrollY = computed(() => scrollStore.scrollYNotification)
 const message = ref([])
 const user = getItem('credentials')
 
-const channel = '_notifications.' + user.id
+const channelName = '_notifications.' + user.id
+const channelNameHashed = $hashSha256(channelName)
 const event = 'PostNotificationEvent'
 
 const socketListen = () => {
-  $listen(channel, event, (data) => {
+  $listen(channelNameHashed, event, (data) => {
     console.log(data)
     message.value.push(data.message)
+    notifications.value.unshift(data)
   })
 }
 
 onMounted(() => {
-  window.scrollTo(0, scrollY)
-  console.log(channel)
+  nextTick(() => {
+    window.scrollTo(0, scrollY.value)
+  })
+  window.addEventListener('scroll', handleScroll)
   socketListen()
+  observeSentinel()
 })
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+
+const handleScroll = () => {
+  scrollStore.scrollYNotification = window.scrollY
+}
+
+const notificationsFetch = async (page) => {
+  try{
+    const fetch = await notficationStore.getNotifications({
+      page: notificationPage.value,
+    })
+    notificationPage.value = page
+  }catch(e){console.log(e)}finally{
+
+  }
+};
+
+const observeSentinel = () => {
+  const sentinel = document.getElementById("checkpoint-section");
+  if (!sentinel) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && notificationHasNextPage.value && !isFetching.value) {
+        const currentPage = notificationPage.value + 1
+        console.log(currentPage)
+        notificationsFetch(currentPage);
+
+        setTimeout(() => {
+          isFetching.value = false; 
+        }, 2000); // unstable code tho
+      }
+    },
+    { threshold: 1.0 }
+  );
+  
+  observer.observe(sentinel);
+};
 
 watch(message, (oldVal, newVal) => {
   console.log('da;slmlkdsamldmlkm')
 })
 
-onBeforeRouteLeave((to, from, next) => {
-  // sometime this is bad idea 
-  sessionStorage.setItem('notification-scrollY', window.scrollY)
-  console.log('pindah dengan scrollY : ', window.scrollY)
-  next()
-})
+
+// onBeforeRouteLeave((to, from, next) => {
+//   // sometime this is bad idea 
+//   sessionStorage.setItem('notification-scrollY', window.scrollY)
+//   console.log('pindah dengan scrollY : ', window.scrollY)
+//   next()
+// })
 </script>

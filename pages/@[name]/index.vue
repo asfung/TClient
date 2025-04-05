@@ -1,5 +1,4 @@
 <template>
-  <!-- Template remains unchanged as it looks structurally sound -->
   <div class="border-default rounded-lg">
     <div class="user-info">
       <div class="flex justify-between items-center p-4">
@@ -19,9 +18,9 @@
           <img 
             v-if="!isLoadingProfile" 
             :src="userProfileData?.profile_image ? $getImage(userProfileData?.profile_image.key) : $randomProfileImage(userProfileData?.display_name || 'user')" 
-            class="rounded-full h-14 w-14"
+            class="rounded-full h-20 w-20"
             :alt="userProfileData?.display_name" />
-          <div v-else class="rounded-full bg-gray-300 animate-pulse h-14 w-14"></div>
+          <div v-else class="rounded-full bg-gray-300 animate-pulse h-20 w-20"></div>
         </div>
       </div>
       <div class="px-4 max-w-96">
@@ -57,6 +56,11 @@
         </div>
       </div>
     </div>
+
+    <div v-if="isEditable" class="flex justify-end px-4">
+      <v-btn color="primary" @click="dialog = !dialog">Edit Profile</v-btn>
+    </div>
+    <DialogUserProfile v-if="userProfileData" :profile-data="userProfileData" :dialog="dialog" @close-dialog="handleCloseProfileDialog" @profile-updated="handleProfileUpdate" />
 
     <div class="tab">
       <v-tabs 
@@ -99,7 +103,10 @@ import { useRoute } from 'vue-router';
 import { usePostStore } from '~/stores/Post';
 import { useUserStore } from '~/stores/User';
 import { useScrollStore } from '~/stores/Scroll';
+import { useAuthStore } from '~/stores/Auth';
 import { useTheme } from 'vuetify';
+import { Credentials } from '~/enums/Credentials'
+import { File } from '~/enums/File';
 
 const theme = useTheme();
 const route = useRoute();
@@ -107,10 +114,12 @@ const username = route.params.name;
 const postStore = usePostStore();
 const userStore = useUserStore()
 const scrollStore = useScrollStore();
+const authStore = useAuthStore()
 
 const tab = ref('posts');
 const isLoadingProfile = ref(false);
 const isFetching = ref(false);
+const dialog = ref(false);
 
 const { userProfileData } = storeToRefs(userStore);
 const {
@@ -131,14 +140,13 @@ const {
   scrollYPostsLikesMyself
 } = storeToRefs(scrollStore)
 
-const posts = computed(() => {
-  switch(tab.value) {
-    case 'posts': return postsMyself.value;
-    case 'replies': return postsRepliesMyself.value;
-    case 'likes': return postsLikeMyself.value;
-    default: return [];
-  }
-});
+const credentialsUser = computed(() => authStore.getCredentials(Credentials.USER))
+
+const isEditable = computed(() => {
+  // console.log(userProfileData.value?.id)
+  if (!credentialsUser.value.id || !userProfileData.value?.id) return false;
+  return credentialsUser.value.id === userProfileData.value?.id
+})
 
 onMounted( async () => {
   await userProfileFetch();
@@ -267,6 +275,46 @@ const resetPosts = () => {
   postStore.postsLikeMyselfPage = 1;
   postStore.postsLikeMyselfHasNextPage = true;
 };
+
+const handleProfileUpdate = async (updatedProfile) => {
+  const file = updatedProfile.profile_image?.file ?? null;
+  const bio = updatedProfile.bio;
+  const address = updatedProfile.address;
+
+  const payload = { bio, address };
+
+  let hasChanged = false;
+
+  if (bio !== userProfileData.value.bio || address !== userProfileData.value.address) {
+    hasChanged = true;
+  }
+
+  if (file) {
+    hasChanged = true;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', File.PROFILE);
+
+    const fetch = await postStore.uploadMedia(formData);
+    userProfileData.value.profile_image = fetch.data;
+  }
+
+  if (bio !== userProfileData.value.bio || address !== userProfileData.value.address) {
+    const fetch = await userStore.updateUser(payload);
+    userProfileData.value.bio = fetch.data.bio;
+    userProfileData.value.address = fetch.data.address;
+  }
+
+  if (hasChanged) {
+    console.log('updated');
+    authStore.setCredentialBy(Credentials.USER, userProfileData.value)
+  }
+
+};
+const handleCloseProfileDialog = () => {
+  dialog.value = false
+}
 </script>
 
 <style scoped>

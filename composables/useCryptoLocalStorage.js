@@ -1,5 +1,6 @@
 import CryptoJS from "crypto-js";
 import { Utils } from "~/enums/Utils";
+import { useAuthStore } from "~/stores/Auth";
 
 const SECRET_KEY = Utils.SECRET_KEY_CRYPTO
 
@@ -10,7 +11,7 @@ export const useCryptoLocalStorage = () => {
       const encryptedSerializedValue = encrypt(serializedValue)
       localStorage.setItem(key, encryptedSerializedValue);
     } catch (error) {
-      console.error(`err: ${error.message}`);
+      // console.error(`err: ${error.message}`);
     }
   };
 
@@ -21,19 +22,25 @@ export const useCryptoLocalStorage = () => {
       if (item === null) return defaultValue;
       return JSON.parse(decryptItem);
     } catch (error) {
-      console.error(`err: ${error.message}`); // err: Cannot read properties of null (reading 'salt')
+      // console.error(`err: ${error.message}`); // err: Cannot read properties of null (reading 'salt')
       return defaultValue;
     }
   };
 
 
   const encrypt = (value) => {
-    const encryptedValue = CryptoJS.AES.encrypt(value, SECRET_KEY).toString();
+    // const encryptedValue = CryptoJS.AES.encrypt(value, SECRET_KEY).toString();
+    // return encryptedValue
+    const authStore = useAuthStore()
+    const encryptedValue = authStore.encrypt(value)
     return encryptedValue
   }
 
   const decrypt = (value) => {
-    const decryptedValue = CryptoJS.AES.decrypt(value, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+    // const decryptedValue = CryptoJS.AES.decrypt(value, SECRET_KEY).toString(CryptoJS.enc.Utf8);
+    // return decryptedValue
+    const authStore = useAuthStore()
+    const decryptedValue = authStore.decrypt(value)
     return decryptedValue
   }
 

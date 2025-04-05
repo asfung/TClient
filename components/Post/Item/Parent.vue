@@ -3,7 +3,7 @@
 <template>
   <div class="">
     <div :class="headerClass">
-      <ArrowLeftIcon class="size-5 hover:bg-gray-600 hover:rounded-lg" />
+      <ArrowLeftIcon @click="$router.back()" class="size-5 cursor-pointer hover:bg-gray-600 hover:rounded-lg" />
       <p>Post</p>
     </div>
     <div class="flex flex-shrink-0 pt-4 pb-2 justify-between">

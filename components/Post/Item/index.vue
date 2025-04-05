@@ -119,6 +119,10 @@
         </UCarousel>
       </div>
 
+      <div class="pl-[70px]" v-if="item.__typename === 'quote'">
+        <p class="text-error">QUOTE COMPONENT</p>
+      </div>
+
       <!-- ACTIONS -->
       <div class="flex pl-16">
         <ActionPostLike @click.stop :liked="item.liked" :post_id="item.id" :count="item.like_count" @update-like="handleUpdateLike" />

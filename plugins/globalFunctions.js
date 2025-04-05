@@ -70,37 +70,22 @@ export default defineNuxtPlugin((nuxtApp) => {
     return decryptedValue
   }
 
-  const encryptUserId = (userId) => {
-    const encrypted = CryptoJS.AES.encrypt(userId.toString(), encryptionKey, {
-        iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7
-    });
-    return encrypted.toString(); 
-};
-
-  const decryptUserId = (encryptedId) => {
-    const decrypted = CryptoJS.AES.decrypt(encryptedId, encryptionKey, {
-      iv: iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7
-    });
-    return decrypted.toString(CryptoJS.enc.Utf8);
+  const hashSha256 = (data) => {
+    return CryptoJS.SHA256(data).toString()
   }
 
   return {
     provide: {
       randomProfileImage,
       getImage,
-      encrypt,
-      decrypt,
-      encryptUserId,
-      decryptUserId,
+      // encrypt,
+      // decrypt,
       formatNumberWithK,
       numberFormat,
       chaosOrbFor,
       chaosOrb,
       user,
+      hashSha256,
     }
   }
 

@@ -1,7 +1,10 @@
 <template>
-  <div class="flex items-center p-5">
+  <div 
+    :class="{ 'hover:cursor-pointer hover:bg-gray-100 dark:hover:bg-opacity-5' : item?.details?._link }"
+    class="flex items-center p-5" 
+    @click="item?.details?._link ? clickPostItem(item.details._link) : null">
     <div class="relative inline-block shrink-0">
-      <img class="w-10 h-10 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-3.jpg"
+      <img class="w-10 h-10 rounded-full" :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)"
         alt="Jese Leos image" />
       <span class="absolute bottom-0 right-0 inline-flex items-center justify-center w-6 h-6 bg-blue-600 rounded-full">
         <svg class="w-3 h-3 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 18"
@@ -17,9 +20,9 @@
       </span>
     </div>
     <div class="ms-3 text-sm font-normal">
-      <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.from }}</div>
-      <div class="text-sm font-normal">{{ item.content }}</div>
-      <span class="text-xs font-medium text-primaryLight dark:text-primaryDark">a few seconds ago {{ item.read }}</span>
+      <div class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.user.username }}</div>
+      <div class="text-sm font-normal">{{ item.message }}</div>
+      <span class="text-xs font-medium text-primaryLight dark:text-primaryDark">{{ convertToRelativeTime(item.created_at) }}</span>
     </div>
   </div>
 </template>
@@ -30,4 +33,19 @@ const props = defineProps({
     required: false,
   }
 })
+const convertToRelativeTime = (createdAt) => {
+  return useNuxtApp().$dayjs.utc(createdAt)
+    .tz('Asia/Jakarta')   
+    .fromNow();
+};
+
+const clickPostItem = (link) => {
+  console.log(link)
+  if(link){
+    // useNuxtApp().$router.push();
+    const router = useRouter()
+    router.push(link)
+  }
+}
+
 </script>
