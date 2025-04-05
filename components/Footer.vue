@@ -2,8 +2,11 @@
   <div>
     <div v-if="$isBreakpoint(['xs', 'sm'])">
       <v-layout class="overflow-visible" >
-        <v-bottom-navigation v-model="navValue" :bg-color="null" mode="shift" class=" dark:bg-black dark:text-white bg-gray-100 text-gray-900 shadow-md flex justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-50">
-        <!-- <v-bottom-navigation v-model="navValue" :bg-color="null" mode="shift" class=" backdrop-blur-md bg-/20 dark:bg-black/30 border-t border-white/20 dark:border-white/10 shadow-md rounded-t-2xl"> -->
+        <v-bottom-navigation 
+          v-model="navValue" 
+          :bg-color="null" 
+          class="glass"
+          >
           <v-btn v-for="(item, index) in navItems" :key="item.name" @click="navigateTo(item)" :active="isActive(item)">
             <v-icon :icon="isActive(item) ? item.icon : item.iconOutline"></v-icon>
             <span>{{ item.text }}</span>
@@ -87,12 +90,18 @@ const closeReplyDialog = () => {
 </script>
 
 <style scoped>
+.footer {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
 .glass {
   background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 16px 16px 0 0;
+  border-radius: 20px 20px 0px 0px;
+  /* margin-bottom: 20px; */
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
@@ -100,10 +109,4 @@ const closeReplyDialog = () => {
   background-color: rgba(0, 0, 0, 0.25);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-.glass-post {
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
 </style>
