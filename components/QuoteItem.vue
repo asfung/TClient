@@ -24,7 +24,7 @@
       </div>
     </div>
 
-    <div v-if="quote.media?.length" class="mt-2">
+    <div v-if="quote.media?.length" class="mt-2" @click.stop>
       <UCarousel
         v-slot="{ item }"
         :items="quote.media"
