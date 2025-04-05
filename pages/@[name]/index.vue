@@ -58,7 +58,7 @@
     </div>
 
     <div v-if="isEditable" class="flex justify-end px-4">
-      <v-btn color="primary" @click="dialog = !dialog">Edit Profile</v-btn>
+      <PencilSquareIcon class="size-5 hover:cursor-pointer transition-transform duration-200 ease-in-out active:scale-90" @click="dialog = !dialog" />
     </div>
     <DialogUserProfile v-if="userProfileData" :profile-data="userProfileData" :dialog="dialog" @close-dialog="handleCloseProfileDialog" @profile-updated="handleProfileUpdate" />
 
@@ -94,19 +94,21 @@
     </div>
 
     <div id="checkpoint-section"></div>
+
+    <!-- <DialogUserProfile v-if="userProfileData" :profile-data="userProfileData" :dialog="dialog" @close-dialog="handleCloseProfileDialog" @profile-updated="handleProfileUpdate" /> -->
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch, nextTick } from 'vue';
-import { useRoute } from 'vue-router';
-import { usePostStore } from '~/stores/Post';
-import { useUserStore } from '~/stores/User';
-import { useScrollStore } from '~/stores/Scroll';
+import { useRoute } from 'vue-router'
+import { usePostStore } from '~/stores/Post'
+import { useUserStore } from '~/stores/User'
+import { useScrollStore } from '~/stores/Scroll'
 import { useAuthStore } from '~/stores/Auth';
 import { useTheme } from 'vuetify';
 import { Credentials } from '~/enums/Credentials'
-import { File } from '~/enums/File';
+import { File } from '~/enums/File'
+import { PencilSquareIcon } from '@heroicons/vue/24/outline'
 
 const theme = useTheme();
 const route = useRoute();

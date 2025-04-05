@@ -5,16 +5,17 @@
         <v-bottom-navigation 
           v-model="navValue" 
           :bg-color="null" 
+          mode="shift" 
           class="glass"
           >
-          <v-btn v-for="(item, index) in navItems" :key="item.name" @click="navigateTo(item)" :active="isActive(item)">
+          <v-btn v-for="(item, index) in navItems" :key="index" @click="navigateTo(item)" :active="isActive(item)">
             <v-icon :icon="isActive(item) ? item.icon : item.iconOutline"></v-icon>
             <span>{{ item.text }}</span>
           </v-btn>
         </v-bottom-navigation>
 
         <!-- Floating Post Button -->
-        <div class="absolute inset-x-0 bottom-4 flex justify-center z-10">
+        <div class="absolute inset-x-0 bottom-16 flex justify-end z-10 mr-3">
           <button
             @click="openPostDialog"
             class="bg-primaryLight dark:bg-primaryDark text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg border-4 border-white dark:border-black hover:scale-105 transition"

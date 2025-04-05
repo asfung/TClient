@@ -72,8 +72,6 @@
 </template>
 
 <script setup>
-import { ref, watch, reactive } from 'vue';
-
 const props = defineProps({
   dialog: Boolean,
   profileData: {
@@ -111,7 +109,6 @@ watch(isDialogOpen, (val) => {
     emit('close-dialog');
     resetEditableProfile(); 
   } else {
-    // re-initialize data when dialog opens
     editableProfile.bio = props.profileData.bio || '';
     editableProfile.address = props.profileData.address || '';
     editableProfile.profile_image = { ...(props.profileData.profile_image || {}) };
@@ -122,25 +119,6 @@ watch(isDialogOpen, (val) => {
         : $randomProfileImage(props.profileData.display_name);
   }
 });
-
-
-// watch(
-//   () => props.profileData,
-//   (newVal) => {
-//     if (newVal) {
-//       editableProfile.bio = newVal.bio || '';
-//       editableProfile.address = newVal.address || '';
-//       editableProfile.profile_image = { ...(newVal.profile_image || {}) };
-
-//       if (newVal?.profile_image?.key && typeof newVal.profile_image.key === 'string') {
-//         imagePreview.value = $getImage(newVal.profile_image.key);
-//       } else {
-//         imagePreview.value = $randomProfileImage(props.profileData.display_name);
-//       }
-//     }
-//   },
-//   { immediate: true }
-// );
 
 const handleImageChange = (event) => {
   const file = event.target.files[0];

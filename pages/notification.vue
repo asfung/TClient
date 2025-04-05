@@ -34,7 +34,6 @@ const {
 // const hasNextPage = computed(() => notficationStore.hasNextPage)
 
 const scrollY = computed(() => scrollStore.scrollYNotification)
-const message = ref([])
 const user = getItem('credentials')
 
 const channelName = '_notifications.' + user.id
@@ -44,7 +43,6 @@ const event = 'PostNotificationEvent'
 const socketListen = () => {
   $listen(channelNameHashed, event, (data) => {
     console.log(data)
-    message.value.push(data.message)
     notifications.value.unshift(data)
   })
 }
@@ -98,10 +96,6 @@ const observeSentinel = () => {
   
   observer.observe(sentinel);
 };
-
-watch(message, (oldVal, newVal) => {
-  console.log('da;slmlkdsamldmlkm')
-})
 
 
 // onBeforeRouteLeave((to, from, next) => {

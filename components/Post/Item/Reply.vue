@@ -117,6 +117,7 @@ import { usePostStore } from '~/stores/Post'
 const postStore = usePostStore()
 const { editPost } = useEditPost()
 const { deletePost } = useDeletePost()
+const { $listen, $hashSha256 } = useNuxtApp()
 
 // delete dialog
 const isSubmitting = ref(false)
@@ -133,14 +134,31 @@ const props = defineProps({
 
 const emit = defineEmits(['post-updated']) // unused
 
+onMounted(() => {
+  postSocketListen()
+})
+
+const channelName = '_watcherpost.' + props.item?.id
+const channelNameHashed = $hashSha256(channelName)
+const event = 'WatcherPostEvent'
+
+const postSocketListen = () => {
+  $listen(channelNameHashed, event, (data) => {
+    console.log(data)
+    props.item.like_count = data.like_count
+    props.item.reply_count = data.reply_count
+    props.item.repost_count = data.repost_count
+  })
+}
+
 const handleUpdateLike = (payload) => {
   props.item.liked = payload.liked
-  props.item.like_count = payload.count
+  // props.item.like_count = payload.count
 }
 
 const handleUpdateRepost = (payload) => {
   props.item.reposted = payload.reposted
-  props.item.repost_count = payload.count
+  // props.item.repost_count = payload.count
 }
 
 const handleUpdateBookmark = (payload) => {

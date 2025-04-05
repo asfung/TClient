@@ -74,6 +74,12 @@ export default defineNuxtPlugin((nuxtApp) => {
     return CryptoJS.SHA256(data).toString()
   }
 
+  const convertToRelativeTime = (createdAt) => {
+    return useNuxtApp().$dayjs.utc(createdAt)
+      .tz('Asia/Jakarta')   
+      .fromNow();
+  };
+
   return {
     provide: {
       randomProfileImage,
@@ -86,6 +92,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       chaosOrb,
       user,
       hashSha256,
+      convertToRelativeTime,
     }
   }
 

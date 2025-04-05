@@ -50,7 +50,7 @@
       </v-timeline>
     </div>
 
-    <div class="flex items-center justify-between p-4 border-y">
+    <div v-if="props.item?.parent?.length > 0" class="flex items-center justify-between p-4 border-y">
       <div class="w-full">
         <PostInput 
           :uniqueId="'post-input-reply'"
@@ -89,12 +89,9 @@ import { PostReplyCard } from '#components'
 import { ArrowLeftIcon, CurrencyEuroIcon } from '@heroicons/vue/24/outline'
 import { usePostStore } from '~/stores/Post'
 
-const isBookmarked = ref(false)
-const isLiked = ref(false)
 const postStore = usePostStore()
 const scrollY = ref(0)
 const replyDialog = ref(false)
-const postsReply = computed(() => postStore.postsReply);
 const timelineRefs = ref([])
 const uploadedFiles = ref([]);
 const isSelectingText = ref(false)

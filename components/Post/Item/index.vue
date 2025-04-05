@@ -5,7 +5,7 @@
     @click="clickPostItem" 
     @mousedown="startSelection"
     @mouseup="endSelection"
-    class="cursor-pointer hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
+    class="cursor-pointer hover:bg-gray-300 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20"
     >
     <hr v-if="props.index !== 0" class="border-gray-400 dark:border-white" />
 
@@ -38,7 +38,7 @@
                     <span :class="$chaosOrb(item.user.username)" class="hover:underline">{{ item.user.display_name }}</span>
                     <span
                       class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
-                      @{{ item.user.username }} . {{ convertToRelativeTime(item.created_at) }} </span>
+                      @{{ item.user.username }} . {{ $convertToRelativeTime(item.created_at) }} </span>
                   </NuxtLink>
                 </p>
               </div>
@@ -119,8 +119,9 @@
         </UCarousel>
       </div>
 
-      <div class="pl-[70px]" v-if="item.__typename === 'quote'">
-        <p class="text-error">QUOTE COMPONENT</p>
+      <div class="pl-[70px] mr-10" v-if="item.__typename === 'quote'">
+        <!-- <p class="text-error">QUOTE COMPONENT</p> -->
+         <QuoteItem :quote="item.quote" />
       </div>
 
       <!-- ACTIONS -->
@@ -135,11 +136,10 @@
     </div>
 
   </div>
-
     <div 
       v-if="isDeleted"
       class="p-4 text-gray-500 dark:text-gray-400 border-t border-gray-400 dark:border-white"
-    >
+      >
       <p>This post has been deleted</p>
     </div>
 
@@ -155,7 +155,7 @@
 
 
 <script setup>
-import { usePostStore } from '~/stores/Post';
+import { usePostStore } from '~/stores/Post'
 import { useEditPost } from '~/composables/useEditPost'
 import { useDeletePost } from '~/composables/useDeletePost'
 import { useEditPostField } from '~/composables/useEditPostField'
@@ -164,6 +164,7 @@ const postStore = usePostStore()
 const { editPost } = useEditPost()
 const { deletePost } = useDeletePost()
 const { editPostField } = useEditPostField()
+const { $listen, $hashSha256 } = useNuxtApp()
 
 const isDeleted = ref(false)
 const isBookmarked = ref(false)
@@ -187,16 +188,33 @@ const props = defineProps({
 
 const emit = defineEmits(['post-updated', 'post-deleted'])
 
+onMounted(() => {
+  postSocketListen()
+})
+
+const channelName = '_watcherpost.' + props.item?.id
+const channelNameHashed = $hashSha256(channelName)
+const event = 'WatcherPostEvent'
+
+const postSocketListen = () => {
+  $listen(channelNameHashed, event, (data) => {
+    console.log(data)
+    props.item.like_count = data.like_count
+    props.item.reply_count = data.reply_count
+    props.item.repost_count = data.repost_count
+  })
+}
+
 const handleUpdateLike = (payload) => {
   props.item.liked = payload.liked
-  props.item.like_count = payload.count
+  // props.item.like_count = payload.count
 }
 
 const handleUpdateRepost = (payload) => {
   // props.item.reposted = payload.reposted
   // props.item.repost_count = payload.count
   editPostField(props.item.id, "reposted", payload.reposted)
-  editPostField(props.item.id, "repost_count", payload.count)
+  // editPostField(props.item.id, "repost_count", payload.count)
 }
 
 const handleUpdateBookmark = (payload) => {
@@ -224,6 +242,7 @@ const handlePostDelete = async () => {
   }
 }
 
+// gesture
 const closeReplyDialog = () => {
   postEditDialog.value = false
 }
@@ -239,14 +258,9 @@ const endSelection = () => {
   }
 };
 
+// ini buat tipe post 'quote', 'reply' but gk guna deh 
 const handleTypePost = () => {
 }
-
-const convertToRelativeTime = (createdAt) => {
-  return useNuxtApp().$dayjs.utc(createdAt)
-    .tz('Asia/Jakarta')   
-    .fromNow();
-};
 
 const clickPostItem = () => {
   if (!isSelectingText.value) {
