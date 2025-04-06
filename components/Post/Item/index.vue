@@ -173,8 +173,6 @@ const { editPostField } = useEditPostField()
 const { $listen, $hashSha256 } = useNuxtApp()
 
 const isDeleted = ref(false)
-const isBookmarked = ref(false)
-const isLiked = ref(false)
 const isSelectingText = ref(false);
 const menuDot = ref(false)
 const postEditDialog = ref(false)
@@ -286,8 +284,6 @@ const handleMoreOptions = () => {
 }
 
 const previewMedia = (media, index = 0) => {
-  // console.log(media)
-  console.log(index)
   selectedMedia.value = media
   selectedStartIndex.value = index
   showMediaPreview.value = true

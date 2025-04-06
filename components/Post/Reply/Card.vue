@@ -29,7 +29,7 @@
                 </template>
               </TooltipCard>
           </template>
-          <PostItemReply :item="item" />
+          <PostItemReply :item="item" :show-quote="false" />
           <button 
             v-if="item.reply_count > 0 && !showReplies"
             @click.stop="fetchReplies" 
@@ -63,7 +63,7 @@
               </TooltipCard>
           </template>
           <div>
-            <PostItemReply :item="reply" />
+            <PostItemReply :item="reply" :show-quote="false" />
           </div>
           <button 
             v-if="replyI === item.replies.length - 1 && replyRepliesHasNextPage"

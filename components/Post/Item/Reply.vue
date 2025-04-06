@@ -1,6 +1,7 @@
 <template>
   <div class="">
-    <div class="">
+    <!-- FKKKK THIS SHIT PAL -->
+    <div :class="{ 'max-w-[300px]' : $isBreakpoint(['xs','sm']), 'max-w-[200px]' : $isBreakpoint(['lg']) }">
       <p class="text-base leading-6 font-medium flex items-start justify-between" v-if="item.user">
         <NuxtLink :to="`/@${item.user.username}`" @click.stop>
           <TooltipCard v-if="item.user">
@@ -83,7 +84,7 @@
         </UCarousel>
       </div>
 
-      <div class="mr-10" v-if="item.__typename === 'quote'">
+      <div class="mr-10" v-if="item.__typename === 'quote' && props.showQuote">
          <QuoteItem :quote="item.quote" />
       </div>
 
@@ -133,6 +134,10 @@ const props = defineProps({
   item: {
     required: true
   },
+  showQuote: {
+    required: false,
+    default: true,
+  }
 })
 
 const emit = defineEmits(['post-updated']) // unused
