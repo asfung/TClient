@@ -3,9 +3,10 @@
     v-model="internalValue"
     :max-width="maxWidth"
     scrollable
+    class="font-base"
   >
-    <v-card>
-      <v-card-title class="d-flex justify-space-between align-center">
+    <v-card variant="flat" class="rounded-lg">
+      <v-card-title class="d-flex text-white justify-space-between align-center bg-primaryLight dark:bg-primaryDark">
         <span class="text-h6">{{ computedTitle }}</span>
         <v-btn
           icon
@@ -20,6 +21,9 @@
         <v-form @submit.prevent="handleSubmit" ref="form">
           <v-container>
             <v-row>
+              <v-col cols="12">
+                <p>Key Format: {{initialData.toLowerCase()}}-[NAME]</p>
+              </v-col>
               <v-col cols="12">
                 <v-text-field
                   v-model="formData.key"
@@ -44,8 +48,8 @@
               <v-col cols="12">
                 <v-text-field
                   v-model="formData.endpoint"
-                  label="Endpoint"
-                  placeholder="/api/endpoint"
+                  label="Route Name"
+                  placeholder="route.name"
                   variant="outlined"
                   :rules="endpointRules"
                 />
@@ -150,8 +154,8 @@ const nameRules = [
 ]
 
 const endpointRules = [
-  v => !v || v.startsWith('/') || 'Endpoint must start with /',
-  v => !v || /^\/[a-zA-Z0-9-_/]*$/.test(v) || 'Endpoint must be a valid URL path'
+  // v => !v || v.startsWith('/') || 'Endpoint must start with /',
+  // v => !v || /^\/[a-zA-Z0-9-_/]*$/.test(v) || 'Endpoint must be a valid URL path'
 ]
 
 const formData = ref({

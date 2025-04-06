@@ -22,9 +22,15 @@ const authStore = useAuthStore()
 const user = computed(() => authStore.getCredentials(Credentials.USER))
 const token = computed(() => authStore.getCredentials(Credentials.TOKEN))
 
-const signOutEvent = () => {
-  authStore.signOut()
-  window.location.href = '/'
+const signOutEvent = async () => {
+  try{
+    const fetch = await authStore.signOut()
+    if(fetch.status === 200){
+      window.location.href = '/'
+    }
+  }catch(e){
+    console.log(e)
+  }
 }
 
 const changeLocalStorage = () => {

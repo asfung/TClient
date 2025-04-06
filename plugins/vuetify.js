@@ -23,6 +23,13 @@ export default defineNuxtPlugin((app) => {
         },
       },
     },
+    defaults: {
+      global: {
+        style: {
+          // fontFamily: `'IA Writer Quattro S', sans-serif`
+        }
+      }
+    }
   })
   app.vueApp.use(vuetify)
   app.hook('app:mounted', () => {

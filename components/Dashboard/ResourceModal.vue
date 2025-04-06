@@ -3,9 +3,10 @@
     v-model="internalValue"
     :max-width="maxWidth"
     scrollable
+    class="font-base"
   >
-    <v-card>
-      <v-card-title class="d-flex justify-space-between align-center">
+    <v-card variant="flat" class="rounded-lg">
+      <v-card-title class="d-flex text-white justify-space-between align-center bg-primaryLight dark:bg-primaryDark">
         <span class="text-h6">{{ computedTitle }}</span>
         <v-btn
           icon
@@ -64,7 +65,7 @@
                 <v-text-field
                   v-model="formData.path"
                   label="Path"
-                  placeholder="/resource/path"
+                  placeholder="/resource/to/"
                   variant="outlined"
                   :rules="pathRules"
                 />
@@ -187,8 +188,8 @@ const nameRules = [
 ]
 
 const pathRules = [
-  v => !v || v.startsWith('/') || 'Path must start with /',
-  v => !v || /^\/[a-zA-Z0-9-_/]*$/.test(v) || 'Path must be valid URL path'
+  // v => !v || v.startsWith('/') || 'Path must start with /',
+  // v => !v || /^\/[a-zA-Z0-9-_/]*$/.test(v) || 'Path must be valid URL path'
 ]
 
 const formData = ref({

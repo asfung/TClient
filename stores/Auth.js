@@ -21,9 +21,6 @@ export const useAuthStore = defineStore('AuthStore', {
     },
   },
   actions: {
-    test(){
-      return 'hello test'
-    },
     setCredentials(credentials) {
       const jsonCredentials = JSON.stringify(credentials);
       const encryptedCredentials = CryptoJS.AES.encrypt(jsonCredentials, SECRET_KEY).toString();
@@ -125,7 +122,30 @@ export const useAuthStore = defineStore('AuthStore', {
       const decryptedToken = bytes.toString(CryptoJS.enc.Utf8);
       return decryptedToken;
     },
-    signOut(){
+    async signOut(){
+      try{
+        const { $axios } = useNuxtApp()
+        const response = await $axios.post('/Logout');
+        const data = response.data
+        if (response.status === 200) {
+          console.log('berhasil logout')
+          this.userLogout()
+          return {
+            response: response,
+            status: response.status,
+            data: data,
+            message: 'Success',
+          };
+        }
+      }catch(e){
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
+    userLogout(){
       localStorage.removeItem('credentials')
       localStorage.removeItem('resources')
     },

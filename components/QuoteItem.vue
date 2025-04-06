@@ -5,7 +5,7 @@
     @mouseup="endSelection"
     class="border hover:bg-gray-400 hover:bg-opacity-15 dark:hover:bg-gray-600 dark:hover:bg-opacity-20 border-gray-300 dark:border-gray-600 rounded-lg p-3 mt-2 w-full">
     <!-- class="border border-gray-300 dark:border-gray-600 rounded-lg p-3 mt-2 w-full"> -->
-    <div class="flex items-start gap-3">
+    <div class="flex items-start gap-2">
       <img
         class="w-10 h-10 rounded-full"
         :src="quote.user.profile_image ? $getImage(quote.user.profile_image.key) : $randomProfileImage(quote.user.display_name)"
@@ -18,11 +18,15 @@
         <p class="text-sm text-gray-500 dark:text-gray-400">
           @{{ quote.user.username }} · {{ $convertToRelativeTime(quote.created_at) }}
         </p>
-        <p class="mt-1 text-base break-words whitespace-pre-wrap">
-          {{ quote.content }}
-        </p>
       </div>
+
     </div>
+
+    <p class="mt-1 text-base break-words whitespace-pre-wrap">
+      <!-- {{ quote.content }} -->
+      <PostContentText :content="quote.content" />
+    </p>
+
 
     <div v-if="quote.media?.length" class="mt-2" @click.stop>
       <UCarousel

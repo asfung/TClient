@@ -14,9 +14,9 @@
       </button>
 
       <div v-if="showDropdown"
-        class="absolute left-0 top-10 z-10 w-32 bg-white border rounded shadow-lg text-sm text-gray-700">
-        <button @click="handleRepost" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Repost</button>
-        <button @click="handleQuote" class="block w-full text-left px-4 py-2 hover:bg-gray-100">Quote</button>
+        class="absolute right-0 top-10 z-10 w-32 shadow-lg bg-gray-100 dark:bg-black rounded-2xl ring-1 ring-primaryDark dark:ring-primaryLight shadow-primaryLight/50 dark:shadow-primaryDark/50">
+        <button @click="handleRepost" class="block rounded-t-2xl w-full text-left px-4 py-2 hover:bg-gray-300 dark:hover:bg-opacity-10">{{ props.reposted ? 'Unrepost' : 'Repost' }}</button>
+        <button @click="handleQuote" class="block rounded-b-2xl w-full text-left px-4 py-2 hover:bg-gray-300 dark:hover:bg-opacity-10">Quote</button>
       </div>
     </div>
 
@@ -90,7 +90,7 @@ const handleQuote = () => {
 }
 
 const handlePostCreated = (newPostQuote) => {
-  postStore.posts.shift(newPostQuote)
+  postStore.posts.unshift(newPostQuote)
 }
 
 const closeReplyDialog = () => {

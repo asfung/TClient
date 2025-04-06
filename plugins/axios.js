@@ -83,6 +83,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
             originalRequest.headers.Authorization = `Bearer ${newToken}`
             return axiosInstance(originalRequest)
+          }else{
+            // temporary
+            authStore.userLogout()
+            window.location.href = '/'
           }
         } catch (err) {
           isRefreshing = false

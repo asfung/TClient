@@ -85,15 +85,9 @@ const changeLocalStorage = () => {
     email: 'paung@gmail.com',
     profile_image: 'dasmkdlms'
   })
-  // authStore.setCredentialBy(Credentials.USER, 'ini new token')
 }
 
 onMounted(() => {
-  // console.log(authStore.getCredentials(Credentials.USER))
-  // console.log(authStore.hello)
-  // localStorage.removeItem('token')
-  // localStorage.setItem('test', 'ini belum diubah')
-  // authStore.testCredentials()
 });
 
 

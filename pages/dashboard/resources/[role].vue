@@ -97,6 +97,7 @@
     <DashboardPermissionModal
       v-model="showCreatePermissionModal"
       :resource-id="selectedResource?.id"
+      :initial-data="selectedResource?.name"
       @submit="handlePermissionCreate"
     />
 

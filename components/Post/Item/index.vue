@@ -54,7 +54,7 @@
 
       <v-menu 
         v-model="menuDot"
-        v-if="$user.id === props.item.user.id"
+        v-if="$user?.id === props.item?.user?.id"
         location="bottom end"
         @click.stop="handleMoreOptions"
         scroll-strategy="close" 
@@ -109,13 +109,13 @@
       <!-- </div> -->
 
       <div class="pl-0" @click.stop>
-        <UCarousel v-slot="{ item }" :items="item.media" @click.stop
+        <UCarousel v-slot="{ item, index }" :items="item.media" @click.stop
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth flex items-center' }">
           <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
-          <img v-if="item.mimetypes.startsWith('image/')" :src="$getImage(item.key)" width="300" draggable="true" @click.stop
+          <img v-if="item.mimetypes.startsWith('image/')" :src="$getImage(item.key)" width="300" draggable="true" @click.stop="previewMedia(props.item.media, index)"
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
           <video v-else-if="item.mimetypes === 'video/mp4'" :src="$getImage(item.key)" class="w-full h-52 object-cover rounded"
-            controls @click.stop />
+            controls @click.stop="previewMedia(props.item.media, index)" />
         </UCarousel>
       </div>
 
@@ -150,6 +150,11 @@
       :loading="isSubmitting"
       @confirm="handlePostDelete"
     />
+    <MediaPreview
+      v-model="showMediaPreview"
+      :media="selectedMedia"
+      :startIndex="selectedStartIndex"
+    />
   </div>
 </template>
 
@@ -176,6 +181,12 @@ const postEditDialog = ref(false)
 // delete dialog 
 const isSubmitting = ref(false)
 const showDeleteConfirm = ref(false)
+
+// media preview
+const showMediaPreview = ref(false)
+const selectedMedia = ref([])
+const selectedStartIndex = ref(0)
+
 
 const props = defineProps({
   item: {
@@ -271,5 +282,13 @@ const clickPostItem = () => {
 const handleMoreOptions = () => {
   menuDot.value = !menuDot.value
   console.log('item post ', props.item.id)
+}
+
+const previewMedia = (media, index = 0) => {
+  // console.log(media)
+  console.log(index)
+  selectedMedia.value = media
+  selectedStartIndex.value = index
+  showMediaPreview.value = true
 }
 </script>
