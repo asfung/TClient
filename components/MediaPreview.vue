@@ -1,13 +1,6 @@
 <template>
   <v-dialog v-model="show" width="auto">
-    <div class="relative bg-white dark:bg-black shadow-lg p-1 mx-auto">
-      <button
-        class="absolute top-2 right-2 text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white"
-        @click="closeDialog"
-      >
-        ✕
-      </button>
-
+    <!-- <div class="relative mx-auto"> -->
       <UCarousel
         ref="carouselRef"
         v-slot="{ item }"
@@ -17,16 +10,16 @@
         <img
           v-if="item.mimetypes.startsWith('image/')"
           :src="$getImage(item.key)"
-          class="rounded-lg max-h-[80vh]"
+          class="max-h-[80vh]"
         />
         <video
           v-else-if="item.mimetypes === 'video/mp4'"
           :src="$getImage(item.key)"
-          class="rounded-lg max-h-[80vh]"
+          class="max-h-[80vh]"
           controls
         />
       </UCarousel>
-    </div>
+    <!-- </div> -->
   </v-dialog>
 </template>
 
