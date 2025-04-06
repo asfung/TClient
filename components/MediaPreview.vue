@@ -2,10 +2,10 @@
   <div 
     v-if="modelValue" 
     @click="handleBackgroundClick"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-100 rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-10 border border-gray-100">
+    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-100 rounded-md backdrop-filter backdrop-blur-md bg-opacity-10">
     <button 
       @click="closePreview" 
-      class="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+      class="absolute top-4 right-4 dark:text-white hover:text-gray-300 transition-colors z-10"
     >
       <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -15,7 +15,7 @@
     <button 
       v-if="media.length > 1 && $isBreakpoint(['md', 'lg', 'xl'])" 
       @click="prevMedia" 
-      class="absolute left-4 text-white hover:text-gray-300 transition-colors z-10"
+      class="absolute left-4 dark:text-white hover:text-gray-300 transition-colors z-10"
       :hidden="currentIndex === 0"
     >
       <!-- :disabled="currentIndex === 0" -->
@@ -27,7 +27,7 @@
     <button 
       v-if="media.length > 1 && $isBreakpoint(['md', 'lg', 'xl'])" 
       @click="nextMedia" 
-      class="absolute right-4 text-white hover:text-gray-300 transition-colors z-10"
+      class="absolute right-4 dark:text-white hover:text-gray-300 transition-colors z-10"
       :hidden="currentIndex === media.length - 1"
     >
       <!-- :disabled="currentIndex === media.length - 1" -->
@@ -57,7 +57,7 @@
     <button 
       v-if="media.length > 1 && $isBreakpoint(['xs', 'sm'])" 
       @click="prevMedia" 
-      class="absolute left-4 bottom-3 text-white hover:text-gray-300 transition-colors z-10"
+      class="absolute left-4 bottom-3 dark:text-white hover:text-gray-300 transition-colors z-10"
       :hidden="currentIndex === 0"
       >
       <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@
     <button 
       v-if="media.length > 1 && $isBreakpoint(['xs', 'sm'])" 
       @click="nextMedia" 
-      class="absolute right-4 bottom-3 text-white hover:text-gray-300 transition-colors z-10"
+      class="absolute right-4 bottom-3 dark:text-white hover:text-gray-300 transition-colors z-10"
       :hidden="currentIndex === media.length - 1"
       >
       <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +75,7 @@
       </svg>
     </button>
 
-    <div v-if="media.length > 1" class="absolute bottom-4 text-white text-sm">
+    <div v-if="media.length > 1" class="absolute bottom-4 dark:text-white text-sm">
       {{ currentIndex + 1 }} / {{ media.length }}
     </div>
   </div>
