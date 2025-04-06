@@ -71,6 +71,8 @@
         </div>
       </div>
     </div>
+
+    <div id="checkpoint-section"></div>
   </div>
 </template>
 
@@ -90,7 +92,7 @@ const route = useRoute()
 const router = useRouter()
 
 const { userSearch } = storeToRefs(userStore)
-const { postsSearch } = storeToRefs(postStore)
+const { postsSearch, postsSearchPage, postsSearchHasNextPage } = storeToRefs(postStore)
 
 const debounce = (fn, delay) => {
   let timeout;
@@ -111,16 +113,34 @@ const userSearchFetch = debounce(async () => {
   }
 }, 300)
 
-const postSearchFetch = debounce(async () => {
+const postSearchFetch = debounce(async (page) => {
   if (searchQuery.value.trim()) {
     const fetch = await postStore.getPost({ 
       q: searchQuery.value, 
-      page: 1, 
-      per_page: 10 
+      page: page,
     })
-    postStore.postsSearch = fetch.status === 200 ? fetch.data : []
+
+    if (fetch.status === 200) {
+      const newPosts = fetch.data
+
+      if (page === 1) {
+        postStore.postsSearch = newPosts
+      } else {
+        postStore.postsSearch.push(...newPosts)
+      }
+
+      postStore.postsSearchPage = page
+      postStore.postsSearchHasNextPage = newPosts.length > 0
+
+      if (page === 1) {
+        nextTick(() => observeSentinel())
+      }
+    } else {
+      postStore.postsSearchHasNextPage = false
+    }
   } else {
     postStore.postsSearch = []
+    postStore.postsSearchHasNextPage = false
   }
 }, 300)
 
@@ -139,11 +159,25 @@ const toggleFollowFetch = async (user) => {
 }
 
 watch(searchQuery, (newQuery) => {
-  userSearchFetch()
-  postSearchFetch()
+  // userSearchFetch()
+  // postSearchFetch()
+  // if (newQuery.trim()) {
+  //   router.push({ query: { q: newQuery } })
+  // } else {
+  //   router.push({ query: {} })
+  // }
   if (newQuery.trim()) {
+    userSearchFetch()
+    postStore.postsSearch = [] 
+    postStore.postsSearchPage = 1 
+    postStore.postsSearchHasNextPage = true 
+    postSearchFetch(1)
     router.push({ query: { q: newQuery } })
   } else {
+    userStore.userSearch = []
+    postStore.postsSearch = []
+    postStore.postsSearchPage = 1
+    postStore.postsSearchHasNextPage = true
     router.push({ query: {} })
   }
 })
@@ -172,13 +206,31 @@ const clickUser = (item) => {
   searchFocus.value = true
 }
 
+const observeSentinel = () => {
+  if(searchQuery.value.length < 0) return;
+  if(postsSearchHasNextPage.value === false) return;
+  const sentinel = document.getElementById("checkpoint-section")
+  if (!sentinel) return;
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && postsSearchHasNextPage.value) {
+        const nextPage = postsSearchPage.value + 1
+        postSearchFetch(nextPage)
+      }
+    },
+    { threshold: 1.0 }
+  );
+  observer.observe(sentinel)
+};
+
 onMounted(() => {
   const query = route.query.q
   if (query) {
     searchQuery.value = query
     searchFocus.value = true 
     userSearchFetch()
-    postSearchFetch()
+    postSearchFetch(1)
+    // observeSentinel()
   }
 })
 </script>
