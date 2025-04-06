@@ -83,6 +83,9 @@
         </UCarousel>
       </div>
 
+      <div class="mr-10" v-if="item.__typename === 'quote'">
+         <QuoteItem :quote="item.quote" />
+      </div>
 
       <div class="flex">
         <ActionPostLike @click.stop :liked="item.liked" :post_id="item.id" :count="item.like_count" @update-like="handleUpdateLike" />

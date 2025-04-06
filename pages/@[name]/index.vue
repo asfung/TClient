@@ -29,29 +29,40 @@
       </div>
 
       <div class="px-4">
-        <div class="flex flex-wrap sm:justify-start gap-4 mt-4">
-          <div class="flex items-center">
-            <p v-if="!isLoadingProfile" class="text-lg font-medium">
-              {{ $numberFormat(userProfileData?.followers_count) }}
-            </p>
-            <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
-            <span class="text-neutral ml-1 text-sm">Followers</span>
+        <div class="flex justify-between">
+          <div class="flex flex-wrap sm:justify-start gap-4 mt-4">
+            <div class="flex items-center">
+              <p v-if="!isLoadingProfile" class="text-lg font-medium">
+                {{ $numberFormat(userProfileData?.followers_count) }}
+              </p>
+              <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+              <span class="text-neutral ml-1 text-sm">Followers</span>
+            </div>
+            
+            <div class="flex items-center">
+              <p v-if="!isLoadingProfile" class="text-lg font-medium">
+                {{ $numberFormat(userProfileData?.following_count) }}
+              </p>
+              <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+              <span class="text-neutral ml-1 text-sm">Following</span>
+            </div>
+            
+            <div class="flex items-center">
+              <p v-if="!isLoadingProfile" class="text-lg font-medium">
+                {{ $numberFormat(userProfileData?.post_count) }}
+              </p>
+              <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
+              <span class="text-neutral ml-1 text-sm">Posts</span>
+            </div>
           </div>
-          
-          <div class="flex items-center">
-            <p v-if="!isLoadingProfile" class="text-lg font-medium">
-              {{ $numberFormat(userProfileData?.following_count) }}
-            </p>
-            <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
-            <span class="text-neutral ml-1 text-sm">Following</span>
-          </div>
-          
-          <div class="flex items-center">
-            <p v-if="!isLoadingProfile" class="text-lg font-medium">
-              {{ $numberFormat(userProfileData?.post_count) }}
-            </p>
-            <p v-else class="animate-pulse bg-gray-300 h-4 w-12 rounded"></p>
-            <span class="text-neutral ml-1 text-sm">Posts</span>
+
+          <div v-if="!userProfileData?.is_me && !isLoadingProfile" class="mt-4 transition-transform duration-200 ease-in-out active:scale-90">
+            <button 
+              @click="toggleFollowFetch"
+              :class="userProfileData?.followed ? 'ring-1 ring-primaryLight dark:ring-primaryDark dark:text-white' : ' bg-primaryLight dark:bg-primaryDark text-white'"
+              class="font-bold py-2 px-4 rounded-full">
+              {{ userProfileData?.followed ? 'Followed' : 'Follow' }}
+            </button>
           </div>
         </div>
       </div>
@@ -228,6 +239,18 @@ const postsFetch = async (page = 1) => {
   }
 };
 
+const toggleFollowFetch = async () => {
+  const fetch = await userStore.toggleFollow({
+    user_id_followed: userProfileData.value.id
+  })
+  userProfileData.value.followed = fetch.state
+  if(fetch.state){
+    userProfileData.value.followers_count += 1
+  }else{
+    userProfileData.value.followers_count -= 1
+  }
+}
+
 const observeSentinel = () => {
   const sentinel = document.getElementById("checkpoint-section");
   if (!sentinel) return;
@@ -282,9 +305,7 @@ const handleProfileUpdate = async (updatedProfile) => {
   const file = updatedProfile.profile_image?.file ?? null;
   const bio = updatedProfile.bio;
   const address = updatedProfile.address;
-
   const payload = { bio, address };
-
   let hasChanged = false;
 
   if (bio !== userProfileData.value.bio || address !== userProfileData.value.address) {
@@ -293,11 +314,9 @@ const handleProfileUpdate = async (updatedProfile) => {
 
   if (file) {
     hasChanged = true;
-
     const formData = new FormData();
     formData.append('file', file);
     formData.append('type', File.PROFILE);
-
     const fetch = await postStore.uploadMedia(formData);
     userProfileData.value.profile_image = fetch.data;
   }

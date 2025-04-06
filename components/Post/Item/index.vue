@@ -40,6 +40,7 @@
                       class="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 breaks-word block">
                       @{{ item.user.username }} . {{ $convertToRelativeTime(item.created_at) }} </span>
                   </NuxtLink>
+                  <!-- {{ item.__typename }} -->
                 </p>
               </div>
           </template>

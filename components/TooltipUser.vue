@@ -22,7 +22,7 @@
                   @click="toggleFollowFetch"
                   class="bg-neutral dark:bg-neutral-dark font-bold py-2 px-4 rounded-full"
                   >
-                  {{ userProfile.followed ? 'Following' : 'Follow' }}
+                  {{ userProfile.followed ? 'Followed' : 'Follow' }}
                 </button>
               </div>
             </div>
