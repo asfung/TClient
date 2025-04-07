@@ -221,6 +221,11 @@ onUnmounted(() => {
 })
 
 const clickPostItem = (item, index, event) => {
+  if (event.target.closest('.media-preview-container')) {
+    console.log('media-preview-container on the screen preventing the clickPostItem')
+    return; 
+  }
+
   if (!isSelectingText.value && index !== lastIndex.value) {
     if (event.target.closest('.v-timeline-divider')) {
       return;
