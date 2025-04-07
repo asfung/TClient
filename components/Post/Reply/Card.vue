@@ -138,11 +138,6 @@ const handleLoadMoreReplies = async () => {
 };
 
 const clickPostItem = (item, event) => {
-  if (event.target.closest('.media-preview-container')) {
-    console.log('media-preview-container on the screen preventing the clickPostItem')
-    return; 
-  }
-
   if (!isSelectingText.value ) {
     if (event.target.closest('.v-timeline-divider')) {
       return;

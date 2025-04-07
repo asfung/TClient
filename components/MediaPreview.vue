@@ -1,8 +1,8 @@
 <template>
   <div 
     v-if="modelValue" 
-    @click="handleBackgroundClick"
-    class="media-preview-container fixed inset-0 z-50 cursor-default flex items-center justify-center bg-gray-100 rounded-md backdrop-filter backdrop-blur-md bg-opacity-10">
+    @click.stop="(event) => handleBackgroundClick(event)"
+    class="fixed inset-0 z-50 cursor-default flex items-center justify-center bg-gray-100 rounded-md backdrop-filter backdrop-blur-md bg-opacity-10">
     <button 
       @click="closePreview" 
       class="absolute top-4 right-4 dark:text-white hover:text-gray-300 transition-colors z-10"
@@ -117,6 +117,7 @@ watch(() => props.modelValue, (newVal) => {
 })
 
 const handleBackgroundClick = (event) => {
+  // event.stopPropagation()
   if (mediaContainer.value && !mediaContainer.value.contains(event.target)) {
     if (!event.target.closest('button')) {
       closePreview()

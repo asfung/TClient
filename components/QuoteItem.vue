@@ -31,7 +31,7 @@
 
       <div v-if="quote.media?.length" class="mt-2" @click.stop>
         <UCarousel
-          v-slot="{ item }"
+          v-slot="{ item, index }"
           :items="quote.media"
           :ui="{ item: 'mx-1', container: 'pl-0 pr-5 snap-none scroll-smooth flex items-center' }"
         >
@@ -41,7 +41,7 @@
             width="300"
             draggable="true"
             class="rounded-lg cursor-pointer duration-200 active:scale-95"
-            @click.stop
+            @click.stop="previewMedia(props.quote.media, index)"
           />
           <!-- @click.stop="(event) => previewMedia(props.quote.media, index, event)" -->
           <video
@@ -49,7 +49,7 @@
             :src="$getImage(item.key)"
             class="w-full h-52 object-cover rounded"
             controls
-            @click.stop
+            @click.stop="previewMedia(props.quote.media, index)"
           />
           <!-- @click.stop="(event) => previewMedia(props.quote.media, index, event)" -->
         </UCarousel>
@@ -100,7 +100,7 @@ const clickPostItem = () => {
   justClosedPreview.value = false
 }
 
-const previewMedia = (media, index = 0, event) => {
+const previewMedia = (media, index = 0) => {
   event.stopPropagation();
   selectedMedia.value = media
   selectedStartIndex.value = index

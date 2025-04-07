@@ -1,13 +1,27 @@
 <template>
-  <div class="h-screen">
-    <div class="grid justify-start">
-      <button @click="checkTokenEvent()">Check Token</button>
-      <button @click="signOutEvent()">Sign Out</button>
-      <!-- <pre>{{ user }}</pre>
-      <button @click="changeLocalStorage">change user credentials</button>
-      <p class="break-all">{{ token }}</p> -->
+  <!-- <div class="h-screen flex flex-col justify-between"> -->
+  <div class="flex flex-col justify-between">
+    <!-- Top content (optional) -->
+    <div class="p-4">
+      <div>
+        GK TAU MAU TEMPAT APA DISINI
+      </div>
+    </div>
+
+    <div class="p-4">
+      <button 
+        class="w-full py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+        @click="signOutEvent"
+      >
+        Sign Out
+      </button>
     </div>
   </div>
+  <!-- <button @click="checkTokenEvent()">Check Token</button>
+  <button @click="signOutEvent()" >Sign Out </button>
+  <pre>{{ user }}</pre>
+  <button @click="changeLocalStorage">change user credentials</button>
+  <p class="break-all">{{ token }}</p> -->
 </template>
 
 <script setup>
@@ -23,12 +37,12 @@ const user = computed(() => authStore.getCredentials(Credentials.USER))
 const token = computed(() => authStore.getCredentials(Credentials.TOKEN))
 
 const signOutEvent = async () => {
-  try{
+  try {
     const fetch = await authStore.signOut()
-    if(fetch.status === 200){
+    if (fetch.status === 200) {
       window.location.href = '/'
     }
-  }catch(e){
+  } catch (e) {
     console.log(e)
   }
 }
@@ -44,7 +58,4 @@ const changeLocalStorage = () => {
 const checkTokenEvent = () => {
   authStore.checkToken()
 }
-
-
 </script>
-
