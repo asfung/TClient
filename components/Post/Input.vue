@@ -153,23 +153,26 @@ const handleOverLimit = (value) => {
 const generateUid = () => `file-${Math.random().toString(36).substr(2, 9)}`;
 
 const handleFileUpload = (event) => {
+  if (!event.target.files) return;
+
   const files = Array.from(event.target.files);
-  files.forEach((file, index) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
-    if (!allowedTypes.includes(file.type)) return;
-    
-    const uid = generateUid();
-    const fileData = {
-      uid,
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
+
+  const newFilesData = files
+    .filter(file => allowedTypes.includes(file.type))
+    .map((file, index) => ({
+      uid: isEditMode.value ? generateUid() : undefined,
+      index: isEditMode.value ? undefined : fileUploadPrepared.value.length + index,
       type: file.type,
       preview: URL.createObjectURL(file),
       isLoading: true,
       file,
-      // index,
-    };
-    fileUploadPrepared.value.push(fileData);
-    uploadFile(fileData);
-  });
+    }));
+
+  if (newFilesData.length === 0) return;
+
+  fileUploadPrepared.value.push(...newFilesData);
+  newFilesData.forEach(uploadFile);
   emit('update:fileUploadPrepared', fileUploadPrepared.value);
 };
 
@@ -181,7 +184,10 @@ const uploadFile = async (fileData) => {
     formData.append('type', File.POST);
     const { data } = await postStore.uploadMedia(formData);
 
-    const index = fileUploadPrepared.value.findIndex(item => item.uid === fileData.uid);
+    // const index = fileUploadPrepared.value.findIndex(item => item.uid === fileData.uid);
+    const index = fileData.uid 
+      ? fileUploadPrepared.value.findIndex(item => item.uid === fileData.uid)
+      : fileUploadPrepared.value.findIndex(item => item.index === fileData.index);
     if (index !== -1) {
       fileUploadPrepared.value[index] = { ...fileData, ...data, isLoading: false };
       emit('update:fileUploadPrepared', fileUploadPrepared.value);
