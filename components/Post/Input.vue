@@ -158,16 +158,22 @@ const handleFileUpload = (event) => {
   const files = Array.from(event.target.files);
   const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
 
-  const newFilesData = files
-    .filter(file => allowedTypes.includes(file.type))
-    .map((file, index) => ({
+  const newFilesData = [];
+  files.forEach((file, index) => {
+    if (!allowedTypes.includes(file.type)) {
+      console.warn(`File type ${file.type} not supported and was skipped.`);
+      return; // skip unsupported files
+    }
+
+    newFilesData.push({
       uid: isEditMode.value ? generateUid() : undefined,
       index: isEditMode.value ? undefined : fileUploadPrepared.value.length + index,
       type: file.type,
       preview: URL.createObjectURL(file),
       isLoading: true,
       file,
-    }));
+    });
+  });
 
   if (newFilesData.length === 0) return;
 
@@ -175,6 +181,7 @@ const handleFileUpload = (event) => {
   newFilesData.forEach(uploadFile);
   emit('update:fileUploadPrepared', fileUploadPrepared.value);
 };
+
 
 
 const uploadFile = async (fileData) => {
