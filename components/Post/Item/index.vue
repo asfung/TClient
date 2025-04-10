@@ -117,6 +117,11 @@
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
           <video v-else-if="item.mimetypes === 'video/mp4'" :src="$getImage(item.key)" class="w-full h-52 object-cover rounded"
             controls @click.stop="previewMedia(props.item.media, index)" />
+          <!-- <MediaVIdeo 
+            v-else-if="item.mimetypes === 'video/mp4'"
+            :src="$getImage(item.key)"
+            class="w-full rounded-lg"
+          /> -->
         </UCarousel>
       </div>
 
@@ -209,11 +214,9 @@ const event = 'WatcherPostEvent'
 const postSocketListen = () => {
   $listen(channelNameHashed, event, (data) => {
     console.log(data)
-    if(data.user.username !== $user.username){
-      props.item.like_count = data.like_count
-      props.item.reply_count = data.reply_count
-      props.item.repost_count = data.repost_count
-    }
+    props.item.like_count = data.like_count
+    props.item.reply_count = data.reply_count
+    props.item.repost_count = data.repost_count
   })
 }
 

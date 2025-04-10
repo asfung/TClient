@@ -163,11 +163,9 @@ const event = 'WatcherPostEvent'
 const postSocketListen = () => {
   $listen(channelNameHashed, event, (data) => {
     console.log(data)
-    if(data.user.username !== $user.username){
-      props.item.like_count = data.like_count
-      props.item.reply_count = data.reply_count
-      props.item.repost_count = data.repost_count
-    }
+    props.item.like_count = data.like_count
+    props.item.reply_count = data.reply_count
+    props.item.repost_count = data.repost_count
   })
 }
 
