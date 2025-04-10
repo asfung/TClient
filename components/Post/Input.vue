@@ -21,7 +21,11 @@
             :ui="{ item: 'mx-1', container: 'pr-5 snap-none scroll-smooth' }">
             <div class="relative">
               <div v-if="item.isLoading" class="absolute inset-0 flex items-center justify-center bg-black/50">
-                Loading...
+                <!-- Loading... -->
+                <v-progress-circular
+                  color="primary"
+                  indeterminate
+                ></v-progress-circular>
               </div>
               <img v-if="(item.type?.startsWith('image/') || item.mimetypes?.startsWith('image/'))" :src="item.preview" class="w-full h-32 object-cover rounded" />
               <video v-else-if="(item.type === 'video/mp4' || item.mimetypes === 'video/mp4')" :src="item.preview" class="w-full h-32 object-cover rounded"
