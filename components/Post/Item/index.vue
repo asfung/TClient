@@ -170,7 +170,7 @@ const postStore = usePostStore()
 const { editPost } = useEditPost()
 const { deletePost } = useDeletePost()
 const { editPostField } = useEditPostField()
-const { $listen, $hashSha256 } = useNuxtApp()
+const { $listen, $hashSha256, $user } = useNuxtApp()
 
 const isDeleted = ref(false)
 const isSelectingText = ref(false);
@@ -209,22 +209,24 @@ const event = 'WatcherPostEvent'
 const postSocketListen = () => {
   $listen(channelNameHashed, event, (data) => {
     console.log(data)
-    props.item.like_count = data.like_count
-    props.item.reply_count = data.reply_count
-    props.item.repost_count = data.repost_count
+    if(data.user.username !== $user.username){
+      props.item.like_count = data.like_count
+      props.item.reply_count = data.reply_count
+      props.item.repost_count = data.repost_count
+    }
   })
 }
 
 const handleUpdateLike = (payload) => {
   props.item.liked = payload.liked
-  // props.item.like_count = payload.count
+  props.item.like_count = payload.count
 }
 
 const handleUpdateRepost = (payload) => {
   // props.item.reposted = payload.reposted
   // props.item.repost_count = payload.count
   editPostField(props.item.id, "reposted", payload.reposted)
-  // editPostField(props.item.id, "repost_count", payload.count)
+  editPostField(props.item.id, "repost_count", payload.count)
 }
 
 const handleUpdateBookmark = (payload) => {
