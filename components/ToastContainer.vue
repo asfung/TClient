@@ -9,7 +9,7 @@ const { visible, message, color, actionLabel, triggerAction, hideToast } = useTo
     v-model="visible"
     :color="color"
     timeout="4000"
-    location="bottom"
+    location="bottom left"
     rounded="pill"
   >
     {{ message }}

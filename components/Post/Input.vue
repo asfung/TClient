@@ -17,7 +17,7 @@
           />
 
         <div class="image-list mt-4" v-if="fileUploadPrepared.length">
-          <UCarousel v-slot="{ item }" :items="fileUploadPrepared" @click.stop
+          <UCarousel v-slot="{ item }" :items="fileUploadPrepared" @click.stop :key="item?.id"
             :ui="{ item: 'mx-1', container: 'pr-5 snap-none scroll-smooth' }">
             <div class="relative">
               <div v-if="item.isLoading" class="absolute inset-0 flex items-center justify-center bg-black/50">
@@ -128,7 +128,9 @@ onMounted(() => {
       preview: $getImage(file.key), 
       index,
       isLoading: false,
+      type: file.mimetypes || file.type
     })) || [];
+    console.log(fileUploadPrepared.value)
   }
 });
 
@@ -144,23 +146,29 @@ const handleOverLimit = (value) => {
   isOverCharacterLimit.value = value;
 };
 
+const generateUid = () => `file-${Math.random().toString(36).substr(2, 9)}`;
+
 const handleFileUpload = (event) => {
   const files = Array.from(event.target.files);
   files.forEach((file, index) => {
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4'];
     if (!allowedTypes.includes(file.type)) return;
+    
+    const uid = generateUid();
     const fileData = {
-      index: fileUploadPrepared.value.length + index,
+      uid,
       type: file.type,
       preview: URL.createObjectURL(file),
       isLoading: true,
-      file: file,
+      file,
+      // index,
     };
     fileUploadPrepared.value.push(fileData);
     uploadFile(fileData);
   });
   emit('update:fileUploadPrepared', fileUploadPrepared.value);
 };
+
 
 const uploadFile = async (fileData) => {
   try {
@@ -169,7 +177,7 @@ const uploadFile = async (fileData) => {
     formData.append('type', File.POST);
     const { data } = await postStore.uploadMedia(formData);
 
-    const index = fileUploadPrepared.value.findIndex(item => item.index === fileData.index);
+    const index = fileUploadPrepared.value.findIndex(item => item.uid === fileData.uid);
     if (index !== -1) {
       fileUploadPrepared.value[index] = { ...fileData, ...data, isLoading: false };
       emit('update:fileUploadPrepared', fileUploadPrepared.value);
@@ -181,16 +189,28 @@ const uploadFile = async (fileData) => {
   }
 };
 
+
 const removeFile = async (file) => {
-  const index = fileUploadPrepared.value.findIndex(item => item.index === file.index);
-  const { status } = await postStore.deleteMedia({ data: file.id });
-  if (index !== -1 && status === 200) {
+  // let index;
+  // if(isEditMode.value){
+  //   index = fileUploadPrepared.value.findIndex(item => item.uid === file.uid);
+  // }else{
+  //   index = fileUploadPrepared.value.findIndex(item => item.index === file.index);
+  // }
+  const index = file.uid 
+    ? fileUploadPrepared.value.findIndex(item => item.uid === file.uid)
+    : fileUploadPrepared.value.findIndex(item => item.index === file.index);
+  if (index !== -1) {
+    if (file.id) {
+      const { status } = await postStore.deleteMedia({ data: file.id });
+      if (status !== 200) return;
+    }
     URL.revokeObjectURL(fileUploadPrepared.value[index].preview);
     fileUploadPrepared.value.splice(index, 1);
-    fileUploadPrepared.value.forEach((item, idx) => item.index = idx);
     emit('update:fileUploadPrepared', fileUploadPrepared.value);
   }
 };
+
 
 const debounce = (fn, delay) => {
   let timeout;
