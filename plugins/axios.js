@@ -33,8 +33,8 @@ export default defineNuxtPlugin((nuxtApp) => {
       const authStore = useAuthStore()
       const originalRequest = error.config
 
-      // If 401 and not retrying, try refreshing the token
-      if (error.response && error.response.status === 401 && !originalRequest._retry) {
+      // If 401 and not retrying, try refreshing the token, jsut added "error.response.data.key === 'refresh-token'"
+      if (error.response && error.response.data.key === 'refresh-token' && error.response.status === 401 && !originalRequest._retry) {
         if (isRefreshing) {
           console.log('refreshing ')
           return new Promise((resolve, reject) => {
