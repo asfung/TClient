@@ -70,7 +70,9 @@ import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 import { usePostStore } from '~/stores/Post';
 import { faker } from '@faker-js/faker';
 import { File } from '~/enums/File';
+import { useTalkerToast } from "~/composables/useTalkerToast"
 
+const showToast = useTalkerToast()
 const { $getImage } = useNuxtApp()
 const props = defineProps({
   inputPost: {
@@ -190,25 +192,15 @@ const removeFile = async (file) => {
   }
 };
 
-const handlePostCreate = async () => {
-  // const { status, data } = await postStore.createPost({
-  //   parent_id: props.parent_id,
-  //   content: postMe.value.content,
-  //   media: fileUploadPrepared.value
-  // });
-  // // if (fileUploadPrepared.value.length > 0 && status === 201) {
-  // //   await postStore.editMediaPostId({
-  // //     post_id: data.id,
-  // //     data: fileUploadPrepared.value,
-  // //   });
-  // // }
-  // // emit('post-created', { ...postMe.value, id: data.id, media: fileUploadPrepared.value });
-  // // emit('post-created', { ...data, media: fileUploadPrepared.value });
-  // emit('post-created', data );
-  // handleInputClear();
+const debounce = (fn, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), delay);
+  };
+}
 
-
-
+const handlePostCreate = debounce(async () => {
   const payload = {
     content: postMe.value.content,
     media: fileUploadPrepared.value,
@@ -233,12 +225,28 @@ const handlePostCreate = async () => {
   if (response?.status === 200 || response?.status === 201) {
     if(isEditMode.value){
       emit('post-updated', response.data)
+      showToast({
+        message: 'Post Created !',
+        color: 'info',
+        actionLabel: 'See',
+        onAction: () => {
+          useNuxtApp().$router.push(`/@${response.data.user.username}/talk/${response.data.id}`)
+        }
+      })
     }else{
       emit('post-created', response.data);
+      showToast({
+        message: 'Quote Created !',
+        color: 'info',
+        actionLabel: 'See',
+        onAction: () => {
+          useNuxtApp().$router.push(`/@${response.data.user.username}/talk/${response.data.id}`)
+        }
+      })
     }
     handleInputClear();
   }
-};
+}, 500);
 
 const handleInputClear = () => {
   fileUploadPrepared.value = [];

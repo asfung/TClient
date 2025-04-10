@@ -18,7 +18,9 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
+import { useTalkerToast } from "~/composables/useTalkerToast"
 
+const showToast = useTalkerToast()
 const props = defineProps({
   inputPost: {
     type: Boolean,

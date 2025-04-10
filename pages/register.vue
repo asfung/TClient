@@ -114,6 +114,11 @@ const registerEvent = async () => {
     email: email.value, 
     password: password.value
   });
+  if(status === 200){
+    const credentials = authStore.formattedCredentials(data)
+    authStore.setCredentials(credentials)
+    window.location.href = '/'
+  }
   if(status === 500){
     snackbar.value = true
     text.value = message

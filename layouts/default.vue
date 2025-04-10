@@ -26,6 +26,7 @@
     <Footer class="footer-bottom" />
 
     <DialogTextArea :dialog="postDialog" @close-dialog="closeReplyDialog" />
+    <ToastContainer />
   </div>
 
   <!-- 
