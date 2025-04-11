@@ -59,6 +59,10 @@ export default defineNuxtPlugin((nuxtApp) => {
       : '';
   } 
 
+  const redirectProfile =  (user) => {
+    useNuxtApp().$router.push(`/@${user.username}`)
+  }
+
   // no priority func here
   const encrypt = (value) => {
     const encryptedValue = CryptoJS.AES.encrypt(value, SECRET_KEY).toString();
@@ -84,6 +88,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     provide: {
       randomProfileImage,
       getImage,
+      redirectProfile,
       // encrypt,
       // decrypt,
       formatNumberWithK,

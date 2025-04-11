@@ -55,7 +55,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(['update:dialog', 'post-created', 'post-updated']);
+const emit = defineEmits(['update:dialog', 'post-created', 'post-updated', 'close-dialog']);
 
 const closeModal = () => {
   emit('close-dialog');

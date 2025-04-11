@@ -182,7 +182,26 @@ export const useAuthStore = defineStore('AuthStore', {
         };
       }
     },
-
+    async changePassword(payload){
+      try{
+        const { $axios } = useNuxtApp()
+        const response = await $axios.post('/ChangePassword', payload)
+        if(response.status === 200){
+          return {
+            response: response,
+            status: response.status,
+            data: response.data,
+            message: response.data.message || response.data.error || 'An error occurred'
+          };
+        }
+      }catch(e){
+        return {
+          status: e.response?.status || 500,
+          data: null,
+          message: e.response?.data?.message || e.message || 'An error occurred'
+        };
+      }
+    },
     async apiRequest(endpoint, payload) {
       try {
         const { $axios } = useNuxtApp();

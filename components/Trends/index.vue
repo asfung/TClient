@@ -5,7 +5,7 @@
       <div v-for="(trend, index) in hashtags" :key="index">
         <NuxtLink :to="`/search?q=${trend.tag_name}`">
           <v-chip class="text-primaryLight dark:text-primaryDark" variant="outlined" link >
-              <p class="font-semibold">{{ trend.tag_name }} <span class="font-thin text-primaryDark dark:text-primaryLight">{{ $numberFormat(trend.tag_count) }}</span></p>
+              <p class="font-semibold">{{ trend.tag_name }}</p>
           </v-chip>
         </NuxtLink>
       </div>

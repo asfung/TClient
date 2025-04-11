@@ -90,7 +90,7 @@
 
       <div class="flex">
         <ActionPostLike @click.stop :liked="item.liked" :post_id="item.id" :count="item.like_count" @update-like="handleUpdateLike" />
-        <ActionPostReply @click.stop :count="item.reply_count" />
+        <ActionPostReply @click.stop :parent_id="item.id" :count="item.reply_count" />
         <ActionPostRepost @click.stop :count="item.repost_count" :post_id="item.id" :reposted="item.reposted" @update-repost="handleUpdateRepost" />
         <ActionPostBookmark @click.stop :bookmarked="item.bookmarked" :post_id="item.id" @update-bookmark="handleUpdateBookmark" />
         <ActionPostShared @click.stop />

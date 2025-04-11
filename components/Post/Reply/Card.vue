@@ -5,7 +5,7 @@
         align="start" 
         density="compact" 
         dot-color="grey-darken-2"
-        fill-dot="false"
+        fill-dot
         line-inset="8" 
         truncate-line="both">
 
@@ -19,7 +19,7 @@
           <template v-slot:icon>
             <TooltipCard v-if="item.user">
                 <template v-slot:body>
-                  <img v-bind="props" class="h-10 w-10 rounded-full"
+                  <img v-bind="props" class="h-10 w-10 rounded-full" @click.stop="$redirectProfile(item.user)"
                     :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)" alt="" />
                 </template>
                 <template v-slot:tooltip>
@@ -52,7 +52,7 @@
           <template v-slot:icon>
             <TooltipCard >
                 <template v-slot:body>
-                  <img v-bind="props" class="h-10 w-10 rounded-full"
+                  <img v-bind="props" class="h-10 w-10 rounded-full" @click.stop="$redirectProfile(reply?.user)"
                     :src="reply.user.profile_image ? $getImage(reply.user.profile_image.key) : $randomProfileImage(reply.user.display_name)" alt="" />
                 </template>
                 <template v-slot:tooltip>

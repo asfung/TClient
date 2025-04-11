@@ -16,7 +16,7 @@
           <div>
             <TooltipCard>
               <template v-slot:body>
-                <img v-bind="props" class="inline-block h-10 w-10 rounded-full"
+                <img v-bind="props" class="inline-block h-10 w-10 rounded-full" @click.stop="$redirectProfile(item.user)"
                   :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)" alt="" />
               </template>
               <template v-slot:tooltip>
@@ -126,8 +126,7 @@
       </div>
 
       <div class="pl-[70px] mr-10" v-if="item.__typename === 'quote'">
-        <!-- <p class="text-error">QUOTE COMPONENT</p> -->
-         <QuoteItem :quote="item.quote" />
+        <QuoteItem :quote="item.quote" />
       </div>
 
       <!-- ACTIONS -->

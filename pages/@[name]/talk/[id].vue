@@ -22,6 +22,7 @@
   import { usePostStore } from '~/stores/Post'
   const route = useRoute()
   const parent_id = computed(() => route.params.id)
+  const username = computed(() => route.params.name)
   
   const postStore = usePostStore()
   const isLoading = ref(false)
@@ -38,6 +39,11 @@
       })
       // postStore.postDetails.parent = fetch.data
       postStore.postDetails = { parent: fetch.data || [], replies: postStore.postDetails.replies || [] };
+
+      const parent_post = postStore.postDetails.parent.find(parentPost => parentPost.id === parent_id.value)
+      if(parent_post && parent_post.user.username !== username.value){
+        useNuxtApp().$router.push(`/@${parent_post.user.username}/talk/${parent_id.value}`)
+      }
     }finally{
       isLoading.value = false
     }

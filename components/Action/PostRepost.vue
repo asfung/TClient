@@ -41,7 +41,7 @@ const props = defineProps({
   reposted: Boolean,
   post_id: { required: true },
   count: { required: true },
-  item: { type: Object, required: true },
+  item: { type: Object, required: false },
 })
 
 const emit = defineEmits(['update-repost', 'post-updated'])

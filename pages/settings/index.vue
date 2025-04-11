@@ -1,11 +1,20 @@
 <template>
   <!-- <div class="h-screen flex flex-col justify-between"> -->
-  <div class="flex flex-col justify-between">
-    <!-- Top content (optional) -->
+  <div class="flex flex-col h-screen">
     <div class="p-4">
       <div>
-        GK TAU MAU TEMPAT APA DISINI
+        <div class="text-primaryLight dark:text-primaryDark font-base-bold">Account</div>
+        <v-divider class="mb-3"></v-divider>
+        <div>
+          Change Password
+        </div>
       </div>
+    </div>
+
+    <div class="p-4">
+      <div class="text-primaryLight dark:text-primaryDark font-base-bold">Theme</div>
+      <v-divider class="mb-3"></v-divider>
+      <SelectionTheme />
     </div>
 
     <div class="p-4">
@@ -17,15 +26,6 @@
       </button>
     </div>
 
-    <div class="p-4">
-      <button 
-        class="w-full py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
-        @click="showSimpleToast"
-      >
-        Test Toast
-      </button>
-    </div>
-    <ToastSnackbar />
   </div>
   <!-- <button @click="checkTokenEvent()">Check Token</button>
   <button @click="signOutEvent()" >Sign Out </button>

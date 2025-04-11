@@ -1,7 +1,9 @@
 <template>
-  <div class="header dark:bg-black dark:text-white bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex items-center justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-50">
+  <div 
+    class="header dark:bg-black dark:text-white bg-gray-100 text-gray-900 shadow-md py-4 px-6 flex items-center justify-between backdrop-blur-md bg-opacity-20 dark:backdrop-blur-md dark:bg-opacity-50"
+    >
     <!-- left -->
-    <div class="flex items-center">
+    <div v-if="($isBreakpoint(['xs', 'sm', 'md', 'lg', 'xl']) && showCenter)" class="flex items-center">
       <!-- <v-img :src="logoImage" class="h-8 w-auto"></v-img> -->
       <img :src="logoImage" class="h-8 w-auto" />
       <!-- {{ logoImage }} -->
@@ -32,7 +34,7 @@
     </div>
 
     <!-- right -->
-    <div>
+    <div v-if="($isBreakpoint(['xs', 'sm', 'md', 'lg', 'xl']) && showCenter)">
       <button @click="setColorTheme($colorMode.preference === 'dark' ? 'light' : 'dark')" class="ml-4">
         <svg v-if="$colorMode.value === 'dark'" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-50" viewBox="0 0 20 20" fill="currentColor">
           <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />

@@ -9,7 +9,7 @@
     <div class="flex flex-shrink-0 pt-4 pb-2 justify-between">
       <v-timeline 
           dot-color="grey-darken-2"
-          fill-dot="false"
+          fill-dot
           align="start" 
           density="comfortable" 
           :line-color="$colorMode.preference === 'dark' ? 'grey-darken-3' : ''"
@@ -29,7 +29,7 @@
             <template v-slot:icon>
               <TooltipCard v-if="item.user">
                   <template v-slot:body>
-                    <img v-bind="props" class="h-10 w-10 rounded-full"
+                    <img v-bind="props" class="h-10 w-10 rounded-full" @click.stop="$redirectProfile(item.user)"
                       :src="item.user.profile_image ? $getImage(item.user.profile_image.key) : $randomProfileImage(item.user.display_name)" alt="" />
                   </template>
                   <template v-slot:tooltip>
