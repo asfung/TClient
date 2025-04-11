@@ -39,6 +39,15 @@
         </div>
 
         <div>
+          <label class="text-sm font-semibold block mb-1">Display Name</label>
+          <input
+            type="text"
+            v-model="editableProfile.display_name"
+            class="w-full border p-2 rounded bg-gray-200 dark:bg-neutral-dark text-gray-900 dark:text-white"
+          />
+        </div>
+
+        <div>
           <label class="text-sm font-semibold block mb-1">Bio</label>
           <TextAreaInput 
             :placeholder="'tell\' em brooo'"
@@ -98,6 +107,7 @@ watch(isDialogOpen, (val) => {
 const imagePreview = ref('');
 
 const editableProfile = reactive({
+  display_name: '',
   bio: '',
   address: '',
   profile_image: {},
@@ -109,6 +119,7 @@ watch(isDialogOpen, (val) => {
     emit('close-dialog');
     resetEditableProfile(); 
   } else {
+    editableProfile.display_name = props.profileData.display_name || '';
     editableProfile.bio = props.profileData.bio || '';
     editableProfile.address = props.profileData.address || '';
     editableProfile.profile_image = { ...(props.profileData.profile_image || {}) };
@@ -143,6 +154,7 @@ const closeDialog = () => {
 };
 
 const resetEditableProfile = () => {
+  editableProfile.display_name = ''
   editableProfile.bio = '';
   editableProfile.address = '';
   editableProfile.profile_image = {};

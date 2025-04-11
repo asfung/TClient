@@ -120,7 +120,9 @@ import { useTheme } from 'vuetify';
 import { Credentials } from '~/enums/Credentials'
 import { File } from '~/enums/File'
 import { PencilSquareIcon } from '@heroicons/vue/24/outline'
+import { useTalkerToast } from "~/composables/useTalkerToast"
 
+const showToast = useTalkerToast()
 const theme = useTheme();
 const route = useRoute();
 const username = route.params.name;
@@ -303,12 +305,13 @@ const resetPosts = () => {
 
 const handleProfileUpdate = async (updatedProfile) => {
   const file = updatedProfile.profile_image?.file ?? null;
+  const display_name = updatedProfile.display_name;
   const bio = updatedProfile.bio;
   const address = updatedProfile.address;
-  const payload = { bio, address };
+  const payload = { bio, address, display_name };
   let hasChanged = false;
 
-  if (bio !== userProfileData.value.bio || address !== userProfileData.value.address) {
+  if (display_name !== userProfileData.value.display_name || bio !== userProfileData.value.bio || address !== userProfileData.value.address) {
     hasChanged = true;
   }
 
@@ -321,10 +324,15 @@ const handleProfileUpdate = async (updatedProfile) => {
     userProfileData.value.profile_image = fetch.data;
   }
 
-  if (bio !== userProfileData.value.bio || address !== userProfileData.value.address) {
+  if (bio !== userProfileData.value.bio || address !== userProfileData.value.address || display_name !== userProfileData.value.display_name) {
     const fetch = await userStore.updateUser(payload);
+    userProfileData.value.display_name = fetch.data.display_name;
     userProfileData.value.bio = fetch.data.bio;
     userProfileData.value.address = fetch.data.address;
+    showToast({
+      message: 'Berhasil Update User Profile',
+      color: 'info',
+    })
   }
 
   if (hasChanged) {
