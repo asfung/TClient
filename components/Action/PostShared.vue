@@ -1,7 +1,6 @@
 <template>
   <button @click="toggleShare" 
     class="w-12 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-primaryLight hover:bg-opacity-10 hover:text-primaryLight transition-transform duration-200 ease-in-out active:scale-90">
-    <!-- <svg :class="{'scale-110 transition-transform duration-200 ease-out': isShare}" -->
     <svg
       class="h-7 w-7 scale-110 transition-transform duration-200 ease-in-out"
       fill="currentColor"
@@ -16,15 +15,23 @@
 <script setup>
 import { ref, computed } from 'vue';
 
+const { $share, $copyText } = useNuxtApp()
 const props = defineProps({
-  shared: Boolean
+  shared: Boolean,
+  item: {
+    required: true,
+  }
 });
 
 const isShared = ref(props.shared);
-
+const url = ref(`${window.location.origin}/@${props.item.user.username}/talk/${props.item.id}`)
 const shareClass = computed(() => isShared.value ? 'text-blue-300 fill-blue-300' : '');
 
-const toggleShare = () => {
-  isShared.value = !isShared.value;
+const toggleShare = async () => {
+  $share({
+    title: 'Talker',
+    text: 'Share Link Talk',
+    url: await $copyText(url.value)
+  })
 };
 </script>

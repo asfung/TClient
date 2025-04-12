@@ -186,14 +186,14 @@ export const useAuthStore = defineStore('AuthStore', {
       try{
         const { $axios } = useNuxtApp()
         const response = await $axios.post('/ChangePassword', payload)
-        if(response.status === 200){
+        // if(response.status === 200){
           return {
             response: response,
             status: response.status,
             data: response.data,
             message: response.data.message || response.data.error || 'An error occurred'
           };
-        }
+        // }
       }catch(e){
         return {
           status: e.response?.status || 500,

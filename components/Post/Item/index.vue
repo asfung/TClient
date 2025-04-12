@@ -112,20 +112,15 @@
       <div class="pl-0" @click.stop>
         <UCarousel v-slot="{ item, index }" :items="item.media" @click.stop
           :ui="{ item: 'mx-1', container: 'pl-16 pr-5 snap-none scroll-smooth flex items-center' }">
-          <!-- <img :src="item" width="200" height="300" draggable="true" @click.stop -->
           <img v-if="item.mimetypes.startsWith('image/')" :src="$getImage(item.key)" width="300" draggable="true" @click.stop="previewMedia(props.item.media, index)"
             class="rounded-lg cursor-pointer duration-200 active:scale-95" />
-          <video v-else-if="item.mimetypes === 'video/mp4'" :src="$getImage(item.key)" class="w-full h-52 object-cover rounded"
+          <video v-else-if="item.mimetypes === 'video/mp4'" :src="$getImage(item.key)" class="w-full h-64 object-cover rounded"
             controls @click.stop="previewMedia(props.item.media, index)" />
-          <!-- <MediaVIdeo 
-            v-else-if="item.mimetypes === 'video/mp4'"
-            :src="$getImage(item.key)"
-            class="w-full rounded-lg"
-          /> -->
         </UCarousel>
       </div>
 
-      <div class="pl-[70px] mr-10" v-if="item.__typename === 'quote'">
+      <!-- post item cant hold this ass thing -->
+      <div class="px-[70px]" v-if="item.__typename === 'quote'">
         <QuoteItem :quote="item.quote" />
       </div>
 
@@ -135,7 +130,7 @@
         <ActionPostReply @click.stop :parent_id="item.id" :count="item.reply_count" />
         <ActionPostRepost @click.stop :count="item.repost_count" :post_id="item.id" :reposted="item.reposted" @update-repost="handleUpdateRepost" />
         <ActionPostBookmark @click.stop :bookmarked="item.bookmarked" :post_id="item.id" @update-bookmark="handleUpdateBookmark" />
-        <ActionPostShared @click.stop />
+        <ActionPostShared @click.stop :item="item" />
       </div>
 
     </div>

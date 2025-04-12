@@ -59,8 +59,56 @@ export default defineNuxtPlugin((nuxtApp) => {
       : '';
   } 
 
+  const hashSha256 = (data) => {
+    return CryptoJS.SHA256(data).toString()
+  }
+
+  const convertToRelativeTime = (createdAt) => {
+    return useNuxtApp().$dayjs.utc(createdAt)
+      .tz('Asia/Jakarta')   
+      .fromNow();
+  };
+
   const redirectProfile =  (user) => {
     useNuxtApp().$router.push(`/@${user.username}`)
+  }
+
+  const share = async ({ title, text, url }) => {
+    try{
+      const shareData = {
+        title: title,
+        text: text,
+        url: url
+      }
+      await navigator.share(shareData)
+    }catch(e){
+      console.log(e)
+    }
+  }
+
+  const copyText =  async (text) => {
+    try{
+      await navigator.clipboard.writeText(text)
+      return text
+    }catch(e){
+      console.log(e)
+      return false
+    }
+  }
+
+  const shareLink = async ({ title, text, url }) => {
+    try{
+      const shareData = {
+        title: title,
+        text: text,
+        url: url
+      }
+      await share(shareData)
+      await copyText(shareData.url)
+      return shareData.url
+    }catch(e){
+      console.log(e)
+    }
   }
 
   // no priority func here
@@ -74,15 +122,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     return decryptedValue
   }
 
-  const hashSha256 = (data) => {
-    return CryptoJS.SHA256(data).toString()
-  }
-
-  const convertToRelativeTime = (createdAt) => {
-    return useNuxtApp().$dayjs.utc(createdAt)
-      .tz('Asia/Jakarta')   
-      .fromNow();
-  };
 
   return {
     provide: {
@@ -98,6 +137,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       user,
       hashSha256,
       convertToRelativeTime,
+      // shareLink, // idk fk this shit
+      share,
+      copyText,
     }
   }
 
