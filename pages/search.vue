@@ -198,6 +198,23 @@ watch(searchQuery, (newQuery) => {
   }
 })
 
+watch(() => route.query.q, (newQuery) => {
+  if (newQuery && typeof newQuery === 'string') {
+    searchQuery.value = newQuery
+    searchFocus.value = true
+    userSearchFetch()
+    postSearchFetch(1)
+  } else {
+    searchQuery.value = ''
+    searchFocus.value = false
+    userStore.userSearch = []
+    postStore.postsSearch = []
+    postStore.postsSearchPage = 1
+    postStore.postsSearchHasNextPage = true
+  }
+})
+
+
 const updateFocus = (focus) => {
   searchFocus.value = focus
 }
