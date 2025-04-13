@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Hello User</h1>
+  <div class="flex w-full">
+    <DashboardUserAdminTable />
 
     <!-- <button @click="clickAcl" class="bg-red-500">Acl</button>
     <p>{{ resourceStore.resourcesPermission }}</p> -->
