@@ -257,7 +257,7 @@ async function submitUser() {
   try {
     const payload = { ...form }
     const res = isUpdating.value
-      ? await userStore.updateUser(payload, form.id)
+      ? await userStore.updateUserTable(payload, form.id)
       : await userStore.createUser(payload)
 
     if (res.status === 200 || res.status === 201) {

@@ -163,7 +163,7 @@ export const useUserStore = defineStore('UserStore', {
       }
     },
 
-    async updateUser(payload, user_id) {
+    async updateUserTable(payload, user_id) {
       try {
         const { $axios } = useNuxtApp();
         const response = await $axios.post(`/user/admin/Update/${user_id}`, payload);
