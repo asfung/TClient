@@ -15,6 +15,18 @@
       </v-text-field>
     </div>
 
+    <div v-if="$isBreakpoint(['xs', 'sm']) && !searchFocus && !searchQuery" class="h-screen">
+      <NuxtLink
+        v-for="(trend, index) in hashtags"
+        :key="index"
+        :to="`/search?q=${trend.tag_name}`"
+        >
+        <v-chip class="m-2 text-primaryLight dark:text-primaryDark" variant="outlined" link>
+          <p class="font-semibold">{{ trend.tag_name }}</p>
+        </v-chip>
+      </NuxtLink>
+    </div>
+
     <div class="result-post">
       <div v-if="searchFocus">
         <!-- <div class="mx-4 my-2 space-y-4"> -->
@@ -82,7 +94,10 @@ import { usePostStore } from '~/stores/Post'
 import { useUserStore } from '~/stores/User'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted } from 'vue'
+import { useTagStore } from '~/stores/Tag'
 
+const { $isBreakpoint } = useNuxtApp()
+const tagStore = useTagStore()
 const searchQuery = ref('')
 const searchFocus = ref(false)
 const searchInput = ref(null)
@@ -93,6 +108,7 @@ const router = useRouter()
 
 const { userSearch } = storeToRefs(userStore)
 const { postsSearch, postsSearchPage, postsSearchHasNextPage } = storeToRefs(postStore)
+const { hashtags } = storeToRefs(tagStore)
 
 const debounce = (fn, delay) => {
   let timeout;

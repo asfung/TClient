@@ -1,7 +1,12 @@
 <template>
   <div class="border-default rounded-lg">
-    <div v-for="(item, index) in postsBookmark" :key="index">
-      <PostItem :item="item" :index="index" />
+    <div v-if="postsBookmark.length > 0">
+      <div v-for="(item, index) in postsBookmark" :key="index">
+        <PostItem :item="item" :index="index" />
+      </div>
+    </div>
+    <div v-else class="flex items-center justify-center h-screen">
+      <p class="text-gray-500">Bookmark Empty</p>
     </div>
     <!-- <v-progress-circular color="primary" indeterminate></v-progress-circular> -->
 

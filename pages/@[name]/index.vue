@@ -85,20 +85,35 @@
 
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="posts">
-          <div v-for="(item, index) in postsMyself" :key="index">
-            <PostItem :item="item" />
+          <div v-if="postsMyself.length > 0">
+            <div v-for="(item, index) in postsMyself" :key="index">
+              <PostItem :item="item" />
+            </div>
+          </div>
+          <div v-else class="flex justify-center my-4 h-screen">
+            <p class="text-gray-500">No Post here</p> 
           </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="replies">
-          <div v-for="(item, index) in postsRepliesMyself" :key="index">
-            <PostItem :item="item" />
+          <div v-if="postsRepliesMyself.length > 0">
+            <div v-for="(item, index) in postsRepliesMyself" :key="index">
+              <PostItem :item="item" />
+            </div>
+          </div>
+          <div v-else class="flex justify-center my-4 h-screen">
+            <p class="text-gray-500">No Replies here</p> 
           </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="likes">
-          <div v-for="(item, index) in postsLikeMyself" :key="index">
-            <PostItem :item="item" />
+          <div v-if="postsLikeMyself.length > 0">
+            <div v-for="(item, index) in postsLikeMyself" :key="index">
+              <PostItem :item="item" />
+            </div>
+          </div>
+          <div v-else class="flex justify-center my-4 h-screen">
+            <p class="text-gray-500">No Liked Post here</p> 
           </div>
         </v-tabs-window-item>
       </v-tabs-window>
