@@ -1,11 +1,11 @@
 <template>
   <div class="border-default rounded-lg">
-    <div v-if="notifications.length > 0">
+    <!-- <div v-if="notifications.length > 0"> -->
       <NotificationCard :notifications="notifications" />
-    </div>
-    <div v-else class="flex items-center justify-center h-screen">
+    <!-- </div> -->
+    <!-- <div v-else class="flex items-center justify-center h-screen"> -->
       <p class="text-gray-500">Notifications Empty</p>
-    </div>
+    <!-- </div> -->
     
     <div id="checkpoint-section"></div>
   </div>
