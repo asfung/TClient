@@ -4,7 +4,7 @@
       <NotificationCard :notifications="notifications" />
     <!-- </div> -->
     <!-- <div v-else class="flex items-center justify-center h-screen"> -->
-      <p class="text-gray-500">Notifications Empty</p>
+      <!-- <p class="text-gray-500">Notifications Empty</p> -->
     <!-- </div> -->
     
     <div id="checkpoint-section"></div>
