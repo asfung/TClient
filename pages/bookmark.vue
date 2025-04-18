@@ -6,7 +6,7 @@
       </div>
     <!-- </div> -->
     <!-- <div v-else class="flex items-center justify-center h-screen"> -->
-      <p class="text-gray-500">Bookmark Empty</p>
+      <!-- <p class="text-gray-500">Bookmark Empty</p> -->
     <!-- </div> -->
     <!-- <v-progress-circular color="primary" indeterminate></v-progress-circular> -->
 
