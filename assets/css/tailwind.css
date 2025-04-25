@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'IA Writer Quattro S';
+  font-style: normal;
+  font-weight: 400;
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+  src: url('~/assets/fonts/iAWriterQuattroS-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IA Writer Quattro S Bold';
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+  src: url('~/assets/fonts/iAWriterQuattroS-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IA Writer Quattro S Italic';
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+  src: url('~/assets/fonts/iAWriterQuattroS-Italic.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IA Writer Quattro S Bold Italic';
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('woff2'); */
+  /* src: url('/fonts/iAWriterQuattroS-Regular.woff2') format('truetype'); */
+  src: url('~/assets/fonts/iAWriterQuattroS-BoldItalic.woff2') format('woff2');
+}
+
+.dark .border-default {
+  border: 1px solid gray;
+}
+
+.border-talker {
+  border: 1px solid #545FDE;
+}
+
+.dark .font-normal{
+  font-weight: normal;
+}
+
+.border-timeline {
+  border-inline-start-width: thin;
+  border-inline-start-style: solid;
+  border-inline-start-color: #9CA3AF;
+}
+
+/* Custom Scrollbar Styles */
+.scrollable {
+  scrollbar-width: thin; /* For Firefox */
+}
+
+/* Light Mode Scrollbar */
+.scrollable {
+  scrollbar-color: #4b5563 #f3f4f6;
+}
+
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollable::-webkit-scrollbar-track {
+  background: #f3f4f6; 
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+  background-color: #4b5563; 
+  border-radius: 10px; 
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Dark Mode Scrollbar */
+.dark .scrollable {
+  scrollbar-color: #a1a1a1 #1f2937; 
+}
+
+.dark .scrollable::-webkit-scrollbar-track {
+  background: #1f2937; 
+}
+
+.dark .scrollable::-webkit-scrollbar-thumb {
+  background-color: #a1a1a1;
+}
+
+.dark .scrollable::-webkit-scrollbar-thumb:hover {
+  background-color: #c1c1c1; 
+}
+
+
+/* GLOBAL */
+/* Light Mode Scrollbar */
+/* .scrollable {
+  scrollbar-color: #4b5563 #f3f4f6;
+} */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6; 
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #4b5563; 
+  border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* Dark Mode Scrollbar */
+/* .dark .scrollable {
+  scrollbar-color: #a1a1a1 #1f2937; 
+} */
+
+.dark ::-webkit-scrollbar-track {
+  background: #1f2937; 
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #a1a1a1;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #c1c1c1; 
+}
+
