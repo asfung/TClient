@@ -15,13 +15,9 @@ is a conversation platform to connect through people  -->
     </a> -->
     <h3 style="font-size: 2em;" align="center">Talker</h3>
     <p> is a conversation platform to connect through people </p>
-    <!-- <p align="center"> -->
-        </br>
-        <a href="https://github.com/asfung/TClient/issues"><img src="https://img.shields.io/github/issues/asfung/tclient" alt="issues"></a>
-        <a href="https://github.com/asfung/TClient/graphs/contributors"><img src="https://img.shields.io/github/contributors/asfung/TClient?color=coral" alt="contributors"></a>
-        <a href="https://github.com/asfung/TClient/stargazers"><img src="https://img.shields.io/github/stars/asfung/TClient" alt="stargazers"></a>
-    <!-- </p> -->
-    
+    <a href="https://github.com/asfung/TClient/issues"><img src="https://img.shields.io/github/issues/asfung/tclient" alt="issues"></a>
+    <a href="https://github.com/asfung/TClient/graphs/contributors"><img src="https://img.shields.io/github/contributors/asfung/TClient?color=coral" alt="contributors"></a>
+    <a href="https://github.com/asfung/TClient/stargazers"><img src="https://img.shields.io/github/stars/asfung/TClient" alt="stargazers"></a>
 
 </div>
 
