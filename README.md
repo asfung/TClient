@@ -8,7 +8,7 @@ is a conversation platform to connect through people  -->
         <img src="docs/images/TALKER_TRANSPARENT.png" alt="Logo" width="130" height="130">
     </a> -->
     <a href="https://github.com/asfung/TClient">
-        <img src="docs/images/TALKER_PART2_BLACK.png" alt="Logo" width="130" height="130" style="border-radius: 10px;">
+        <img src="docs/images/TALKER_PART2_BLACK.png" alt="Logo" width="150" height="150" style="border-radius: 10px;">
     </a>
     <!-- <a href="https://github.com/asfung/TClient">
         <img src="docs/images/TALKER_PART2_WHITE.png" alt="Logo" width="130" height="130" style="border-radius: 15px;">
