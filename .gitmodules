@@ -1,0 +1,6 @@
+[submodule "TServer"]
+	path = TServer
+	url = git@github.com:asfung/TServer.git
+[submodule "Talker-MS"]
+	path = Talker-MS
+	url = git@github.com:asfung/Talker-MS.git
