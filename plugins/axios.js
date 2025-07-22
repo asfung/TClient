@@ -92,7 +92,9 @@ export default defineNuxtPlugin((nuxtApp) => {
           isRefreshing = false
           failedRequests.forEach((req) => req.reject(err))
           failedRequests = []
-          authStore.logout()
+          // temporary
+          authStore.userLogout() 
+          window.location.href = '/'
           return Promise.reject(err)
         }
       }
