@@ -71,16 +71,20 @@
 
           <div v-if="postsSearch.length">
             <p class="font-bold mt-4 ml-3">Posts</p>
-            <div v-for="(item, index) in postsSearch" :key="index">
-              <PostItem :item="item" :index="index" />
-            </div>
+            <v-virtual-scroll :items="postsSearch">
+              <template v-slot:default="{ item, index}">
+                <PostItem :item="item" :index="index" />
+              </template>
+            </v-virtual-scroll>
           </div>
         </div>
       </div>
       <div v-else>
-        <div v-for="(item, index) in postsSearch" :key="index">
-          <PostItem :item="item" :index="index" />
-        </div>
+        <v-virtual-scroll :items="postsSearch">
+          <template v-slot:default="{ item, index}">
+            <PostItem :item="item" :index="index" />
+          </template>
+        </v-virtual-scroll>
       </div>
     </div>
 
@@ -118,6 +122,11 @@ const debounce = (fn, delay) => {
   };
 }
 
+/*
+  TODO:
+  just receive the users 10 piece,
+  added the new field (limit) on the api query param 
+*/
 const userSearchFetch = debounce(async () => {
   if (searchQuery.value.trim()) {
     const fetch = await userStore.searchUser({ 

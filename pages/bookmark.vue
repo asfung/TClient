@@ -1,14 +1,19 @@
 <template>
   <div class="border-default rounded-lg">
-    <!-- <div v-if="postsBookmark.length > 0"> -->
-      <div v-for="(item, index) in postsBookmark" :key="index">
-        <PostItem :item="item" :index="index" />
+    <div v-if="postsBookmark && postsBookmark.length > 0">
+      <v-virtual-scroll :items="postsBookmark">
+        <template v-slot:default="{ item, index }">
+          <PostItem :item="item" :index="index" />
+        </template>
+      </v-virtual-scroll>
+    </div>
+
+    <div v-else class="flex items-center justify-center h-screen">
+      <div v-if="isFetching" class="flex items-center justify-center py-4">
+        <v-progress-circular color="primary" indeterminate></v-progress-circular>
       </div>
-    <!-- </div> -->
-    <!-- <div v-else class="flex items-center justify-center h-screen"> -->
-      <!-- <p class="text-gray-500">Bookmark Empty</p> -->
-    <!-- </div> -->
-    <!-- <v-progress-circular color="primary" indeterminate></v-progress-circular> -->
+      <p v-else class="text-gray-500">Bookmark Empty</p>
+    </div>
 
     <div id="checkpoint-section"></div>
   </div>
@@ -36,6 +41,13 @@ const isFetching = ref(false)
 onMounted(() => {
   nextTick(() => {
     window.scrollTo(0, scrollYBookmarks.value)
+    if (
+      postsBookmark.value.length < 5 &&
+      postsBookmarkHasNextPage.value &&
+      !isFetching.value
+    ) {
+      bookmarksFetch(postsBookmarkPage.value + 1)
+    }
   })
   window.addEventListener('scroll', handleScroll)
   observeSentinel()

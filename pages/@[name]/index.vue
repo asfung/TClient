@@ -86,34 +86,43 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item value="posts">
           <div v-if="postsMyself.length > 0">
-            <div v-for="(item, index) in postsMyself" :key="index">
-              <PostItem :item="item" />
-            </div>
+            <v-virtual-scroll :items="postsMyself">
+              <template v-slot:default="{ item }">
+                <PostItem :item="item" />
+              </template>
+            </v-virtual-scroll>
           </div>
           <div v-else class="flex justify-center my-4 h-screen">
-            <p class="text-gray-500">No Post here</p> 
+            <v-progress-circular v-if="isFetching" color="primary" indeterminate></v-progress-circular>
+            <p v-else class="text-gray-500">No Post here</p> 
           </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="replies">
           <div v-if="postsRepliesMyself.length > 0">
-            <div v-for="(item, index) in postsRepliesMyself" :key="index">
-              <PostItem :item="item" />
-            </div>
+            <v-virtual-scroll :items="postsRepliesMyself">
+              <template v-slot:default="{ item} ">
+                <PostItem :item="item" />
+              </template>
+            </v-virtual-scroll>
           </div>
           <div v-else class="flex justify-center my-4 h-screen">
-            <p class="text-gray-500">No Replies here</p> 
+            <v-progress-circular v-if="isFetching" color="primary" indeterminate></v-progress-circular>
+            <p v-else class="text-gray-500">No Post here</p> 
           </div>
         </v-tabs-window-item>
 
         <v-tabs-window-item value="likes">
           <div v-if="postsLikeMyself.length > 0">
-            <div v-for="(item, index) in postsLikeMyself" :key="index">
-              <PostItem :item="item" />
-            </div>
+            <v-virtual-scroll :items="postsLikeMyself">
+              <template v-slot:default="{ item }">
+                <PostItem :item="item" />
+              </template>
+            </v-virtual-scroll>
           </div>
           <div v-else class="flex justify-center my-4 h-screen">
-            <p class="text-gray-500">No Liked Post here</p> 
+            <v-progress-circular v-if="isFetching" color="primary" indeterminate></v-progress-circular>
+            <p v-else class="text-gray-500">No Post here</p> 
           </div>
         </v-tabs-window-item>
       </v-tabs-window>

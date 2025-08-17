@@ -64,9 +64,14 @@
     <div class="replies">
       <div v-if="!isLoadingReply">
         <div v-if="item.replies && item.replies.length > 0">
-          <div v-for="(reply, index) in item.replies" :key="index">
+          <!-- <div v-for="(reply, index) in item.replies" :key="index">
             <PostReplyCard :item="reply" :index="index" :lastIndex="props.item.replies.length - 1" />
-          </div>
+          </div> -->
+          <v-virtual-scroll :items="item.replies">
+            <template v-slot:default="{item, index}">
+              <PostReplyCard :item="item" :index="index" :lastIndex="props.item.replies.length - 1" />
+            </template>
+          </v-virtual-scroll>
         </div>
         <div v-else class="text-center p-4">
           No Replies
@@ -246,6 +251,11 @@ const postDetailsReplyFetch = async (page = 1) => {
     if (!postsDetailsRepliesHasNextPage.value) return; 
     isLoadingReply.value = true;
 
+    // saving the scrollY position
+    const repliesSection = document.querySelector('.replies');
+    const prevScroll = window.scrollY;
+    const prevHeight = document.body.scrollHeight;
+
     const fetch = await postStore.getReplies({
       post_id: props.parent_id,
       page: page,
@@ -257,6 +267,14 @@ const postDetailsReplyFetch = async (page = 1) => {
     } else {
       // append only new replies data
       postStore.postDetails.replies.push(...fetch.data); 
+
+      // restore scrollY position after dom updates
+      nextTick(() => {
+        const newHeight = document.body.scrollHeight;
+        const diff = newHeight - prevHeight;
+        // restore relative scroll offset
+        window.scrollTo({ top: prevScroll + diff });
+      });
     }
 
     postStore.postsDetailsRepliesPage = page;

@@ -8,9 +8,11 @@
       @post-created="handlePostCreated" 
     />
 
-    <div v-for="(item, index) in displayPosts" :key="index">
-      <PostItem :item="item" />
-    </div>
+    <v-virtual-scroll :items="displayPosts">
+      <template v-slot:default="{ item, index }">
+        <PostItem :item="item" />
+      </template>
+    </v-virtual-scroll>
 
     <div id="checkpoint-section"></div>
   </div>
